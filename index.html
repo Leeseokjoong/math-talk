@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>땡중샘 수학톡 (중학수학)</title>
+<style>
+:root {
+  --primary: #4f46e5; --primary-bg: #eef2ff; --primary-border: #c7d2fe;
+  --accent: #0ea5e9; --accent-bg: #e0f2fe;
+  --green: #059669; --green-bg: #d1fae5;
+  --orange: #d97706; --orange-bg: #fef3c7;
+  --red: #dc2626; --red-bg: #fee2e2;
+  --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+  --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280;
+  --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacSystemFont,sans-serif; background:#f5f5f7; color:var(--gray-800); line-height:1.6; -webkit-font-smoothing:antialiased; min-height:100vh; }
+
+/* ── 이름 입력 모달 ── */
+.name-modal { position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:500; display:flex; align-items:center; justify-content:center; padding:20px; }
+.name-modal.hidden { display:none; }
+.name-card { background:white; border-radius:20px; padding:36px 28px; width:100%; max-width:340px; text-align:center; animation:popUp 0.3s ease; }
+@keyframes popUp { from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)} }
+.name-card-emoji { font-size:48px; margin-bottom:14px; }
+.name-card h2 { font-size:20px; font-weight:900; color:var(--gray-900); margin-bottom:6px; }
+.name-card p { font-size:14px; color:var(--gray-500); margin-bottom:22px; line-height:1.7; }
+.name-input { width:100%; border:2px solid var(--gray-200); border-radius:10px; padding:13px 16px; font-size:16px; font-family:inherit; font-weight:700; outline:none; text-align:center; transition:border-color 0.15s; }
+.name-input:focus { border-color:var(--primary); }
+.name-submit { margin-top:12px; width:100%; background:var(--gray-900); color:white; border:none; border-radius:10px; padding:14px; font-size:16px; font-weight:800; cursor:pointer; font-family:inherit; transition:background 0.15s; }
+.name-submit:hover { background:var(--primary); }
+
+/* ── 헤더 ── */
+.header { background:var(--gray-900); color:white; padding:36px 24px 32px; text-align:center; }
+.header-eyebrow { font-size:11px; font-weight:600; letter-spacing:1.8px; text-transform:uppercase; color:#a5b4fc; margin-bottom:8px; }
+.header h1 { font-size:clamp(22px,5vw,30px); font-weight:900; letter-spacing:-0.5px; }
+
+/* ── 인사 배너 ── */
+.greet-bar { background:white; border-bottom:1px solid var(--gray-100); padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.greet-left { display:flex; align-items:center; gap:12px; }
+.greet-avatar { width:40px; height:40px; background:var(--primary); border-radius:99px; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:900; color:white; flex-shrink:0; }
+.greet-name { font-size:15px; font-weight:800; color:var(--gray-900); }
+.greet-sub { font-size:12px; color:var(--gray-400); margin-top:1px; }
+.greet-change { font-size:12px; font-weight:600; color:var(--gray-400); background:var(--gray-100); border:none; border-radius:6px; padding:5px 12px; cursor:pointer; font-family:inherit; }
+.greet-change:hover { background:var(--gray-200); }
+
+/* ── 본문 ── */
+.page { max-width:680px; margin:0 auto; padding:20px 16px 80px; }
+
+/* ── 학기 섹션 ── */
+.term-block { margin-bottom:28px; }
+.term-label { font-size:11px; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; color:var(--gray-400); margin-bottom:12px; padding-left:4px; }
+
+/* ── 단원 카드 ── */
+.unit-card {
+  background:white; border-radius:14px; padding:18px 20px;
+  margin-bottom:10px; box-shadow:0 1px 4px rgba(0,0,0,0.06);
+  display:flex; align-items:center; gap:16px;
+  text-decoration:none; color:inherit;
+  border:2px solid transparent;
+  transition:all 0.18s; cursor:pointer;
+}
+.unit-card:hover { border-color:var(--primary); box-shadow:0 4px 16px rgba(79,70,229,0.12); transform:translateY(-1px); }
+.unit-card.locked { opacity:0.5; cursor:not-allowed; }
+.unit-card.locked:hover { border-color:transparent; box-shadow:0 1px 4px rgba(0,0,0,0.06); transform:none; }
+.unit-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+.unit-icon.indigo { background:var(--primary-bg); }
+.unit-icon.teal { background:var(--accent-bg); }
+.unit-icon.green { background:var(--green-bg); }
+.unit-icon.orange { background:var(--orange-bg); }
+.unit-main { flex:1; min-width:0; }
+.unit-title { font-size:15px; font-weight:800; color:var(--gray-900); }
+.unit-sub { font-size:12px; color:var(--gray-400); margin-top:2px; }
+.unit-right { display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0; }
+.unit-badge { font-size:11px; font-weight:700; border-radius:6px; padding:3px 9px; white-space:nowrap; }
+.badge-new { background:var(--primary-bg); color:var(--primary); }
+.badge-soon { background:var(--gray-100); color:var(--gray-400); }
+.badge-done { background:var(--green-bg); color:var(--green); }
+.unit-prog-row { display:flex; align-items:center; gap:6px; }
+.unit-prog-bar { width:60px; height:4px; background:var(--gray-200); border-radius:99px; overflow:hidden; }
+.unit-prog-fill { height:100%; background:var(--primary); border-radius:99px; }
+.unit-prog-pct { font-size:11px; font-weight:700; color:var(--gray-400); }
+
+/* ── 학부모 링크 ── */
+.parent-btn {
+  display:flex; align-items:center; gap:14px;
+  background:var(--gray-900); color:white;
+  border-radius:14px; padding:18px 20px;
+  text-decoration:none; margin-top:10px;
+  transition:background 0.15s;
+}
+.parent-btn:hover { background:#1e1b4b; }
+.parent-icon { width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.parent-main { flex:1; }
+.parent-title { font-size:14px; font-weight:800; }
+.parent-sub { font-size:12px; color:#9ca3af; margin-top:2px; }
+.parent-arrow { font-size:18px; color:#6b7280; }
+
+/* ── 하단 안내 ── */
+.footer-note { text-align:center; font-size:12px; color:var(--gray-400); margin-top:28px; line-height:1.8; }
+</style>
+</head>
+<body>
+
+<!-- 이름 입력 모달 -->
+<div class="name-modal" id="nameModal">
+  <div class="name-card">
+    <div class="name-card-emoji">👋</div>
+    <h2>처음 오셨나요?</h2>
+    <p>별명을 입력하면 대화 속에서 그 이름으로<br>불러드려요. 학습 기록도 저장돼요.</p>
+    <input class="name-input" id="nameInput" type="text" placeholder="별명을 입력하세요 (예: 태린)" maxlength="8">
+    <button class="name-submit" onclick="saveName()">시작하기</button>
+  </div>
+</div>
+
+<div class="header">
+  <div class="header-eyebrow">땡중샘 수학톡</div>
+  <h1>중학수학</h1>
+</div>
+
+<div class="greet-bar">
+  <div class="greet-left">
+    <div class="greet-avatar" id="greetAvatar">?</div>
+    <div>
+      <div class="greet-name" id="greetName">안녕하세요!</div>
+      <div class="greet-sub">오늘도 수학 공부 시작해볼까요?</div>
+    </div>
+  </div>
+  <button class="greet-change" onclick="changeName()">이름 변경</button>
+</div>
+
+<div class="page">
+
+  <!-- 중2 1학기 -->
+  <div class="term-block">
+    <div class="term-label">중학교 2학년 1학기</div>
+
+    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-icon orange">🔢</div>
+      <div class="unit-main">
+        <div class="unit-title">유리수와 순환소수</div>
+        <div class="unit-sub">순환소수, 유리수와 무리수의 구별</div>
+      </div>
+      <div class="unit-right">
+        <span class="unit-badge badge-soon">준비 중</span>
+      </div>
+    </div>
+
+    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-icon teal">✖️</div>
+      <div class="unit-main">
+        <div class="unit-title">식의 계산</div>
+        <div class="unit-sub">지수법칙, 단항식·다항식 계산</div>
+      </div>
+      <div class="unit-right">
+        <span class="unit-badge badge-soon">준비 중</span>
+      </div>
+    </div>
+
+    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-icon orange">📐</div>
+      <div class="unit-main">
+        <div class="unit-title">일차부등식</div>
+        <div class="unit-sub">부등식의 풀이와 활용</div>
+      </div>
+      <div class="unit-right">
+        <span class="unit-badge badge-soon">준비 중</span>
+      </div>
+    </div>
+
+    <a class="unit-card" href="연립방정식_인터랙티브교재.html" id="card-연립방정식">
+      <div class="unit-icon indigo">⚖️</div>
+      <div class="unit-main">
+        <div class="unit-title">연립방정식</div>
+        <div class="unit-sub">가감법, 대입법, 활용 문제</div>
+      </div>
+      <div class="unit-right" id="prog-연립방정식">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 중2 2학기 -->
+  <div class="term-block">
+    <div class="term-label">중학교 2학년 2학기</div>
+
+    <a class="unit-card" href="일차함수_인터랙티브교재.html" id="card-일차함수">
+      <div class="unit-icon indigo">📈</div>
+      <div class="unit-main">
+        <div class="unit-title">일차함수</div>
+        <div class="unit-sub">함수의 뜻, 그래프, 기울기와 절편</div>
+      </div>
+      <div class="unit-right" id="prog-일차함수">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+
+    <a class="unit-card" href="일차함수활용_인터랙티브교재.html" id="card-일차함수활용">
+      <div class="unit-icon teal">🚀</div>
+      <div class="unit-main">
+        <div class="unit-title">일차함수 활용</div>
+        <div class="unit-sub">실생활 적용, 거리-시간 그래프, 교점</div>
+      </div>
+      <div class="unit-right" id="prog-일차함수활용">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 중3 -->
+  <div class="term-block">
+    <div class="term-label">중학교 3학년</div>
+
+    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-icon green">√</div>
+      <div class="unit-main">
+        <div class="unit-title">제곱근과 실수</div>
+        <div class="unit-sub">제곱수, 무리수, 근호 계산</div>
+      </div>
+      <div class="unit-right">
+        <span class="unit-badge badge-soon">준비 중</span>
+      </div>
+    </div>
+
+    <a class="unit-card" href="이차함수_인터랙티브교재.html" id="card-이차함수">
+      <div class="unit-icon indigo">📉</div>
+      <div class="unit-main">
+        <div class="unit-title">이차함수</div>
+        <div class="unit-sub">포물선, 꼭짓점, 평행이동, 표준형</div>
+      </div>
+      <div class="unit-right" id="prog-이차함수">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+
+    <a class="unit-card" href="이차방정식_인터랙티브교재.html" id="card-이차방정식">
+      <div class="unit-icon orange">🔷</div>
+      <div class="unit-main">
+        <div class="unit-title">이차방정식</div>
+        <div class="unit-sub">인수분해, 제곱근, 근의 공식, 활용</div>
+      </div>
+      <div class="unit-right" id="prog-이차방정식">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 학부모 모니터링 -->
+  <a class="parent-btn" href="monitoring.html">
+    <div class="parent-icon">👨‍👩‍👧</div>
+    <div class="parent-main">
+      <div class="parent-title">학부모 학습 현황</div>
+      <div class="parent-sub">어떤 개념을 얼마나 공부했는지 확인하세요</div>
+    </div>
+    <div class="parent-arrow">›</div>
+  </a>
+
+  <div class="footer-note">
+    땡중샘 수학톡 (중학수학)<br>
+    중학교 수학 개념을 대화로 배워요
+  </div>
+
+</div>
+
+<script>
+const TRACK_KEY = 'mathTalk_progress';
+
+function getProgress() { try { return JSON.parse(localStorage.getItem(TRACK_KEY)) || {}; } catch(e) { return {}; } }
+
+const UNIT_META = {
+  '연립방정식':  { total:7, domId:'prog-연립방정식' },
+  '일차함수':    { total:7, domId:'prog-일차함수' },
+  '일차함수활용': { total:5, domId:'prog-일차함수활용' },
+  '이차방정식':  { total:6, domId:'prog-이차방정식' },
+  '이차함수':    { total:6, domId:'prog-이차함수' },
+};
+
+function renderGreet() {
+  const name = localStorage.getItem('studentName');
+  if (name) {
+    document.getElementById('greetAvatar').textContent = name.charAt(0);
+    document.getElementById('greetName').textContent = name + '님, 안녕하세요!';
+    document.getElementById('nameModal').classList.add('hidden');
+  } else {
+    document.getElementById('nameModal').classList.remove('hidden');
+  }
+}
+
+function renderProgress() {
+  const prog = getProgress();
+  const units = prog.units || {};
+
+  Object.entries(UNIT_META).forEach(([key, meta]) => {
+    const ud = units[key] || {};
+    const visited = Object.keys(ud).length;
+    const pct = Math.round((visited / meta.total) * 100);
+    const el = document.getElementById(meta.domId);
+    if (!el) return;
+
+    if (visited === 0) {
+      el.innerHTML = '<span class="unit-badge badge-new">학습 가능</span>';
+    } else if (pct >= 100) {
+      el.innerHTML = '<span class="unit-badge badge-done">완료 ✓</span>';
+    } else {
+      el.innerHTML = `
+        <div class="unit-prog-row">
+          <div class="unit-prog-bar"><div class="unit-prog-fill" style="width:${pct}%"></div></div>
+          <span class="unit-prog-pct">${pct}%</span>
+        </div>`;
+    }
+  });
+}
+
+function saveName() {
+  const val = document.getElementById('nameInput').value.trim();
+  if (!val) { document.getElementById('nameInput').focus(); return; }
+  localStorage.setItem('studentName', val);
+  renderGreet();
+  renderProgress();
+}
+
+function changeName() {
+  const current = localStorage.getItem('studentName') || '';
+  document.getElementById('nameInput').value = current;
+  document.getElementById('nameModal').classList.remove('hidden');
+  setTimeout(() => document.getElementById('nameInput').focus(), 100);
+}
+
+document.getElementById('nameInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') saveName();
+});
+
+renderGreet();
+renderProgress();
+</script>
+</body>
+</html>

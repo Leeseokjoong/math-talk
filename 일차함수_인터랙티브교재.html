@@ -1,0 +1,2438 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>땡중샘 수학톡 | 일차함수</title>
+<style>
+:root {
+  --primary: #4f46e5;
+  --primary-bg: #eef2ff;
+  --primary-border: #c7d2fe;
+  --accent: #0ea5e9;
+  --accent-bg: #e0f2fe;
+  --green: #059669;
+  --green-bg: #d1fae5;
+  --red: #dc2626;
+  --red-bg: #fee2e2;
+  --orange: #d97706;
+  --orange-bg: #fef3c7;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', BlinkMacSystemFont, sans-serif;
+  background: #f5f5f7;
+  color: var(--gray-800);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── 헤더 ── */
+.header { background: var(--gray-900); color: white; padding: 40px 24px 36px; text-align: center; }
+.header-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #a5b4fc; margin-bottom: 10px; }
+.header h1 { font-size: clamp(24px, 5vw, 32px); font-weight: 800; letter-spacing: -0.5px; }
+.header p { margin-top: 10px; font-size: 14px; color: #9ca3af; }
+
+/* ── 진도 바 ── */
+.progress-wrap { background: white; padding: 14px 24px; border-bottom: 1px solid var(--gray-200); position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 8px rgba(0,0,0,0.06); }
+.progress-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--gray-500); margin-bottom: 8px; }
+.progress-bar { height: 4px; background: var(--gray-200); border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); border-radius: 99px; transition: width 0.5s ease; width: 0%; }
+
+/* ── 섹션 ── */
+.section { background: white; border-radius: 16px; margin: 20px 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); display: none; animation: fadeUp 0.35s ease; }
+.section.active { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+.sec-top { padding: 22px 28px 0; }
+.sec-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--primary); background: var(--primary-bg); border-radius: 6px; padding: 3px 10px; }
+.sec-badge.teal { color: var(--accent); background: var(--accent-bg); }
+.sec-badge.green { color: var(--green); background: var(--green-bg); }
+.sec-title { font-size: 18px; font-weight: 800; color: var(--gray-900); margin-top: 8px; padding: 0 28px; line-height: 1.4; }
+.sec-body { padding: 20px 28px 28px; }
+
+/* ── 콘텐츠 블록 ── */
+.definition-box { border: 1.5px solid var(--gray-300); border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; position: relative; }
+.definition-label { position: absolute; top: -10px; left: 16px; background: white; padding: 0 8px; font-size: 11px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.5px; }
+.empathy-box { background: var(--gray-900); color: white; border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; }
+.empathy-box p { font-size: 15px; line-height: 1.8; }
+.explain-box { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 10px; padding: 16px 18px; margin-bottom: 14px; }
+.explain-box p { font-size: 14px; line-height: 1.8; color: var(--gray-700); }
+.point-box { background: var(--primary-bg); border-left: 3px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 18px; margin-bottom: 14px; }
+.point-box p { font-size: 14px; line-height: 1.8; color: var(--gray-700); }
+.warn-box { background: var(--red-bg); border-left: 3px solid var(--red); border-radius: 0 10px 10px 0; padding: 16px 18px; margin-bottom: 14px; }
+.warn-box p { font-size: 14px; line-height: 1.8; color: var(--gray-700); }
+.warn-label { font-size: 11px; font-weight: 800; color: var(--red); letter-spacing: 0.5px; display: block; margin-bottom: 6px; }
+.divider { height: 1px; background: var(--gray-100); margin: 20px 0; }
+.summary-label { display: block; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-400); margin-bottom: 10px; }
+.math-block { background: var(--gray-900); color: #a5b4fc; border-radius: 10px; padding: 16px 20px; font-family: 'Courier New', monospace; font-size: 15px; margin-bottom: 14px; line-height: 2; }
+
+/* ── 단계 목록 ── */
+.steps { display: flex; flex-direction: column; gap: 0; margin-bottom: 14px; }
+.step-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--gray-100); opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: translateY(8px); }
+.step-item.on { opacity: 1; transform: translateY(0); }
+.step-dot { width: 28px; height: 28px; border-radius: 99px; background: var(--primary); color: white; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-content { font-size: 14px; color: var(--gray-700); line-height: 1.7; padding-top: 3px; }
+
+/* ── 풀이 단계 ── */
+.eq-steps { background: var(--gray-50); border-radius: 10px; overflow: hidden; margin-bottom: 14px; }
+.eq-row { display: flex; align-items: baseline; gap: 12px; padding: 11px 16px; border-bottom: 1px solid var(--gray-100); font-size: 14px; }
+.eq-row:last-child { border-bottom: none; }
+.eq-row.highlight { background: var(--primary-bg); }
+.eq-row.result { background: var(--gray-900); color: white; }
+.eq-num { font-size: 11px; font-weight: 700; color: var(--gray-400); min-width: 54px; flex-shrink: 0; }
+.eq-row.result .eq-num { color: #6b7280; }
+.eq-content { flex: 1; }
+.mv { color: var(--primary); font-weight: 700; }
+.eq-row.result .mv { color: #a5b4fc; }
+.mr { color: var(--red); font-weight: 700; }
+.eq-row.result .mr { color: #fca5a5; }
+
+/* ── 표 ── */
+.tbl { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 14px; }
+.tbl th { background: var(--gray-900); color: white; padding: 10px 14px; font-weight: 700; font-size: 13px; text-align: left; }
+.tbl td { padding: 10px 14px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+.tbl tbody tr:last-child td { border-bottom: none; }
+.tbl tbody tr:nth-child(even) { background: var(--gray-50); }
+
+/* ── 그래프 ── */
+.graph-wrap { display: flex; justify-content: center; margin: 14px 0; }
+.graph-canvas { border: 1px solid var(--gray-200); border-radius: 12px; background: white; max-width: 100%; display: block; }
+.graph-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+.graph-item { text-align: center; }
+.graph-item canvas { border: 1px solid var(--gray-200); border-radius: 10px; background: white; max-width: 100%; }
+.graph-label { font-size: 12px; font-weight: 700; color: var(--gray-600); margin-top: 6px; }
+
+/* ── 함수 카드 ── */
+.fn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.fn-card { border-radius: 10px; padding: 14px 16px; border: 2px solid var(--gray-200); }
+.fn-card.yes { border-color: var(--green); background: var(--green-bg); }
+.fn-card.no { border-color: var(--red); background: var(--red-bg); }
+.fn-tag { font-size: 11px; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
+.fn-card.yes .fn-tag { color: var(--green); }
+.fn-card.no .fn-tag { color: var(--red); }
+.fn-expr { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+.fn-desc { font-size: 12px; color: var(--gray-500); line-height: 1.6; }
+
+/* ── 기울기 시각 ── */
+.slope-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+.slope-card { border-radius: 10px; padding: 14px 16px; border: 2px solid var(--gray-200); text-align: center; }
+.slope-card.pos { border-color: var(--primary); background: var(--primary-bg); }
+.slope-card.neg { border-color: var(--red); background: var(--red-bg); }
+.slope-sign { font-size: 28px; font-weight: 900; line-height: 1; }
+.slope-card.pos .slope-sign { color: var(--primary); }
+.slope-card.neg .slope-sign { color: var(--red); }
+.slope-desc { font-size: 12px; color: var(--gray-600); margin-top: 6px; font-weight: 600; }
+
+/* ── 확인 문제 ── */
+.quiz { background: var(--gray-50); border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+.quiz-label { font-size: 11px; font-weight: 800; color: var(--primary); letter-spacing: 0.8px; margin-bottom: 8px; }
+.quiz-q { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 14px; line-height: 1.6; }
+.quiz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.qopt { background: white; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 11px 14px; font-size: 14px; font-family: inherit; font-weight: 600; color: var(--gray-700); cursor: pointer; transition: all 0.15s; text-align: left; }
+.qopt:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-bg); }
+.qopt.correct { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+.qopt.wrong { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+.qopt:disabled { cursor: not-allowed; }
+.quiz-fb { font-size: 13px; color: var(--gray-600); margin-top: 10px; min-height: 18px; line-height: 1.6; }
+.quiz-fb.ok { color: var(--green); font-weight: 600; }
+.quiz-fb.no { color: var(--red); font-weight: 600; }
+
+/* ── 점수 패널 ── */
+.score-panel { display: none; background: var(--gray-900); color: white; border-radius: 12px; padding: 36px; text-align: center; margin-top: 20px; animation: fadeUp 0.4s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.score-num { font-size: 60px; font-weight: 900; line-height: 1; }
+.score-of { font-size: 14px; color: #6b7280; margin-top: 4px; }
+.score-msg { font-size: 20px; font-weight: 800; margin-top: 18px; }
+.score-detail { font-size: 14px; color: #9ca3af; margin-top: 6px; }
+.restart-btn { margin-top: 20px; background: white; color: var(--gray-900); border: none; border-radius: 8px; padding: 11px 28px; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+/* ── 버튼 ── */
+.next-wrap { text-align: center; margin-top: 22px; }
+.next-btn { background: var(--gray-900); color: white; border: none; border-radius: 8px; padding: 13px 36px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.18s; }
+.next-btn:hover { background: var(--primary); }
+.score-check-btn { background: var(--gray-300); color: var(--gray-500); border: none; border-radius: 8px; padding: 13px 36px; font-size: 15px; font-weight: 700; cursor: not-allowed; transition: all 0.2s; }
+.score-check-btn.ready { background: var(--primary); color: white; cursor: pointer; }
+
+/* ── 수정 요청 ── */
+.edit-bar { display: flex; align-items: center; justify-content: flex-end; padding: 10px 20px 14px; border-top: 1px solid var(--gray-100); margin-top: 4px; }
+.edit-request-btn { background: none; border: 1.5px dashed var(--gray-300); border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--gray-400); cursor: pointer; transition: all 0.15s; }
+.edit-request-btn:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-bg); }
+.edit-request-btn.has-memo { border-color: var(--orange); color: var(--orange); background: var(--orange-bg); border-style: solid; }
+.memo-banner { margin: 0 20px 14px; background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 8px; padding: 12px 14px; display: none; }
+.memo-banner.show { display: block; }
+.memo-banner-label { font-size: 11px; font-weight: 700; color: var(--orange); margin-bottom: 4px; }
+.memo-banner-text { font-size: 14px; color: var(--gray-700); white-space: pre-wrap; }
+.memo-input-area { display: none; margin: 0 20px 14px; background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 8px; padding: 14px; }
+.memo-input-area.show { display: block; }
+.memo-textarea { width: 100%; border: 1px solid #fcd34d; border-radius: 6px; padding: 10px 12px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 80px; outline: none; background: white; }
+.memo-textarea:focus { border-color: var(--orange); }
+.memo-actions { display: flex; gap: 8px; margin-top: 10px; }
+.memo-save-btn { background: var(--orange); color: white; border: none; border-radius: 6px; padding: 8px 18px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.memo-delete-btn { background: white; color: var(--red); border: 1.5px solid var(--red); border-radius: 6px; padding: 8px 14px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.memo-cancel-btn { background: white; color: var(--gray-500); border: 1.5px solid var(--gray-200); border-radius: 6px; padding: 8px 14px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.memo-float-btn { position: fixed; bottom: 24px; right: 20px; background: var(--orange); color: white; border: none; border-radius: 99px; padding: 12px 20px; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 16px rgba(217,119,6,0.4); z-index: 50; transition: all 0.2s; display: none; }
+.memo-float-btn .memo-count { background: white; color: var(--orange); border-radius: 99px; padding: 1px 7px; font-size: 12px; font-weight: 900; margin-left: 6px; }
+.memo-list-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: flex-end; justify-content: center; }
+.memo-list-overlay.open { display: flex; }
+.memo-list-sheet { background: white; border-radius: 16px 16px 0 0; padding: 24px 22px 36px; width: 100%; max-width: 740px; max-height: 70vh; overflow-y: auto; animation: slideUp 0.25s ease; }
+@keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.memo-list-title { font-size: 17px; font-weight: 900; color: var(--gray-900); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+.memo-list-close { background: var(--gray-100); border: none; border-radius: 6px; padding: 6px 14px; font-size: 13px; font-weight: 700; cursor: pointer; color: var(--gray-700); }
+.memo-list-item { background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+.memo-list-item-label { font-size: 11px; font-weight: 700; color: var(--orange); margin-bottom: 4px; }
+.memo-list-item-text { font-size: 14px; color: var(--gray-700); white-space: pre-wrap; }
+
+/* ── 참고 아코디언 ── */
+.ref-box { border: 1.5px solid var(--gray-200); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+.ref-toggle { width: 100%; background: var(--gray-50); border: none; padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 700; color: var(--gray-600); text-align: left; }
+.ref-toggle:hover { background: var(--gray-100); }
+.ref-toggle .ref-tag { background: var(--accent-bg); color: var(--accent); border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; margin-right: 8px; }
+.ref-toggle .ref-arrow { font-size: 12px; color: var(--gray-400); transition: transform 0.2s; }
+.ref-toggle.open .ref-arrow { transform: rotate(180deg); }
+.ref-body { display: none; padding: 16px 18px; border-top: 1px solid var(--gray-200); background: white; }
+.ref-body.open { display: block; }
+.ref-section { margin-bottom: 14px; }
+.ref-section:last-child { margin-bottom: 0; }
+.ref-section-title { font-size: 12px; font-weight: 800; color: var(--accent); margin-bottom: 6px; letter-spacing: 0.5px; }
+.coord-svg { display: block; margin: 10px auto; }
+
+/* ── 대화형 구조 ── */
+.chat-step { display: none; animation: fadeUp 0.35s ease; }
+.chat-step.visible { display: block; }
+.t-msg { background: white; color: var(--gray-800); border-radius: 4px 16px 16px 16px; padding: 14px 16px; margin-bottom: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.10); }
+.t-msg p { font-size: 14px; line-height: 1.85; }
+.t-name { font-size: 11px; font-weight: 800; color: var(--gray-500); letter-spacing: 0.8px; margin-bottom: 8px; }
+.s-msg { background: #FEE500; border-radius: 16px 4px 16px 16px; padding: 14px 16px; margin-bottom: 6px; margin-left: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.10); }
+.s-msg p { font-size: 14px; line-height: 1.85; color: var(--gray-800); }
+.s-name { font-size: 11px; font-weight: 800; color: #b8960a; letter-spacing: 0.8px; margin-bottom: 6px; }
+.chat-bg { background: #b2c7d9; border-radius: 0 0 16px 16px; padding: 18px 16px 24px !important; }
+.chat-gap { height: 8px; }
+.cont-wrap { text-align: center; margin-top: 18px; }
+.cont-btn { background: white; color: var(--gray-700); border: 1.5px solid var(--gray-300); border-radius: 99px; padding: 10px 28px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.cont-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-bg); }
+
+/* ── 분수 표현 ── */
+.frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; font-size: 0.88em; line-height: 1.15; margin: 0 2px; }
+.frac .num { border-bottom: 1.5px solid currentColor; padding: 0 4px 2px; text-align: center; white-space: nowrap; }
+.frac .den { padding: 2px 4px 0; text-align: center; white-space: nowrap; }
+
+/* ── confetti ── */
+.cf { position: fixed; border-radius: 2px; pointer-events: none; z-index: 9999; animation: cfFall linear forwards; }
+@keyframes cfFall { 0% { opacity:1; transform: translateY(0) rotate(0); } 100% { opacity:0; transform: translateY(100vh) rotate(720deg); } }
+
+@media (max-width: 520px) {
+  .sec-top, .sec-body { padding-left: 18px; padding-right: 18px; }
+  .sec-title { padding-left: 18px; padding-right: 18px; }
+  .quiz-opts { grid-template-columns: 1fr; }
+  .fn-grid { grid-template-columns: 1fr; }
+  .slope-compare { grid-template-columns: 1fr; }
+  .graph-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">땡중샘 수학톡 (중학수학)</div>
+  <h1>일차함수</h1>
+  <p>중학교 2학년 · 대화로 배우는 수학</p>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-meta">
+    <span id="prog-label">개념 1 — 함수의 뜻</span>
+    <span id="prog-pct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+</div>
+
+<!-- ════ 1. 함수의 뜻 ════ -->
+<div class="section active" id="s1">
+  <div class="sec-top"><div class="sec-badge">개념 1</div></div>
+  <div class="sec-title">함수란 무엇인가</div>
+  <div class="sec-body chat-bg" id="chat-s1">
+
+    <!-- Step 1: 땡중샘 첫 질문 -->
+    <div class="chat-step visible">
+      <div class="t-msg">
+        <div class="t-name">땡중샘</div>
+        <p><span class="s-call-slot">태린아</span>, 오늘부터 함수 시작이야. 갑자기 퀴즈 하나 — 함수가 뭔지 알아?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 2: 태린 모르겠다 -->
+    <div class="chat-step">
+      <div class="s-msg">
+        <div class="s-name s-name-slot">태린</div>
+        <p>음... 잘 모르겠어요. 함수라는 말은 들어봤는데 너무 어렵게 느껴져요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 3: 땡중샘 자판기 비유 -->
+    <div class="chat-step">
+      <div class="t-msg">
+        <div class="t-name">땡중샘</div>
+        <p>당연히 낯설지. 근데 사실 엄청 간단해. 자판기를 생각해봐.</p>
+        <p style="margin-top:10px;">1번 버튼 누르면 → 콜라가 나와. 딱 하나야.</p>
+        <p style="margin-top:6px; font-size:13px; opacity:.8;">1번 눌렀는데 콜라도 나오고 사이다도 나오고 물도 나오고... 이러면 고장난 자판기잖아.</p>
+        <p style="margin-top:10px;">수학에서도 마찬가지야. <strong style="color:#a5b4fc;">x 하나 넣으면 y 하나만 나오는 것</strong> — 그게 함수야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 4: 태린 "아 그러면" -->
+    <div class="chat-step">
+      <div class="s-msg">
+        <div class="s-name s-name-slot">태린</div>
+        <p>아, 그러면 x 하나에 y 하나만 나오면 함수인 거예요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 5: 땡중샘 핵심 정리 -->
+    <div class="chat-step">
+      <div class="t-msg">
+        <div class="t-name">땡중샘</div>
+        <p>정확해! 앞으로 함수가 뭐냐고 물으면 딱 이렇게 대답해.</p>
+      </div>
+      <div style="background:var(--gray-900); color:white; border-radius:10px; padding:18px 20px; margin:8px 0; text-align:center;">
+        <p style="color:#a5b4fc; font-size:18px; font-weight:900; letter-spacing:-0.3px;">"x 하나당 y 하나가 결정되는 관계"</p>
+        <p style="color:#9ca3af; font-size:13px; margin-top:8px;">이것만으로도 함수의 개념을 설명할 수 있는 사람이 되는 거야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 6: 태린 - 4의 약수 질문 -->
+    <div class="chat-step">
+      <div class="s-msg">
+        <div class="s-name s-name-slot">태린</div>
+        <p>선생님, 그럼 자연수 4의 약수 y는요? 이건 함수예요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 7: 땡중샘 함수 O/X -->
+    <div class="chat-step">
+      <div class="t-msg">
+        <div class="t-name">땡중샘</div>
+        <p>좋은 예시야! 4의 약수는 1, 2, 4 — 이렇게 여러 개의 답이 나오니까 그것은 함수관계라고 할 수 없어.</p>
+        <p style="margin-top:10px;">하지만 <strong>4의 약수의 개수</strong>는? — 3개라고 답을 하나로 말할 수 있으니 함수관계가 맞아.</p>
+      </div>
+      <div class="fn-grid" style="margin-top:10px;">
+        <div class="fn-card yes">
+          <span class="fn-tag">함수 ✓</span>
+          <div class="fn-expr">y = 2x + 1</div>
+          <div class="fn-desc">x = 3 → y = 7만 나와<br>y가 딱 하나</div>
+        </div>
+        <div class="fn-card no">
+          <span class="fn-tag">함수 ✗</span>
+          <div class="fn-expr">자연수 x의 약수 y</div>
+          <div class="fn-desc">x = 4 → y = 1, 2, 4<br>y가 여러 개 → 함수 아님</div>
+        </div>
+        <div class="fn-card yes">
+          <span class="fn-tag">함수 ✓</span>
+          <div class="fn-expr">자연수 x의 약수의 개수 y</div>
+          <div class="fn-desc">x = 4 → y = 3 (딱 하나)<br>y가 하나만 나와</div>
+        </div>
+        <div class="fn-card no">
+          <span class="fn-tag">함수 ✗</span>
+          <div class="fn-expr">자연수 x보다 작은 소수 y</div>
+          <div class="fn-desc">x = 10 → y = 2, 3, 5, 7<br>y가 여러 개 → 함수 아님</div>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 8: 태린 "말 하나 차이" -->
+    <div class="chat-step">
+      <div class="s-msg">
+        <div class="s-name s-name-slot">태린</div>
+        <p>"약수의 개수"는 하나니까 함수고, "약수" 자체는 여러 개니까 함수가 아닌 거군요. 말 하나 차이인데 완전 다르네요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 9: 확인 문제 1 -->
+    <div class="chat-step">
+      <div class="t-msg">
+        <div class="t-name">땡중샘</div>
+        <p>정확히 짚었어. 그럼 실력 확인 한번 해보자.</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">다음 중 y가 x의 함수인 것은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q1',false)">x = y²</button>
+          <button class="qopt" onclick="q(this,'q1',true)">y = 3x − 2</button>
+          <button class="qopt" onclick="q(this,'q1',false)">자연수 x의 약수 y</button>
+          <button class="qopt" onclick="q(this,'q1',false)">x² + y² = 1</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q1"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 10: f(x) 시작 -->
+    <div class="chat-step">
+      <div class="t-msg">
+        <div class="t-name">땡중샘</div>
+        <p>이번엔 <strong style="color:#a5b4fc;">f(x)</strong> 표기법이야. 함수는 영어로 <strong style="color:#a5b4fc;">function</strong>이라고 해. 그래서 <strong style="color:#a5b4fc;">f</strong>라고 쓰는 거야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 11: 태린 "너무 어려워요" -->
+    <div class="chat-step">
+      <div class="s-msg">
+        <div class="s-name s-name-slot">태린</div>
+        <p>f(x)요? 선생님, 이거 너무 어려워요. 갑자기 f가 왜 나와요? 처음 보는 기호예요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 12: 땡중샘 f(x) 뜯어보기 -->
+    <div class="chat-step">
+      <div class="t-msg">
+        <div class="t-name">땡중샘</div>
+        <p>처음 보면 낯설어 보이지. 근데 하나씩 뜯어보면 쉬워.</p>
+        <p style="margin-top:10px; font-size:13px; line-height:2.1; opacity:.9;">
+          <strong style="color:#a5b4fc;">f</strong> → function (함수)의 줄임말<br>
+          <strong style="color:#a5b4fc;">x</strong> → 우리가 집어넣는 값<br>
+          <strong style="color:#a5b4fc;">f(x)</strong> → x를 넣었을 때 나오는 값 = <strong style="color:#a5b4fc;">함수값</strong>
+        </p>
+        <p style="margin-top:10px;">자판기에 x를 넣으면 f(x)가 나와. f는 자판기 자체(규칙)야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 13: 태린 "그냥 y라고 하면 되잖아요" -->
+    <div class="chat-step">
+      <div class="s-msg">
+        <div class="s-name s-name-slot">태린</div>
+        <p>그러면 그냥 y라고 하면 되잖아요? y = x + 1 이나 f(x) = x + 1 이나 같은 거 아닌가요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 14: 땡중샘 관점의 차이 -->
+    <div class="chat-step">
+      <div class="t-msg">
+        <div class="t-name">땡중샘</div>
+        <p>계산 결과는 같아. 근데 <strong style="color:#a5b4fc;">바라보는 관점이 달라.</strong></p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin:10px 0 8px;">
+        <div style="background:var(--gray-800); border-radius:10px; padding:14px 16px;">
+          <p style="font-size:12px; font-weight:800; color:#9ca3af; margin-bottom:6px;">y = x + 1 의 관점</p>
+          <p style="font-size:14px; line-height:1.8; color:white;"><strong>y</strong>는 그냥 결과값의 이름이야. "x와 y 사이에 이런 관계가 있어" — 거기서 끝.</p>
+        </div>
+        <div style="background:var(--primary-bg); border:1px solid var(--primary-border); border-radius:10px; padding:14px 16px;">
+          <p style="font-size:12px; font-weight:800; color:var(--primary); margin-bottom:6px;">f(x) = x + 1 의 관점</p>
+          <p style="font-size:14px; line-height:1.8;"><strong>f라는 함수</strong>는 x를 집어넣으면 x+1을 내보내는 <strong>규칙</strong>이야. 값이 아니라 <strong>기계 자체</strong>를 표현하는 거야.</p>
+        </div>
+      </div>
+      <div class="t-msg" style="margin-top:8px;">
+        <div class="t-name">땡중샘</div>
+        <p>f(x) 표기를 쓰면 두 가지를 동시에 말할 수 있어. "이건 함수야" + "x를 넣으면 이 값이 나와".</p>
+        <p style="margin-top:8px; font-size:13px; opacity:.8;">그래서 f(3)이라고 쓰면 "x = 3일 때 함수값"이 돼. 짧고 명확하지.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 15: 태린 "f(3)이 x에 3을 넣으라는" -->
+    <div class="chat-step">
+      <div class="s-msg">
+        <div class="s-name s-name-slot">태린</div>
+        <p>아, f(3)이라고 쓰면 x에 3을 넣으라는 거예요? 그러면 계산만 하면 되겠네요!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 16: 땡중샘 계산 예시 -->
+    <div class="chat-step">
+      <div class="t-msg">
+        <div class="t-name">땡중샘</div>
+        <p>맞아! 그냥 x 자리에 숫자 집어넣으면 끝이야.</p>
+      </div>
+      <div class="math-block" style="margin-top:10px;">
+f(x) = 2x + 1 일 때<br>
+f(3) = 2×<span style="color:#fcd34d;">3</span> + 1 = <span style="color:#fca5a5;">7</span><br>
+f(−1) = 2×<span style="color:#fcd34d;">(−1)</span> + 1 = <span style="color:#fca5a5;">−1</span>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 17: 확인 문제 2, 3, 4 -->
+    <div class="chat-step">
+      <div class="t-msg">
+        <div class="t-name">땡중샘</div>
+        <p>연습 문제 몇 개 풀어봐.</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">x + 1 = y 에서 y가 의미하는 것과 <span style="color:var(--red);">다른</span> 것은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q1b',false)">y = x + 1</button>
+          <button class="qopt" onclick="q(this,'q1b',false)">f(x) = x + 1</button>
+          <button class="qopt" onclick="q(this,'q1b',true)">x + 1 = 0</button>
+          <button class="qopt" onclick="q(this,'q1b',false)" style="font-size:13px;">x를 넣으면 y가 하나 결정되는 관계</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q1b"></div>
+      </div>
+      <div class="quiz" style="margin-top:12px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">f(x) = 2x + 1 일 때, f(1)의 값은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q1c',false)">1</button>
+          <button class="qopt" onclick="q(this,'q1c',false)">2</button>
+          <button class="qopt" onclick="q(this,'q1c',true)">3</button>
+          <button class="qopt" onclick="q(this,'q1c',false)">4</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q1c"></div>
+      </div>
+      <div class="quiz" style="margin-top:12px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">f(x) = 2x + 1 일 때, f(−3)의 값은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q1d',false)">−7</button>
+          <button class="qopt" onclick="q(this,'q1d',true)">−5</button>
+          <button class="qopt" onclick="q(this,'q1d',false)">−3</button>
+          <button class="qopt" onclick="q(this,'q1d',false)">−1</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q1d"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 18: 땡중샘 - 같은 식 다른 이름 -->
+    <div class="chat-step">
+      <div class="t-msg">
+        <div class="t-name">땡중샘</div>
+        <p>마지막으로 하나 더. x + 1 이라는 똑같은 식도 어떻게 쓰느냐에 따라 이름이 달라져.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin:10px 0;">
+        <div style="display:flex; align-items:center; gap:12px; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:10px; padding:14px 16px;">
+          <div style="font-size:15px; font-weight:900; color:var(--gray-900); min-width:90px; font-family:monospace;">x + 1</div>
+          <div><span style="font-size:11px; font-weight:800; color:var(--gray-400); display:block; margin-bottom:2px;">일차식</span><span style="font-size:13px; color:var(--gray-600);">그냥 식. 등호도 부등호도 없어.</span></div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; background:var(--primary-bg); border:1px solid var(--primary-border); border-radius:10px; padding:14px 16px;">
+          <div style="font-size:15px; font-weight:900; color:var(--primary); min-width:90px; font-family:monospace;">x + 1 = 0</div>
+          <div><span style="font-size:11px; font-weight:800; color:var(--primary); display:block; margin-bottom:2px;">방정식</span><span style="font-size:13px; color:var(--gray-600);">등호(=)로 연결. x의 특정 값을 구해.</span></div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; background:var(--orange-bg); border:1px solid #fcd34d; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:15px; font-weight:900; color:var(--orange); min-width:90px; font-family:monospace;">x + 1 &gt; 0</div>
+          <div><span style="font-size:11px; font-weight:800; color:var(--orange); display:block; margin-bottom:2px;">부등식</span><span style="font-size:13px; color:var(--gray-600);">부등호로 연결. x의 범위를 구해.</span></div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; background:var(--green-bg); border:1px solid #6ee7b7; border-radius:10px; padding:14px 16px;">
+          <div style="font-size:15px; font-weight:900; color:var(--green); min-width:90px; font-family:monospace;">y = x + 1</div>
+          <div><span style="font-size:11px; font-weight:800; color:var(--green); display:block; margin-bottom:2px;">함수식</span><span style="font-size:13px; color:var(--gray-600);">x와 y의 관계. x마다 y가 하나씩 결정돼.</span></div>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 19: 태린 이해 확인 -->
+    <div class="chat-step">
+      <div class="s-msg">
+        <div class="s-name s-name-slot">태린</div>
+        <p>같은 x + 1 인데 y = 이 붙으면 함수식, = 0이 붙으면 방정식이 되는 거군요. 이름 외우는 것보다 이게 훨씬 쉬운데요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- Step 20: 땡중샘 마무리 + 참고 박스 + 다음 버튼 -->
+    <div class="chat-step">
+      <div class="t-msg">
+        <div class="t-name">땡중샘</div>
+        <p>바로 그거야! 무엇과 연결하느냐가 이름을 결정해. 다음 넘어가기 전에 참고 박스 봐. 1학년 때 배운 순서쌍이랑 좌표평면이 기억 안 나면 여기서 복습해.</p>
+      </div>
+      <div class="ref-box" style="margin-top:10px;">
+        <button class="ref-toggle" onclick="toggleRef(this)">
+          <span><span class="ref-tag">1학년 복습</span>순서쌍과 좌표평면</span>
+          <span class="ref-arrow">▼</span>
+        </button>
+        <div class="ref-body">
+          <div class="ref-section">
+            <div class="ref-section-title">순서쌍 (x, y)</div>
+            <p style="font-size:13px; color:var(--gray-600); line-height:1.8;">x좌표와 y좌표를 순서대로 묶은 쌍. (3, 5)라고 쓰면 x = 3, y = 5야. 순서가 바뀌면 다른 점이 돼 — (5, 3) ≠ (3, 5).</p>
+          </div>
+          <div class="ref-section">
+            <div class="ref-section-title">좌표평면</div>
+            <svg class="coord-svg" width="200" height="200" viewBox="-100 -100 200 200">
+              <defs>
+                <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9ca3af"/></marker>
+                <marker id="arr2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,6 L3,0 L6,6 Z" fill="#9ca3af"/></marker>
+              </defs>
+              <line x1="-90" y1="0" x2="90" y2="0" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arr)"/>
+              <line x1="0" y1="90" x2="0" y2="-90" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arr2)"/>
+              <text x="92" y="5" font-size="12" fill="#374151" font-weight="bold">x</text>
+              <text x="4" y="-82" font-size="12" fill="#374151" font-weight="bold">y</text>
+              <text x="-4" y="14" font-size="10" fill="#9ca3af" text-anchor="middle">O</text>
+              <line x1="-60" y1="-3" x2="-60" y2="3" stroke="#d1d5db" stroke-width="1"/><text x="-60" y="14" font-size="9" fill="#9ca3af" text-anchor="middle">-2</text>
+              <line x1="-30" y1="-3" x2="-30" y2="3" stroke="#d1d5db" stroke-width="1"/><text x="-30" y="14" font-size="9" fill="#9ca3af" text-anchor="middle">-1</text>
+              <line x1="30" y1="-3" x2="30" y2="3" stroke="#d1d5db" stroke-width="1"/><text x="30" y="14" font-size="9" fill="#9ca3af" text-anchor="middle">1</text>
+              <line x1="60" y1="-3" x2="60" y2="3" stroke="#d1d5db" stroke-width="1"/><text x="60" y="14" font-size="9" fill="#9ca3af" text-anchor="middle">2</text>
+              <line x1="-3" y1="-60" x2="3" y2="-60" stroke="#d1d5db" stroke-width="1"/><text x="-10" y="-56" font-size="9" fill="#9ca3af" text-anchor="end">2</text>
+              <line x1="-3" y1="-30" x2="3" y2="-30" stroke="#d1d5db" stroke-width="1"/><text x="-10" y="-26" font-size="9" fill="#9ca3af" text-anchor="end">1</text>
+              <line x1="-3" y1="30" x2="3" y2="30" stroke="#d1d5db" stroke-width="1"/><text x="-10" y="34" font-size="9" fill="#9ca3af" text-anchor="end">-1</text>
+              <line x1="-3" y1="60" x2="3" y2="60" stroke="#d1d5db" stroke-width="1"/><text x="-10" y="64" font-size="9" fill="#9ca3af" text-anchor="end">-2</text>
+              <circle cx="60" cy="-30" r="4" fill="#4f46e5"/>
+              <text x="68" y="-26" font-size="10" fill="#4f46e5" font-weight="bold">(2, 1)</text>
+              <circle cx="-30" cy="60" r="4" fill="#dc2626"/>
+              <text x="-28" y="74" font-size="10" fill="#dc2626" font-weight="bold">(-1, -2)</text>
+            </svg>
+          </div>
+          <div class="ref-section">
+            <div class="ref-section-title">사분면</div>
+            <p style="font-size:13px; color:var(--gray-600); line-height:1.8;">좌표평면은 x축과 y축으로 4개 영역으로 나뉘어. 제1사분면(+,+), 제2사분면(−,+), 제3사분면(−,−), 제4사분면(+,−).</p>
+          </div>
+        </div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(2)">일차함수의 뜻 보기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s1" onclick="openMemo('s1')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s1"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s1"></div></div>
+  <div class="memo-input-area" id="mi-s1">
+    <textarea class="memo-textarea" id="mt-s1" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s1')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s1')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s1')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 2. 일차함수의 뜻 ════ -->
+<div class="section" id="s2">
+  <div class="sec-top"><div class="sec-badge">개념 2</div></div>
+  <div class="sec-title">일차함수의 뜻</div>
+  <div class="sec-body chat-bg" id="chat-s2">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><span class="s-call-slot">태린아</span>, 일차함수가 뭔지 말해봐.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>음... 함수인데 일차인 거요? y = ax + b 같은 거 아닌가요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>거의 맞았어! 정확한 정의는 이래.</p>
+      </div>
+      <div style="background:white; border:1.5px solid var(--gray-300); border-radius:10px; padding:16px 18px; margin:8px 0; position:relative;">
+        <span style="position:absolute; top:-10px; left:16px; background:white; padding:0 8px; font-size:11px; font-weight:700; color:var(--gray-500);">일차함수 정의</span>
+        <p style="font-size:14px; line-height:1.9;"><strong>y = ax + b (a ≠ 0, a, b는 상수)</strong> 형태로 나타내어지는 함수를 y는 x의 일차함수라 한다.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>그런데 왜 a ≠ 0이어야 해요? a가 0이면 어떻게 되는 거예요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>좋은 질문이야. a = 0이면 y = b가 돼. 그러면 x가 1이든 100이든 −5든 상관없이 y는 항상 b야.</p>
+        <p style="margin-top:8px;">x가 y를 결정하는 게 아니라 — <strong style="color:#a5b4fc;">그냥 숫자 하나만 있는 거야.</strong> 그래서 <strong style="color:#a5b4fc;">상수함수</strong>라고 해. 일차함수가 아니야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>그럼 y = 4는 일차함수가 아닌 거네요. 판별하는 방법이 있어요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>세 가지만 확인하면 돼.</p>
+        <p style="margin-top:10px; font-size:13px; line-height:2.2; opacity:.9;">
+          ① x의 차수가 1이어야 해 (x², x³ 안 됨)<br>
+          ② 분모에 x가 없어야 해 (<span class="frac" style="color:#a5b4fc;"><span class="num">1</span><span class="den">x</span></span> 안 됨)<br>
+          ③ a ≠ 0 이어야 해 (y = 4 같은 상수함수 안 됨)
+        </p>
+      </div>
+      <div class="fn-grid" style="margin-top:10px;">
+        <div class="fn-card yes"><span class="fn-tag">일차함수 ✓</span><div class="fn-expr">y = 3x − 5</div><div class="fn-desc">a=3, b=−5, a≠0</div></div>
+        <div class="fn-card yes"><span class="fn-tag">일차함수 ✓</span><div class="fn-expr">y = −x + 2</div><div class="fn-desc">a=−1, b=2, a≠0</div></div>
+        <div class="fn-card no"><span class="fn-tag">일차함수 ✗</span><div class="fn-expr">y = x² + 1</div><div class="fn-desc">x차수가 2 → 이차함수</div></div>
+        <div class="fn-card no"><span class="fn-tag">일차함수 ✗</span><div class="fn-expr">y = <span class="frac"><span class="num">1</span><span class="den">x</span></span></div><div class="fn-desc">분모에 x 있음</div></div>
+        <div class="fn-card no"><span class="fn-tag">일차함수 ✗</span><div class="fn-expr">y = 4</div><div class="fn-desc">a = 0 → 상수함수</div></div>
+        <div class="fn-card yes"><span class="fn-tag">일차함수 ✓</span><div class="fn-expr">y = x</div><div class="fn-desc">a=1, b=0, a≠0</div></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>선생님, y = <span class="frac"><span class="num">1</span><span class="den">x</span></span> 은 왜 안 되는 거예요? 너무 어렵게 생겼어요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>x = 0이라고 해봐. 분모가 0이 되잖아. 수학에서 0으로 나누는 건 정의가 안 돼. 그리고 y = ax + b 형태로 쓸 수도 없어.</p>
+        <p style="margin-top:8px; font-size:13px; opacity:.8;">이건 나중에 배울 반비례 관계야. 지금은 "분모에 x 있으면 일차함수 아님" 이것만 기억해.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>f(x) = 2x − 3 일 때 값 계산은 전에 배운 것처럼 x 자리에 수를 집어넣으면 돼. 확인해봐.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">f(2)</span><span class="eq-content">2 × <span class="mv">2</span> − 3 = <span class="mr">1</span></span></div>
+        <div class="eq-row"><span class="eq-num">f(−1)</span><span class="eq-content">2 × (<span class="mv">−1</span>) − 3 = <span class="mr">−5</span></span></div>
+        <div class="eq-row highlight"><span class="eq-num">f(0)</span><span class="eq-content">2 × <span class="mv">0</span> − 3 = <span class="mr">−3</span> &nbsp;← y절편이야</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div><p>확인 문제!</p></div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">f(x) = −2x + 5 일 때 f(3)의 값은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q2',false)">−7</button>
+          <button class="qopt" onclick="q(this,'q2',true)">−1</button>
+          <button class="qopt" onclick="q(this,'q2',false)">1</button>
+          <button class="qopt" onclick="q(this,'q2',false)">11</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q2"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>일차함수의 뜻 완료! 이제 그래프로 넘어가자.</p>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(3)">그래프 보기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s2" onclick="openMemo('s2')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s2"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s2"></div></div>
+  <div class="memo-input-area" id="mi-s2">
+    <textarea class="memo-textarea" id="mt-s2" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s2')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s2')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s2')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 3. 일차함수의 그래프 ════ -->
+<div class="section" id="s3">
+  <div class="sec-top"><div class="sec-badge teal">개념 3</div></div>
+  <div class="sec-title">일차함수의 그래프</div>
+  <div class="sec-body chat-bg" id="chat-s3">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>y = 2x + 1 을 좌표평면에 그리려면 어떻게 할 것 같아?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>x에 숫자를 넣어서 y를 구하고 점을 찍으면 되지 않아요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아! 한번 해보자. x에 −2부터 2까지 넣어봐.</p>
+      </div>
+      <div style="overflow-x:auto; margin-top:10px;">
+        <table class="tbl">
+          <thead><tr><th>x</th><th>−2</th><th>−1</th><th>0</th><th>1</th><th>2</th></tr></thead>
+          <tbody><tr>
+            <td><strong>y = 2x+1</strong></td>
+            <td style="color:var(--primary); font-weight:700;">−3</td>
+            <td style="color:var(--primary); font-weight:700;">−1</td>
+            <td style="color:var(--red); font-weight:700;">1</td>
+            <td style="color:var(--primary); font-weight:700;">3</td>
+            <td style="color:var(--primary); font-weight:700;">5</td>
+          </tr></tbody>
+        </table>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>이 점들을 좌표평면에 찍으면 어떻게 될까?</p>
+      </div>
+      <div class="graph-wrap"><canvas id="g3" width="280" height="280" class="graph-canvas"></canvas></div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>점들이 일직선으로 늘어서네요! 그럼 점을 엄청 많이 찍어야 하는 거예요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>아니야! <strong>점 2개면 충분해.</strong> 직선은 두 점만 알면 그을 수 있거든.</p>
+        <p style="margin-top:8px; font-size:13px; opacity:.8;">y절편 (0, 1)에 점 찍고 → (1, 3)에 점 찍고 → 두 점 연결. 끝이야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>순서대로 정리하면 이래.</p>
+      </div>
+      <div class="steps" style="margin-top:10px;">
+        <div class="step-item on"><div class="step-dot">1</div><div class="step-content"><strong>y절편을 구한다</strong><br>x = 0 대입 → y = b. 점 (0, b) 찍기</div></div>
+        <div class="step-item on"><div class="step-dot">2</div><div class="step-content"><strong>점 하나를 더 구한다</strong><br>x = 1 대입 → y = a + b. 점 (1, a+b) 찍기</div></div>
+        <div class="step-item on"><div class="step-dot">3</div><div class="step-content"><strong>두 점을 지나는 직선을 긋는다</strong><br>양쪽으로 쭉 연장해야 해. 선분이 아닌 직선이야.</div></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>그냥 y절편이랑 점 하나 더 찍으면 되는 거네요. 생각보다 간단하다!</p>
+      </div>
+      <div class="ref-box" style="margin-top:10px;">
+        <button class="ref-toggle" onclick="toggleRef(this)">
+          <span><span class="ref-tag">복습</span>순서쌍과 좌표평면 — 헷갈리면 여기서 확인</span>
+          <span class="ref-arrow">▼</span>
+        </button>
+        <div class="ref-body">
+          <div class="ref-section">
+            <div class="ref-section-title">순서쌍 (x, y)</div>
+            <p style="font-size:13px; color:var(--gray-600); line-height:1.8;">(2, 3)과 (3, 2)는 달라 — 순서가 중요해서 "순서쌍"이야.</p>
+          </div>
+          <div class="ref-section">
+            <div class="ref-section-title">좌표평면</div>
+            <p style="font-size:13px; color:var(--gray-600); line-height:1.8;">x축(가로)과 y축(세로)이 원점 O(0,0)에서 만나는 평면이야. 점 (a, b)는 x방향으로 a, y방향으로 b만큼 이동한 위치.</p>
+          </div>
+        </div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(4)">기울기와 y절편 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s3" onclick="openMemo('s3')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s3"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s3"></div></div>
+  <div class="memo-input-area" id="mi-s3">
+    <textarea class="memo-textarea" id="mt-s3" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s3')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s3')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s3')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 4. 기울기와 y절편 ════ -->
+<div class="section" id="s4">
+  <div class="sec-top"><div class="sec-badge teal">개념 4</div></div>
+  <div class="sec-title">기울기와 y절편 · x절편</div>
+  <div class="sec-body chat-bg" id="chat-s4">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>y = ax + b 에서 a랑 b가 각각 뭘 담당하는지 알아?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>a가 기울기고 b가 y절편이요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아! 그런데 <strong>왜</strong> b가 y절편인지 먼저 알아야 해. 그래프 한번 봐봐. 직선이 y축이랑 만나는 점 보여?</p>
+      </div>
+      <div class="graph-wrap"><canvas id="g4int" width="280" height="240" class="graph-canvas"></canvas></div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>y축에 찍힌 초록 점이요? (0, 4) 라고 써있네요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>잘 봤어! 그런데 <strong>y축 위에 있는 점들</strong>은 x좌표가 항상 얼마야? 원점 (0, 0), 저 점 (0, 4), y축 위 다른 점들... 공통점이 뭐야?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>다 x = 0 이잖아요! y축에 있으면 오른쪽이나 왼쪽으로 안 움직이니까요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>바로 그거야! y절편은 <strong>y축 위의 점</strong>이니까 x = 0이고, 그래서 y절편을 구하려면 <strong>x = 0을 대입</strong>하는 거야. 확인해 볼까?</p>
+      </div>
+      <div class="eq-steps" style="margin-top:8px;">
+        <div class="eq-row"><span class="eq-num">식</span><span class="eq-content">y = 2<span class="mv">x</span> + 4</span></div>
+        <div class="eq-row"><span class="eq-num">x = 0 대입</span><span class="eq-content">y = 2 × <span class="mv">0</span> + 4 = <span class="mr">4</span></span></div>
+        <div class="eq-row result"><span class="eq-num">y절편</span><span class="eq-content">점 (0, <span class="mr">4</span>) — 그래프의 초록 점과 일치!</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>아! y축에 있으니까 x = 0인 거고, 그래서 x = 0을 대입하는 거군요. 이유가 있었네요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>그럼 x절편은? 다시 그래프 봐. 직선이 <strong>x축이랑 만나는 점</strong> 보여?</p>
+      </div>
+      <div class="graph-wrap"><canvas id="g4int2" width="280" height="240" class="graph-canvas"></canvas></div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>x축에 찍힌 주황 점이요? (−2, 0) 이네요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>x축 위의 점들은 y좌표가 항상 얼마야? (0, 0), (−2, 0), x축 위 다른 점들...</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>다 y = 0이요! x축에 있으면 위아래로 안 움직이니까요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>완벽해! x절편도 같은 원리야. <strong>x축 위의 점</strong>이니까 y = 0이고, 그래서 <strong>y = 0을 대입</strong>해서 구해.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:8px;">
+        <div class="eq-row"><span class="eq-num">식</span><span class="eq-content">y = 2<span class="mv">x</span> + 4</span></div>
+        <div class="eq-row"><span class="eq-num">y = 0 대입</span><span class="eq-content">0 = 2x + 4 &nbsp;→&nbsp; 2x = −4 &nbsp;→&nbsp; x = <span class="mr">−2</span></span></div>
+        <div class="eq-row result"><span class="eq-num">x절편</span><span class="eq-content">점 (<span class="mr">−2</span>, 0) — 그래프의 주황 점과 일치!</span></div>
+      </div>
+      <div style="background:var(--primary-bg); border-left:3px solid var(--primary); border-radius:0 10px 10px 0; padding:14px 16px; margin:10px 0;">
+        <p><strong>y절편</strong>: y축 위의 점 → x = 0 대입 → 점 (0, b)</p>
+        <p style="margin-top:6px;"><strong>x절편</strong>: x축 위의 점 → y = 0 대입 → 점 (<span class="frac"><span class="num">−b</span><span class="den">a</span></span>, 0)</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>y절편은 y축 위 → x=0, x절편은 x축 위 → y=0. 이름이랑 반대처럼 보이지만 이유가 있었군요!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>이번엔 기울기야. 기울기의 부호는 방향으로 결정돼. 왼쪽에서 오른쪽으로 읽을 때, <strong style="color:var(--primary);">올라가면 +</strong>, <strong style="color:var(--red);">내려가면 −</strong>이야.</p>
+      </div>
+      <div style="display:flex; gap:12px; justify-content:center; margin:10px 0;">
+        <div style="text-align:center; background:var(--primary-bg); border-radius:12px; padding:12px 14px;">
+          <svg width="80" height="60" viewBox="0 0 80 60"><line x1="10" y1="50" x2="70" y2="10" stroke="#4f46e5" stroke-width="4" stroke-linecap="round"/><circle cx="10" cy="50" r="4" fill="#4f46e5"/><circle cx="70" cy="10" r="4" fill="#4f46e5"/></svg>
+          <div style="font-size:13px; font-weight:800; color:var(--primary);">a &gt; 0</div>
+          <div style="font-size:12px; color:var(--gray-600); margin-top:2px;">우상향<br>(오른쪽 위 방향)</div>
+        </div>
+        <div style="text-align:center; background:var(--red-bg); border-radius:12px; padding:12px 14px;">
+          <svg width="80" height="60" viewBox="0 0 80 60"><line x1="10" y1="10" x2="70" y2="50" stroke="#dc2626" stroke-width="4" stroke-linecap="round"/><circle cx="10" cy="10" r="4" fill="#dc2626"/><circle cx="70" cy="50" r="4" fill="#dc2626"/></svg>
+          <div style="font-size:13px; font-weight:800; color:var(--red);">a &lt; 0</div>
+          <div style="font-size:12px; color:var(--gray-600); margin-top:2px;">우하향<br>(오른쪽 아래 방향)</div>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>땡중샘, 그런데 좌측으로 올라가는 것은 왜 +기울기가 아니에요? 좌상향은 안 되는 거예요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>응, 우리 <span class="s-call-slot">태린이</span>가 왼손잡이인 것을 샘이 깜빡했구나.</p>
+        <p style="margin-top:8px;">안타깝게도 수학은 오른손잡이들 위주로 발전하다 보니, 그래프도 <strong>왼쪽 → 오른쪽</strong>으로 흘러가는 방향을 기준으로 삼게 됐어. 좌상향도 그래프 방향을 반대로 읽으면 '우하향'이 되거든.</p>
+        <p style="margin-top:8px; font-size:13px; color:var(--gray-500);">그래서 어느 방향으로 보든, <strong>왼쪽에서 오른쪽으로 읽을 때</strong> 올라가면 +, 내려가면 −로 약속한 거야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>방향은 알겠는데 기울어진 정도를 어떻게 숫자로 나타내요? 각도로 하면 안 되나요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>각도로도 나타낼 수 있어! 30°, 45°, 60° 기울기를 한 그래프에 그려봤어. 각도가 클수록 더 가파르지?</p>
+      </div>
+      <div class="graph-wrap"><canvas id="g4angle" width="280" height="240" class="graph-canvas"></canvas></div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>확실히 60°가 제일 가파르고 30°가 제일 완만하네요. 그러면 각도로 표현하면 되지 않나요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>아쉽게도 각도는 문제가 있어. 그래프 종이를 크게 프린트하면 같은 직선도 각도가 달라 보이거든. 축의 단위가 바뀌면 각도도 바뀌어. 그래서 수학에서는 <strong>좌표의 비율</strong>로 표현해 — x가 1 늘 때 y가 얼마나 변하는지야. y = x 랑 y = 2x 를 비교해봐.</p>
+      </div>
+      <div class="graph-row" style="margin-top:10px;">
+        <div class="graph-item"><canvas id="g4comp1" width="150" height="150"></canvas><div class="graph-label">y = x (기울기 1/1)</div></div>
+        <div class="graph-item"><canvas id="g4comp2" width="150" height="150"></canvas><div class="graph-label">y = 2x (기울기 2/1)</div></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>y = x 는 x가 1 늘면 y도 1 늘고, y = 2x 는 x가 1 늘면 y가 2 늘어요. 비율로 나타내는 거군요!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아! 그걸 식으로 정리하면 이래. <strong><span class="frac" style="font-size:1em; vertical-align:middle;"><span class="num">y끼리 뺀 것</span><span class="den">x끼리 뺀 것</span></span></strong> — 이렇게 외우면 절대 안 잊어.</p>
+      </div>
+      <div class="math-block" style="margin-top:10px;">
+기울기 a = <span class="frac" style="color:#86efac;"><span class="num">y의 변화량</span><span class="den">x의 변화량</span></span> = <span class="frac"><span class="num" style="color:#86efac;">y₂ − y₁</span><span class="den" style="color:#fcd34d;">x₂ − x₁</span></span><br><br>
+y = 2x 위의 두 점 (1, 2) → (3, 6)<br>
+a = <span class="frac"><span class="num" style="color:#86efac;">6 − 2</span><span class="den" style="color:#fcd34d;">3 − 1</span></span> = <span class="frac"><span class="num" style="color:#86efac;">4</span><span class="den" style="color:#fcd34d;">2</span></span> = <span style="color:#fca5a5;">2</span>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>그런데 왜 <strong>y끼리</strong> 빼고 <strong>x끼리</strong> 빼는 걸까? 직각삼각형으로 보면 딱 이해돼. 그래프 봐봐.</p>
+      </div>
+      <div class="graph-wrap"><canvas id="g4tri" width="280" height="240" class="graph-canvas"></canvas></div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>아! 두 점 사이에 직각삼각형이 생기는군요. 가로가 x의 차이고 세로가 y의 차이예요!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아! 기울기 = <span class="frac" style="vertical-align:middle;"><span class="num" style="color:#059669;">높이 (y의 차이)</span><span class="den" style="color:#d97706;">밑변 (x의 차이)</span></span> 야.<br>그래서 분자에 y끼리 뺀 것, 분모에 x끼리 뺀 것이 오는 거야.</p>
+      </div>
+      <div style="background:var(--primary-bg); border-left:3px solid var(--primary); border-radius:0 10px 10px 0; padding:14px 16px; margin:10px 0; font-size:14px;">
+        <p>직각삼각형에서</p>
+        <p style="margin-top:6px;">· 밑변 = <strong style="color:#d97706;">x₂ − x₁</strong> (오른쪽으로 얼마나 이동했나)</p>
+        <p style="margin-top:4px;">· 높이 = <strong style="color:#059669;">y₂ − y₁</strong> (위로 얼마나 이동했나)</p>
+        <p style="margin-top:8px;">기울기 = <span class="frac" style="vertical-align:middle;"><span class="num" style="color:#059669;">높이</span><span class="den" style="color:#d97706;">밑변</span></span> = <span class="frac" style="vertical-align:middle;"><span class="num" style="color:#059669;">y₂ − y₁</span><span class="den" style="color:#d97706;">x₂ − x₁</span></span></p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>그리고 <strong>부호 실수를 막는 꿀팁</strong>이 있어! 뺄 때 항상 <strong>같은 방향</strong>으로 빼야 해.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:8px;">
+        <div class="eq-row"><span class="eq-num">두 점</span><span class="eq-content"><strong style="color:#4f46e5;">(1, 2)</strong> 와 <strong style="color:#dc2626;">(3, 6)</strong></span></div>
+        <div class="eq-row highlight"><span class="eq-num">올바름</span><span class="eq-content"><span class="frac" style="vertical-align:middle;"><span class="num" style="color:#059669;"><span style="color:#dc2626;">6</span> − <span style="color:#4f46e5;">2</span></span><span class="den" style="color:#d97706;"><span style="color:#dc2626;">3</span> − <span style="color:#4f46e5;">1</span></span></span> = <span class="frac" style="vertical-align:middle;"><span class="num">4</span><span class="den">2</span></span> = <strong>2</strong> &nbsp; (둘 다 ②번 − ①번)</span></div>
+        <div class="eq-row highlight"><span class="eq-num">올바름</span><span class="eq-content"><span class="frac" style="vertical-align:middle;"><span class="num" style="color:#059669;"><span style="color:#4f46e5;">2</span> − <span style="color:#dc2626;">6</span></span><span class="den" style="color:#d97706;"><span style="color:#4f46e5;">1</span> − <span style="color:#dc2626;">3</span></span></span> = <span class="frac" style="vertical-align:middle;"><span class="num">−4</span><span class="den">−2</span></span> = <strong>2</strong> &nbsp; (둘 다 ①번 − ②번)</span></div>
+        <div class="eq-row" style="background:var(--red-bg);"><span class="eq-num" style="color:#dc2626;">틀림</span><span class="eq-content"><span class="frac" style="vertical-align:middle;"><span class="num" style="color:#059669;"><span style="color:#dc2626;">6</span> − <span style="color:#4f46e5;">2</span></span><span class="den" style="color:#d97706;"><span style="color:#4f46e5;">1</span> − <span style="color:#dc2626;">3</span></span></span> = <span class="frac" style="vertical-align:middle;"><span class="num">4</span><span class="den">−2</span></span> = <strong style="color:#dc2626;">−2</strong> &nbsp; (방향이 섞임!)</span></div>
+      </div>
+      <div style="background:var(--orange-bg); border-left:3px solid var(--orange); border-radius:0 10px 10px 0; padding:12px 16px; margin:10px 0;">
+        <p style="font-size:13px;"><strong>규칙:</strong> y 분자를 (두 번째 − 첫 번째)로 빼면, x 분모도 (두 번째 − 첫 번째)로. 둘 다 같은 방향!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>그런데 교과서마다 표현이 달라요. f(b) − f(a) / b − a 이런 식도 있던데 그건 뭐예요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>다 같은 말이야! 기울기를 표현하는 방법이 여러 가지가 있는 것뿐이야. 하나씩 비교해볼게.</p>
+      </div>
+      <div style="background:var(--gray-50); border:1px solid var(--gray-200); border-radius:10px; overflow:hidden; margin:10px 0;">
+        <div style="background:var(--gray-900); color:#a5b4fc; font-size:11px; font-weight:700; letter-spacing:1px; padding:8px 16px;">기울기를 표현하는 다양한 방법</div>
+        <div style="padding:14px 16px; display:flex; flex-direction:column; gap:14px;">
+          <div>
+            <div style="font-size:11px; font-weight:800; color:var(--gray-400); letter-spacing:0.5px; margin-bottom:4px;">① 변화량 표현</div>
+            <div style="font-size:15px;">
+              <span class="frac"><span class="num" style="color:#059669;">y의 변화량</span><span class="den" style="color:#d97706;">x의 변화량</span></span>
+              &nbsp;=&nbsp;
+              <span class="frac"><span class="num" style="color:#059669;">Δy</span><span class="den" style="color:#d97706;">Δx</span></span>
+            </div>
+            <div style="font-size:12px; color:var(--gray-500); margin-top:4px;">Δ(델타) = 변화량을 뜻하는 기호</div>
+          </div>
+          <div style="height:1px; background:var(--gray-200);"></div>
+          <div>
+            <div style="font-size:11px; font-weight:800; color:var(--gray-400); letter-spacing:0.5px; margin-bottom:4px;">② 두 점 좌표 표현</div>
+            <div style="font-size:15px;">
+              <span class="frac"><span class="num" style="color:#059669;">y₂ − y₁</span><span class="den" style="color:#d97706;">x₂ − x₁</span></span>
+            </div>
+            <div style="font-size:12px; color:var(--gray-600); margin-top:8px; line-height:1.9;">
+              두 점이 있을 때 각각 이름을 붙여:<br>
+              첫 번째 점 → <strong style="color:#4f46e5;">(x₁, y₁)</strong> &nbsp;x₁ = 첫 번째 점의 x값, y₁ = 첫 번째 점의 y값<br>
+              두 번째 점 → <strong style="color:#dc2626;">(x₂, y₂)</strong> &nbsp;x₂ = 두 번째 점의 x값, y₂ = 두 번째 점의 y값<br>
+              <span style="color:var(--gray-400);">아래첨자 1, 2는 그냥 "첫 번째", "두 번째"라는 뜻이야.</span>
+            </div>
+            <div style="background:var(--gray-50); border-radius:8px; padding:10px 12px; margin-top:8px; font-size:13px; color:var(--gray-700);">
+              예) 점 <strong style="color:#4f46e5;">(1, 2)</strong> 와 <strong style="color:#dc2626;">(3, 6)</strong> 이면<br>
+              x₁=<strong style="color:#4f46e5;">1</strong>, y₁=<strong style="color:#4f46e5;">2</strong>, x₂=<strong style="color:#dc2626;">3</strong>, y₂=<strong style="color:#dc2626;">6</strong><br>
+              →
+              <span class="frac" style="vertical-align:middle;"><span class="num" style="color:#059669;">y₂ − y₁</span><span class="den" style="color:#d97706;">x₂ − x₁</span></span>
+              =
+              <span class="frac" style="vertical-align:middle;"><span class="num" style="color:#059669;"><strong style="color:#dc2626;">6</strong> − <strong style="color:#4f46e5;">2</strong></span><span class="den" style="color:#d97706;"><strong style="color:#dc2626;">3</strong> − <strong style="color:#4f46e5;">1</strong></span></span>
+              = <strong>2</strong>
+            </div>
+          </div>
+          <div style="height:1px; background:var(--gray-200);"></div>
+          <div>
+            <div style="font-size:11px; font-weight:800; color:var(--gray-400); letter-spacing:0.5px; margin-bottom:4px;">③ 함수 표기법</div>
+            <div style="font-size:15px;">
+              <span class="frac"><span class="num" style="color:#059669;">f(b) − f(a)</span><span class="den" style="color:#d97706;">b − a</span></span>
+            </div>
+            <div style="font-size:12px; color:var(--gray-500); margin-top:4px;">f(x) = y이므로 y₂ − y₁ / x₂ − x₁ 와 똑같아</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#fef3c7; border-left:3px solid #d97706; border-radius:0 10px 10px 0; padding:14px 16px; margin-top:4px;">
+        <p style="font-weight:800; color:#92400e;">암기법 &nbsp; <span class="frac" style="font-size:1.05em; vertical-align:middle; color:#92400e;"><span class="num">y끼리 뺀 것</span><span class="den">x끼리 뺀 것</span></span></p>
+        <p style="font-size:13px; color:#78350f; margin-top:6px;">분모·분자 위치만 기억하면 어떤 표현이 나와도 같은 말이야!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>다 <span class="frac" style="font-size:0.95em; vertical-align:middle;"><span class="num">y끼리 뺀 것</span><span class="den">x끼리 뺀 것</span></span> 이네요! 표현만 다르고 의미는 하나구나.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아. 그리고 한 가지 더 — 뺄 때 순서를 바꿔도 돼. 분모·분자 둘 다 뒤집으면 결과가 같아.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:8px;">
+        <div class="eq-row"><span class="eq-num">두 점</span><span class="eq-content">(1, 2) 와 (3, 6)</span></div>
+        <div class="eq-row"><span class="eq-num">순서 ①</span><span class="eq-content"><span class="frac"><span class="num" style="color:#059669;">6 − 2</span><span class="den" style="color:#d97706;">3 − 1</span></span> = <span class="frac"><span class="num">4</span><span class="den">2</span></span> = <span style="color:#dc2626; font-weight:700;">2</span></span></div>
+        <div class="eq-row highlight"><span class="eq-num">순서 ② (뒤집기)</span><span class="eq-content"><span class="frac"><span class="num" style="color:#059669;">2 − 6</span><span class="den" style="color:#d97706;">1 − 3</span></span> = <span class="frac"><span class="num">−4</span><span class="den">−2</span></span> = <span style="color:#dc2626; font-weight:700;">2</span></span></div>
+      </div>
+      <div style="background:var(--red-bg); border-left:3px solid var(--red); border-radius:0 10px 10px 0; padding:12px 16px; margin:10px 0;">
+        <span class="warn-label">주의</span>
+        <p style="font-size:13px;">분모·분자를 <strong>둘 다</strong> 뒤집어야 해. 분자만 또는 분모만 뒤집으면 부호가 틀려!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>a의 부호와 크기에 따라 y = ax 그래프 모양이 달라져.</p>
+      </div>
+      <div class="graph-row" style="margin-top:10px;">
+        <div class="graph-item"><canvas id="g4a" width="150" height="150"></canvas><div class="graph-label">y = 2x (a &gt; 0, 우상향)</div></div>
+        <div class="graph-item"><canvas id="g4b" width="150" height="150"></canvas><div class="graph-label">y = −2x (a &lt; 0, 우하향)</div></div>
+      </div>
+      <div style="background:var(--primary-bg); border-left:3px solid var(--primary); border-radius:0 10px 10px 0; padding:14px 16px; margin:10px 0;">
+        <p><strong>|a|가 클수록</strong> y축에 가깝고 가파라져.</p>
+        <p style="margin-top:6px; font-size:13px; color:var(--gray-600);">|a|가 작을수록 x축에 가깝고 완만해져.</p>
+      </div>
+      <div class="graph-row">
+        <div class="graph-item"><canvas id="g4c" width="150" height="150"></canvas><div class="graph-label">y = 3x (가파름)</div></div>
+        <div class="graph-item"><canvas id="g4d" width="150" height="150"></canvas><div class="graph-label">y = ½x (완만)</div></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>그런데 선생님, y = 2x 랑 y = 2x + 3이랑 y = 2x − 2 는 기울기가 다 똑같은데... 그래프가 어떻게 생겼어요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>좋은 질문이야! 직접 봐봐. a가 같으면 어떻게 되는지.</p>
+      </div>
+      <div class="graph-wrap"><canvas id="g4para" width="280" height="260" class="graph-canvas"></canvas></div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>세 직선이 서로 평행하네요! 모양은 똑같고 위아래로만 이동한 것 같아요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>정확해! 이걸 <strong>평행이동</strong>이라고 해. y = 2x 의 그래프를 <strong>y축 방향(위아래)으로 b만큼 이동</strong>하면 y = 2x + b 가 되는 거야.</p>
+      </div>
+      <div style="background:var(--primary-bg); border-left:3px solid var(--primary); border-radius:0 10px 10px 0; padding:14px 16px; margin:10px 0;">
+        <p><strong>y = ax</strong> 의 그래프를 y축 방향으로 <strong>b만큼 평행이동</strong></p>
+        <p style="margin-top:8px;">→ <strong>y = ax + b</strong></p>
+        <p style="margin-top:10px; font-size:13px; color:var(--gray-600);">b &gt; 0 이면 위로, b &lt; 0 이면 아래로 이동</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>그럼 a가 같은 두 일차함수는 항상 평행한 거네요? 절대 만나지 않고요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아! <strong>기울기가 같으면 평행</strong>이야. 딱 하나 예외는 b도 같으면 — 그건 완전히 똑같은 직선이 되어버려. 시험에 꼭 나오는 포인트야.</p>
+      </div>
+      <div style="background:var(--gray-900); color:white; border-radius:10px; padding:14px 16px; margin:10px 0; font-size:14px; line-height:2;">
+        <span style="color:#a5b4fc; font-weight:700;">a가 같고 b가 다르면</span> → 두 직선은 <span style="color:#86efac; font-weight:700;">평행</span> (만나지 않음)<br>
+        <span style="color:#a5b4fc; font-weight:700;">a가 같고 b도 같으면</span> → <span style="color:#fcd34d; font-weight:700;">일치</span> (완전히 같은 직선)
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>그러면 y = ax + b 에서 a랑 b 부호 조합에 따라 그래프 모양이 정해지겠네요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아! 정리하면 이래. 시험에 자주 나오니까 잘 봐둬.</p>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;">
+        <div style="text-align:center; background:var(--primary-bg); border-radius:12px; padding:10px 6px;">
+          <canvas id="g4s1" width="130" height="120"></canvas>
+          <div style="font-size:12px; font-weight:800; margin-top:4px;"><span style="color:#4f46e5;">a &gt; 0</span> &nbsp; <span style="color:#059669;">b &gt; 0</span></div>
+          <div style="font-size:11px; color:var(--gray-600); margin-top:2px;">우상향 · y축 <strong>위쪽</strong> 교차</div>
+        </div>
+        <div style="text-align:center; background:#fff7ed; border-radius:12px; padding:10px 6px;">
+          <canvas id="g4s2" width="130" height="120"></canvas>
+          <div style="font-size:12px; font-weight:800; margin-top:4px;"><span style="color:#4f46e5;">a &gt; 0</span> &nbsp; <span style="color:#dc2626;">b &lt; 0</span></div>
+          <div style="font-size:11px; color:var(--gray-600); margin-top:2px;">우상향 · y축 <strong>아래쪽</strong> 교차</div>
+        </div>
+        <div style="text-align:center; background:#fef2f2; border-radius:12px; padding:10px 6px;">
+          <canvas id="g4s3" width="130" height="120"></canvas>
+          <div style="font-size:12px; font-weight:800; margin-top:4px;"><span style="color:#dc2626;">a &lt; 0</span> &nbsp; <span style="color:#059669;">b &gt; 0</span></div>
+          <div style="font-size:11px; color:var(--gray-600); margin-top:2px;">우하향 · y축 <strong>위쪽</strong> 교차</div>
+        </div>
+        <div style="text-align:center; background:#f5f3ff; border-radius:12px; padding:10px 6px;">
+          <canvas id="g4s4" width="130" height="120"></canvas>
+          <div style="font-size:12px; font-weight:800; margin-top:4px;"><span style="color:#dc2626;">a &lt; 0</span> &nbsp; <span style="color:#dc2626;">b &lt; 0</span></div>
+          <div style="font-size:11px; color:var(--gray-600); margin-top:2px;">우하향 · y축 <strong>아래쪽</strong> 교차</div>
+        </div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(5)">일차함수의 식 구하기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s4" onclick="openMemo('s4')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s4"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s4"></div></div>
+  <div class="memo-input-area" id="mi-s4">
+    <textarea class="memo-textarea" id="mt-s4" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s4')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s4')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s4')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 5. 일차함수의 식 구하기 ════ -->
+<div class="section" id="s5">
+  <div class="sec-top"><div class="sec-badge teal">개념 5</div></div>
+  <div class="sec-title">일차함수의 식 구하기</div>
+  <div class="sec-body chat-bg" id="chat-s5">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>이번엔 반대야. 조건이 주어지면 y = ax + b 의 식을 구하는 거야. 경우가 세 가지야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>역방향이요? 너무 어려울 것 같아요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>첫 번째 경우부터 — 기울기랑 y절편이 둘 다 주어지면 어떻게 할 것 같아?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>그냥 y = ax + b 에 바로 넣으면 되는 거 아닌가요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아! 제일 쉬운 경우야.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">조건</span><span class="eq-content">기울기 = <span class="mv">2</span>, y절편 = <span class="mr">−3</span></span></div>
+        <div class="eq-row result"><span class="eq-num">식</span><span class="eq-content">y = <span style="color:#a5b4fc;font-weight:700;">2</span>x <span style="color:#fca5a5;font-weight:700;">− 3</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>두 번째 — 기울기랑 점 하나가 주어지면? a는 알고 b를 모르는 상황이야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>y = ax + b 에서 a는 아니까 주어진 점의 x, y를 대입하면 b가 나오지 않아요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>정확해! 바로 그 방법이야.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">조건</span><span class="eq-content">기울기 = <span class="mv">3</span>, 점 (<span class="mr">2</span>, <span class="mr">7</span>) 통과</span></div>
+        <div class="eq-row"><span class="eq-num">식 설정</span><span class="eq-content">y = <span class="mv">3</span>x + b</span></div>
+        <div class="eq-row"><span class="eq-num">b 구하기</span><span class="eq-content"><span class="mr">7</span> = 3 × <span class="mr">2</span> + b &nbsp;→&nbsp; b = <span class="mr">1</span></span></div>
+        <div class="eq-row result"><span class="eq-num">식</span><span class="eq-content">y = <span style="color:#a5b4fc;font-weight:700;">3</span>x + <span style="color:#fca5a5;font-weight:700;">1</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>세 번째 — 점 두 개만 주어지면? 기울기도 모르고 y절편도 몰라.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>둘 다 모르면 너무 어려워요. 어디서 시작해요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>두 점이 있으면 기울기는 구할 수 있잖아. 기울기 먼저 구하고, 그 다음 두 번째 방법처럼 하면 돼.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">조건</span><span class="eq-content">두 점 (<span class="mr">1</span>, <span class="mr">3</span>), (<span class="mr">3</span>, <span class="mr">7</span>)</span></div>
+        <div class="eq-row"><span class="eq-num">① 기울기</span><span class="eq-content">a = <span class="frac"><span class="num" style="color:#86efac;">7−3</span><span class="den" style="color:#fcd34d;">3−1</span></span> = <span class="mv">2</span></span></div>
+        <div class="eq-row"><span class="eq-num">② b 구하기</span><span class="eq-content">y = <span class="mv">2</span>x + b 에 (1, 3) 대입: 3 = 2 + b → b = <span class="mr">1</span></span></div>
+        <div class="eq-row result"><span class="eq-num">식</span><span class="eq-content">y = <span style="color:#a5b4fc;font-weight:700;">2</span>x + <span style="color:#fca5a5;font-weight:700;">1</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>아, 두 점 → 기울기 → b 순서로 하면 되는 거네요! 처음엔 어렵다고 했는데 막상 하니까 별거 아니네요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div><p>확인 문제!</p></div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">기울기가 −2이고 점 (1, 3)을 지나는 일차함수의 식은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q3',false)">y = −2x + 1</button>
+          <button class="qopt" onclick="q(this,'q3',true)">y = −2x + 5</button>
+          <button class="qopt" onclick="q(this,'q3',false)">y = 2x + 1</button>
+          <button class="qopt" onclick="q(this,'q3',false)">y = −2x − 5</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q3"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(6)">일차방정식과의 관계 보기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s5" onclick="openMemo('s5')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s5"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s5"></div></div>
+  <div class="memo-input-area" id="mi-s5">
+    <textarea class="memo-textarea" id="mt-s5" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s5')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s5')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s5')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 6. 일차함수와 일차방정식 ════ -->
+<div class="section" id="s6">
+  <div class="sec-top"><div class="sec-badge teal">개념 6</div></div>
+  <div class="sec-title">일차함수와 일차방정식의 관계</div>
+  <div class="sec-body chat-bg" id="chat-s6">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>전에 연립방정식 배웠지? 거기서 "해"가 뭐였어?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>두 방정식을 동시에 만족하는 x, y 값이요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아! 방정식 하나가 직선 하나야. 그럼 두 방정식의 해를 그래프로 보면 어떻게 될 것 같아?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>두 직선이 만나는 점이요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>정확해! 먼저 방정식을 일차함수 형태로 바꾸는 법부터 봐.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">방정식</span><span class="eq-content">2<span class="mv">x</span> − <span class="mv">y</span> + 1 = 0</span></div>
+        <div class="eq-row"><span class="eq-num">y = 로 변환</span><span class="eq-content"><span class="mv">y</span> = 2<span class="mv">x</span> + 1</span></div>
+        <div class="eq-row result"><span class="eq-num">그래프</span><span class="eq-content">기울기 2, y절편 1인 직선</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>그럼 연립방정식의 해를 그래프로 확인해보자.</p>
+      </div>
+      <div class="graph-wrap"><canvas id="g6" width="280" height="280" class="graph-canvas"></canvas></div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">직선 ①</span><span class="eq-content">y = <span class="mv">x</span> + 1 (파란색)</span></div>
+        <div class="eq-row"><span class="eq-num">직선 ②</span><span class="eq-content">y = −<span class="mv">x</span> + 3 (빨간색)</span></div>
+        <div class="eq-row highlight"><span class="eq-num">교점 계산</span><span class="eq-content">x + 1 = −x + 3 → x = <span class="mr">1</span>, y = <span class="mr">2</span></span></div>
+        <div class="eq-row result"><span class="eq-num">연립해</span><span class="eq-content">x = <span style="color:#fca5a5;font-weight:700;">1</span>, y = <span style="color:#fca5a5;font-weight:700;">2</span> → 교점 (1, 2)</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>선생님, 그러면 두 직선이 평행하면 만나는 점이 없으니까 해도 없는 거 아닌가요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아! 그리고 두 직선이 완전히 겹치면?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>모든 점이 다 교점이 되니까 해가 무한히 많아지겠네요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>완벽하게 이해했어! 정리하면 이래.</p>
+      </div>
+      <div style="overflow-x:auto; margin-top:10px;">
+        <table class="tbl">
+          <thead><tr><th>두 직선의 위치 관계</th><th>연립방정식의 해</th></tr></thead>
+          <tbody>
+            <tr><td><strong>한 점에서 만남</strong><br><span style="font-size:12px; color:var(--gray-500);">기울기가 다름</span></td><td style="color:var(--green); font-weight:700;">해가 1개</td></tr>
+            <tr><td><strong>평행</strong><br><span style="font-size:12px; color:var(--gray-500);">기울기 같고 y절편 다름</span></td><td style="color:var(--red); font-weight:700;">해가 없음</td></tr>
+            <tr><td><strong>일치</strong><br><span style="font-size:12px; color:var(--gray-500);">기울기·y절편 모두 같음</span></td><td style="color:var(--orange); font-weight:700;">해가 무한히 많음</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(7)">종합 퀴즈 풀기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s6" onclick="openMemo('s6')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s6"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s6"></div></div>
+  <div class="memo-input-area" id="mi-s6">
+    <textarea class="memo-textarea" id="mt-s6" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s6')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s6')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s6')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 7. 종합 퀴즈 ════ -->
+<div class="section" id="s7">
+  <div class="sec-top"><div class="sec-badge green">종합 퀴즈</div></div>
+  <div class="sec-title">지금까지 이해한 것 점검</div>
+  <div class="sec-body">
+
+    <p style="font-size:14px; color:var(--gray-500); margin-bottom:18px;">5문제 × 20점. 모두 풀면 점수 확인 버튼이 활성화돼요.</p>
+
+    <div class="quiz" style="margin-bottom:12px;">
+      <div class="quiz-label">문제 1 / 5</div>
+      <div class="quiz-q">y = −3x + 2 에서 기울기와 y절편을 바르게 짝지은 것은?</div>
+      <div class="quiz-opts">
+        <button class="qopt" onclick="fin(this,'f1',false)">기울기 3, y절편 2</button>
+        <button class="qopt" onclick="fin(this,'f1',true)">기울기 −3, y절편 2</button>
+        <button class="qopt" onclick="fin(this,'f1',false)">기울기 −3, y절편 −2</button>
+        <button class="qopt" onclick="fin(this,'f1',false)">기울기 2, y절편 −3</button>
+      </div>
+      <div class="quiz-fb" id="qfb-f1"></div>
+    </div>
+
+    <div class="quiz" style="margin-bottom:12px;">
+      <div class="quiz-label">문제 2 / 5</div>
+      <div class="quiz-q">f(x) = 4x − 1 일 때 f(2)의 값은?</div>
+      <div class="quiz-opts">
+        <button class="qopt" onclick="fin(this,'f2',false)">6</button>
+        <button class="qopt" onclick="fin(this,'f2',true)">7</button>
+        <button class="qopt" onclick="fin(this,'f2',false)">8</button>
+        <button class="qopt" onclick="fin(this,'f2',false)">9</button>
+      </div>
+      <div class="quiz-fb" id="qfb-f2"></div>
+    </div>
+
+    <div class="quiz" style="margin-bottom:12px;">
+      <div class="quiz-label">문제 3 / 5</div>
+      <div class="quiz-q">y = 2x − 4 의 x절편은?</div>
+      <div class="quiz-opts">
+        <button class="qopt" onclick="fin(this,'f3',false)">−4</button>
+        <button class="qopt" onclick="fin(this,'f3',false)">−2</button>
+        <button class="qopt" onclick="fin(this,'f3',true)">2</button>
+        <button class="qopt" onclick="fin(this,'f3',false)">4</button>
+      </div>
+      <div class="quiz-fb" id="qfb-f3"></div>
+    </div>
+
+    <div class="quiz" style="margin-bottom:12px;">
+      <div class="quiz-label">문제 4 / 5</div>
+      <div class="quiz-q">두 점 (0, 3), (2, 7)을 지나는 일차함수의 식은?</div>
+      <div class="quiz-opts">
+        <button class="qopt" onclick="fin(this,'f4',false)">y = x + 3</button>
+        <button class="qopt" onclick="fin(this,'f4',true)">y = 2x + 3</button>
+        <button class="qopt" onclick="fin(this,'f4',false)">y = 2x − 3</button>
+        <button class="qopt" onclick="fin(this,'f4',false)">y = 3x + 2</button>
+      </div>
+      <div class="quiz-fb" id="qfb-f4"></div>
+    </div>
+
+    <div class="quiz" style="margin-bottom:12px;">
+      <div class="quiz-label">문제 5 / 5</div>
+      <div class="quiz-q">두 일차함수 y = 2x + 1 과 y = 2x − 3 의 그래프의 위치 관계는?</div>
+      <div class="quiz-opts">
+        <button class="qopt" onclick="fin(this,'f5',false)">한 점에서 만난다</button>
+        <button class="qopt" onclick="fin(this,'f5',true)">평행하다</button>
+        <button class="qopt" onclick="fin(this,'f5',false)">일치한다</button>
+        <button class="qopt" onclick="fin(this,'f5',false)">수직으로 만난다</button>
+      </div>
+      <div class="quiz-fb" id="qfb-f5"></div>
+    </div>
+
+    <div class="next-wrap">
+      <button class="score-check-btn" id="score-btn" onclick="showScore()">점수 확인</button>
+    </div>
+
+    <div class="score-panel" id="score-panel">
+      <div class="score-num" id="score-num">0</div>
+      <div class="score-of">/ 100점</div>
+      <div class="score-msg" id="score-msg"></div>
+      <div class="score-detail" id="score-detail"></div>
+      <button class="restart-btn" onclick="restart()">처음부터 다시</button>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s7" onclick="openMemo('s7')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s7"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s7"></div></div>
+  <div class="memo-input-area" id="mi-s7">
+    <textarea class="memo-textarea" id="mt-s7" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s7')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s7')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s7')">취소</button>
+    </div>
+  </div>
+</div>
+
+<button class="memo-float-btn" id="memo-float-btn" onclick="openMemoList()">수정 요청 목록 <span class="memo-count" id="memo-float-count">0</span></button>
+
+<div class="memo-list-overlay" id="memo-list-overlay" onclick="if(event.target===this)closeMemoList()">
+  <div class="memo-list-sheet">
+    <div class="memo-list-title">수정 요청 목록 <button class="memo-list-close" onclick="closeMemoList()">닫기</button></div>
+    <div id="memo-list-body"></div>
+  </div>
+</div>
+
+<script>
+/* ── 학생 이름 ── */
+const STUDENT_NAME = localStorage.getItem('studentName') || '태린';
+function hasJongseong(name) {
+  const code = name.charCodeAt(name.length - 1);
+  return (code - 0xAC00) % 28 > 0;
+}
+const STUDENT_CALL = STUDENT_NAME + (hasJongseong(STUDENT_NAME) ? '아' : '야');
+function initStudentNames() {
+  document.querySelectorAll('.s-name-slot').forEach(el => { el.textContent = STUDENT_NAME; });
+  document.querySelectorAll('.s-call-slot').forEach(el => { el.textContent = STUDENT_CALL; });
+  const p = getProgress();
+  p.studentName = STUDENT_NAME;
+  saveProgress(p);
+}
+
+/* ── 학습 추적 시스템 ── */
+const TRACK_KEY = 'mathTalk_progress';
+const UNIT_KEY = '일차함수';
+
+function getProgress() {
+  try { return JSON.parse(localStorage.getItem(TRACK_KEY)) || {}; } catch(e) { return {}; }
+}
+function saveProgress(d) { localStorage.setItem(TRACK_KEY, JSON.stringify(d)); }
+
+let _curSec = null, _secStart = null, _stepStart = null;
+
+function trackEnter(secId) {
+  const now = Date.now();
+  _curSec = secId; _secStart = now; _stepStart = now;
+  const p = getProgress();
+  if (!p.units) p.units = {};
+  if (!p.units[UNIT_KEY]) p.units[UNIT_KEY] = {};
+  if (!p.units[UNIT_KEY][secId]) p.units[UNIT_KEY][secId] = { firstVisit: now, totalTime: 0, stepTimes: [], quizzes: {} };
+  p.units[UNIT_KEY][secId].lastVisit = now;
+  saveProgress(p);
+}
+
+function trackLeave() {
+  if (!_curSec || !_secStart) return;
+  const elapsed = Math.floor((Date.now() - _secStart) / 1000);
+  const p = getProgress();
+  if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][_curSec]) {
+    p.units[UNIT_KEY][_curSec].totalTime = (p.units[UNIT_KEY][_curSec].totalTime || 0) + elapsed;
+  }
+  saveProgress(p);
+  _curSec = null; _secStart = null;
+}
+
+function trackStep(secId) {
+  const now = Date.now();
+  if (_stepStart) {
+    const elapsed = Math.floor((now - _stepStart) / 1000);
+    const p = getProgress();
+    if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][secId]) {
+      p.units[UNIT_KEY][secId].stepTimes.push(elapsed);
+    }
+    saveProgress(p);
+  }
+  _stepStart = now;
+}
+
+function trackQuiz(secId, qId, correct) {
+  const p = getProgress();
+  if (!p.units) p.units = {};
+  if (!p.units[UNIT_KEY]) p.units[UNIT_KEY] = {};
+  if (!p.units[UNIT_KEY][secId]) p.units[UNIT_KEY][secId] = { totalTime: 0, stepTimes: [], quizzes: {} };
+  if (!p.units[UNIT_KEY][secId].quizzes) p.units[UNIT_KEY][secId].quizzes = {};
+  p.units[UNIT_KEY][secId].quizzes[qId] = { correct, time: Date.now() };
+  saveProgress(p);
+}
+
+function trackComplete(secId) {
+  const p = getProgress();
+  if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][secId]) {
+    p.units[UNIT_KEY][secId].completed = true;
+    p.units[UNIT_KEY][secId].completedAt = Date.now();
+  }
+  saveProgress(p);
+}
+
+/* ── 대화 단계 진행 ── */
+function nextStep(secId) {
+  const steps = Array.from(document.querySelectorAll('#chat-' + secId + ' .chat-step'));
+  let lastIdx = -1;
+  steps.forEach((s, i) => { if (s.classList.contains('visible')) lastIdx = i; });
+  if (lastIdx < steps.length - 1) {
+    trackStep(secId);
+    const next = steps[lastIdx + 1];
+    next.classList.add('visible');
+    setTimeout(() => next.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+  }
+}
+
+/* ── 참고 박스 토글 ── */
+function toggleRef(btn) {
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+/* ── 섹션 이동 ── */
+const labels = {
+  s1:'개념 1 — 함수의 뜻', s2:'개념 2 — 일차함수의 뜻',
+  s3:'개념 3 — 일차함수의 그래프', s4:'개념 4 — 기울기와 y절편',
+  s5:'개념 5 — 일차함수의 식 구하기', s6:'개념 6 — 일차방정식과의 관계',
+  s7:'종합 퀴즈'
+};
+const TOTAL = 7;
+
+function show(n) {
+  trackLeave();
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('s' + n);
+  el.classList.add('active');
+  document.getElementById('prog-label').textContent = labels['s' + n];
+  const pct = Math.round((n / TOTAL) * 100);
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  setTimeout(() => window.scrollTo(0, 0), 30);
+  setTimeout(() => {
+    if (n === 3) drawS3();
+    if (n === 4) drawS4();
+    if (n === 6) drawS6();
+  }, 80);
+  trackEnter('s' + n);
+}
+
+function go(n) { show(n); }
+
+/* ── 그래프 엔진 ── */
+function initCanvas(id, xMin, xMax, yMin, yMax) {
+  const c = document.getElementById(id);
+  if (!c) return null;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  const toX = x => (x - xMin) / (xMax - xMin) * W;
+  const toY = y => H - (y - yMin) / (yMax - yMin) * H;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // 격자
+  ctx.strokeStyle = '#f0f0f0';
+  ctx.lineWidth = 1;
+  for (let x = Math.ceil(xMin); x <= xMax; x++) {
+    ctx.beginPath(); ctx.moveTo(toX(x), 0); ctx.lineTo(toX(x), H); ctx.stroke();
+  }
+  for (let y = Math.ceil(yMin); y <= yMax; y++) {
+    ctx.beginPath(); ctx.moveTo(0, toY(y)); ctx.lineTo(W, toY(y)); ctx.stroke();
+  }
+
+  // 축
+  ctx.strokeStyle = '#9ca3af';
+  ctx.lineWidth = 1.5;
+  if (yMin <= 0 && yMax >= 0) {
+    ctx.beginPath(); ctx.moveTo(0, toY(0)); ctx.lineTo(W, toY(0)); ctx.stroke();
+  }
+  if (xMin <= 0 && xMax >= 0) {
+    ctx.beginPath(); ctx.moveTo(toX(0), 0); ctx.lineTo(toX(0), H); ctx.stroke();
+  }
+
+  // 눈금
+  ctx.fillStyle = '#9ca3af';
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'center';
+  for (let x = Math.ceil(xMin); x <= xMax; x++) {
+    if (x !== 0 && x % 1 === 0) ctx.fillText(x, toX(x), toY(0) + 13);
+  }
+  ctx.textAlign = 'right';
+  for (let y = Math.ceil(yMin); y <= yMax; y++) {
+    if (y !== 0 && y % 1 === 0) ctx.fillText(y, toX(0) - 3, toY(y) + 4);
+  }
+
+  // 축 라벨
+  ctx.fillStyle = '#374151';
+  ctx.font = 'bold 11px sans-serif';
+  ctx.textAlign = 'left';
+  if (xMax > 0) ctx.fillText('x', W - 8, toY(0) - 4);
+  if (yMax > 0) ctx.fillText('y', toX(0) + 4, 11);
+
+  return { ctx, W, H, toX, toY, xMin, xMax, yMin, yMax };
+}
+
+function drawLine(g, a, b, color, label) {
+  if (!g) return;
+  const { ctx, W, H, toX, toY, xMin, xMax } = g;
+  ctx.strokeStyle = color || '#4f46e5';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(toX(xMin), toY(a * xMin + b));
+  ctx.lineTo(toX(xMax), toY(a * xMax + b));
+  ctx.stroke();
+  if (label) {
+    const lx = xMax * 0.55;
+    ctx.fillStyle = color;
+    ctx.font = 'bold 11px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(label, toX(lx) + 4, toY(a * lx + b) - 5);
+  }
+}
+
+function drawPoint(g, x, y, color, label) {
+  if (!g) return;
+  const { ctx, toX, toY } = g;
+  ctx.fillStyle = color || '#dc2626';
+  ctx.beginPath();
+  ctx.arc(toX(x), toY(y), 5, 0, Math.PI * 2);
+  ctx.fill();
+  if (label) {
+    ctx.fillStyle = color || '#dc2626';
+    ctx.font = 'bold 11px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(label, toX(x) + 7, toY(y) - 5);
+  }
+}
+
+function drawS3() {
+  const g = initCanvas('g3', -4, 4, -4, 10);
+  drawLine(g, 2, 1, '#4f46e5', 'y=2x+1');
+  drawPoint(g, 0, 1, '#059669', '(0,1)');
+  drawPoint(g, 1, 3, '#059669', '(1,3)');
+}
+
+function drawS4() {
+  // ── 각도 표현 그래프 — 30°, 45°, 60° 한 그래프에 ──
+  const gaEl = document.getElementById('g4angle');
+  if (gaEl) {
+    const ctx = gaEl.getContext('2d');
+    const W = gaEl.width, H = gaEl.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // 좌표 변환 (원점을 왼쪽 아래 20% 지점에)
+    const ox = 36, oy = H - 36;
+    const scale = (W - 50) / 5; // x 0~5 범위
+
+    const toX = x => ox + x * scale;
+    const toY = y => oy - y * scale;
+
+    // 격자선 (연한)
+    ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1;
+    for (let i = 1; i <= 5; i++) {
+      ctx.beginPath(); ctx.moveTo(toX(i), toY(0)); ctx.lineTo(toX(i), toY(5)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(toX(0), toY(i)); ctx.lineTo(toX(5), toY(i)); ctx.stroke();
+    }
+
+    // 축
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.moveTo(toX(0), toY(-0.1)); ctx.lineTo(toX(5), toY(-0.1)); ctx.stroke(); // x축
+    ctx.beginPath(); ctx.moveTo(toX(-0.1), toY(0)); ctx.lineTo(toX(-0.1), toY(5)); ctx.stroke(); // y축
+    ctx.font = 'bold 12px sans-serif'; ctx.fillStyle = '#374151'; ctx.textAlign = 'center';
+    ctx.fillText('x', toX(5) + 10, toY(-0.1) + 4);
+    ctx.fillText('y', toX(-0.1), toY(5) - 8);
+
+    const lines = [
+      { deg: 30, slope: Math.tan(30 * Math.PI / 180), color: '#059669', arcR: 52, labelX: 4.3 },
+      { deg: 45, slope: Math.tan(45 * Math.PI / 180), color: '#4f46e5', arcR: 36, labelX: 3.8 },
+      { deg: 60, slope: Math.tan(60 * Math.PI / 180), color: '#dc2626', arcR: 22, labelX: 2.5 },
+    ];
+
+    lines.forEach(({ deg, slope, color, arcR, labelX }) => {
+      // 직선 — y=4.6 또는 x=4.7 에서 클립
+      let xEnd = 4.7, yEnd = slope * xEnd;
+      if (yEnd > 4.6) { yEnd = 4.6; xEnd = yEnd / slope; }
+
+      ctx.strokeStyle = color; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(toX(xEnd), toY(yEnd)); ctx.stroke();
+
+      // 라벨: labelX 위치의 y값에서 선 옆에 표시
+      const labelY = slope * labelX;
+      ctx.font = 'bold 13px sans-serif'; ctx.fillStyle = color; ctx.textAlign = 'left';
+      ctx.fillText(deg + '°', toX(labelX) + 6, toY(labelY) - 3);
+
+      // 각도 호 (원점 기준)
+      ctx.beginPath();
+      ctx.arc(ox, oy, arcR, -deg * Math.PI / 180, 0, true);
+      ctx.strokeStyle = color; ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+
+    // 호 라벨 — 30°만 호 바깥에 표시 (나머지는 선 라벨로 충분)
+    ctx.font = 'bold 11px sans-serif';
+    [
+      { deg: 30, arcR: 52, color: '#059669' },
+      { deg: 45, arcR: 36, color: '#4f46e5' },
+      { deg: 60, arcR: 22, color: '#dc2626' },
+    ].forEach(({ deg, arcR, color }) => {
+      const midRad = (deg / 2) * Math.PI / 180;
+      const tx = ox + (arcR + 10) * Math.cos(midRad);
+      const ty = oy - (arcR + 10) * Math.sin(midRad);
+      ctx.fillStyle = color; ctx.textAlign = 'center';
+      ctx.fillText(deg + '°', tx, ty);
+    });
+
+    // 원점 O
+    ctx.font = '11px sans-serif'; ctx.fillStyle = '#6b7280'; ctx.textAlign = 'right';
+    ctx.fillText('O', ox - 4, oy + 12);
+  }
+
+  // ── y=x vs y=2x 비교 ──
+  const gc1 = initCanvas('g4comp1', -3, 3, -3, 4);
+  if (gc1) {
+    drawLine(gc1, 1, 0, '#4f46e5', 'y=x');
+    const { ctx, toX, toY } = gc1;
+    // 1/1 삼각형
+    const p1x = toX(1), p1y = toY(1), p0x = toX(0), p0y = toY(0), pmx = toX(1), pmy = toY(0);
+    ctx.setLineDash([4,3]);
+    ctx.strokeStyle = '#059669'; ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.moveTo(p0x, p0y); ctx.lineTo(pmx, pmy); ctx.stroke();
+    ctx.strokeStyle = '#d97706';
+    ctx.beginPath(); ctx.moveTo(pmx, pmy); ctx.lineTo(p1x, p1y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = 'bold 11px sans-serif';
+    ctx.fillStyle = '#059669'; ctx.textAlign = 'center';
+    ctx.fillText('+1', (p0x+pmx)/2, pmy+14);
+    ctx.fillStyle = '#d97706'; ctx.textAlign = 'left';
+    ctx.fillText('+1', pmx+4, (pmy+p1y)/2+4);
+    ctx.fillStyle = '#4f46e5'; ctx.textAlign = 'center';
+    ctx.fillText('기울기 = 1', toX(0), toY(-2.3));
+  }
+  const gc2 = initCanvas('g4comp2', -3, 3, -3, 4);
+  if (gc2) {
+    drawLine(gc2, 2, 0, '#dc2626', 'y=2x');
+    const { ctx, toX, toY } = gc2;
+    // 2/1 삼각형
+    const p1x = toX(1), p1y = toY(2), p0x = toX(0), p0y = toY(0), pmx = toX(1), pmy = toY(0);
+    ctx.setLineDash([4,3]);
+    ctx.strokeStyle = '#059669'; ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.moveTo(p0x, p0y); ctx.lineTo(pmx, pmy); ctx.stroke();
+    ctx.strokeStyle = '#d97706';
+    ctx.beginPath(); ctx.moveTo(pmx, pmy); ctx.lineTo(p1x, p1y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = 'bold 11px sans-serif';
+    ctx.fillStyle = '#059669'; ctx.textAlign = 'center';
+    ctx.fillText('+1', (p0x+pmx)/2, pmy+14);
+    ctx.fillStyle = '#d97706'; ctx.textAlign = 'left';
+    ctx.fillText('+2', pmx+4, (pmy+p1y)/2+4);
+    ctx.fillStyle = '#dc2626'; ctx.textAlign = 'center';
+    ctx.fillText('기울기 = 2', toX(0), toY(-2.3));
+  }
+
+  // ── 직각삼각형 기울기 시각화 ──
+  const gt = initCanvas('g4tri', -1, 5, -1, 7);
+  if (gt) {
+    drawLine(gt, 2, 0, '#4f46e5', 'y=2x');
+    const { ctx, toX, toY } = gt;
+    const x1 = 1, y1 = 2, x2 = 3, y2 = 6;
+    const p1x = toX(x1), p1y = toY(y1);
+    const p2x = toX(x2), p2y = toY(y2);
+    const pmx = toX(x2), pmy = toY(y1); // 직각 꼭짓점 (3,2)
+    const axisY = toY(0); // x축 픽셀 y좌표
+    const axisX = toX(0); // y축 픽셀 x좌표
+
+    // 직각삼각형 채우기 (연한)
+    ctx.beginPath();
+    ctx.moveTo(p1x, p1y);
+    ctx.lineTo(pmx, pmy);
+    ctx.lineTo(p2x, p2y);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(79,70,229,0.07)';
+    ctx.fill();
+
+    // x축으로 내리는 점선: (1,2)→(1,0), (3,2)→(3,0)
+    ctx.save();
+    ctx.setLineDash([4, 3]);
+    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.2; ctx.globalAlpha = 0.5;
+    ctx.beginPath(); ctx.moveTo(p1x, p1y); ctx.lineTo(toX(x1), axisY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pmx, pmy); ctx.lineTo(toX(x2), axisY); ctx.stroke();
+    // y축으로 수평 점선: (3,2)→(0,2), (3,6)→(0,6)
+    ctx.strokeStyle = '#059669';
+    ctx.beginPath(); ctx.moveTo(pmx, pmy); ctx.lineTo(axisX, toY(y1)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(p2x, p2y); ctx.lineTo(axisX, toY(y2)); ctx.stroke();
+    ctx.restore();
+
+    // x축 위 주황 선분 (x=1 ~ x=3)
+    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(toX(x1), axisY); ctx.lineTo(toX(x2), axisY); ctx.stroke();
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(toX(x1), axisY - 5); ctx.lineTo(toX(x1), axisY + 5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(toX(x2), axisY - 5); ctx.lineTo(toX(x2), axisY + 5); ctx.stroke();
+
+    // y축 위 초록 선분 (y=2 ~ y=6)
+    ctx.strokeStyle = '#059669'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(axisX, toY(y1)); ctx.lineTo(axisX, toY(y2)); ctx.stroke();
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(axisX - 5, toY(y1)); ctx.lineTo(axisX + 5, toY(y1)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(axisX - 5, toY(y2)); ctx.lineTo(axisX + 5, toY(y2)); ctx.stroke();
+
+    // 밑변 (주황 실선)
+    ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(p1x, p1y); ctx.lineTo(pmx, pmy); ctx.stroke();
+
+    // 높이 (초록 실선)
+    ctx.strokeStyle = '#059669'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(pmx, pmy); ctx.lineTo(p2x, p2y); ctx.stroke();
+
+    // 직각 표시
+    const sq = 9;
+    ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(pmx - sq, pmy);
+    ctx.lineTo(pmx - sq, pmy - sq);
+    ctx.lineTo(pmx, pmy - sq);
+    ctx.stroke();
+
+    // 두 점
+    drawPoint(gt, x1, y1, '#4f46e5', '(1, 2)');
+    drawPoint(gt, x2, y2, '#4f46e5', '(3, 6)');
+
+    // x축 레이블: x₁=1, x₂=3
+    ctx.font = 'bold 10px sans-serif';
+    ctx.fillStyle = '#d97706'; ctx.textAlign = 'center';
+    ctx.fillText('x₁=1', toX(x1), axisY + 22);
+    ctx.fillText('x₂=3', toX(x2), axisY + 22);
+
+    // y축 레이블: y₁=2, y₂=6
+    ctx.fillStyle = '#059669'; ctx.textAlign = 'left';
+    ctx.fillText('y₁=2', axisX + 6, toY(y1) + 4);
+    ctx.fillText('y₂=6', axisX + 6, toY(y2) + 4);
+
+    // 삼각형 내 레이블
+    ctx.font = 'bold 12px sans-serif';
+    ctx.fillStyle = '#d97706'; ctx.textAlign = 'center';
+    ctx.fillText('밑변: x₂−x₁ = 2', (p1x + pmx) / 2, pmy + 18);
+    ctx.fillStyle = '#059669'; ctx.textAlign = 'left';
+    ctx.fillText('높이:', pmx + 6, (pmy + p2y) / 2 - 6);
+    ctx.fillText('y₂−y₁ = 4', pmx + 6, (pmy + p2y) / 2 + 10);
+  }
+
+  // y절편 그래프 — y축과 만나는 점 강조
+  const gi = initCanvas('g4int', -4, 4, -3, 7);
+  if (gi) {
+    drawLine(gi, 2, 4, '#4f46e5', 'y=2x+4');
+    const { ctx, toX, toY } = gi;
+    // y절편 점 (0, 4) 강조
+    const px = toX(0), py = toY(4);
+    ctx.beginPath();
+    ctx.arc(px, py, 7, 0, Math.PI * 2);
+    ctx.fillStyle = '#059669';
+    ctx.fill();
+    ctx.font = 'bold 12px sans-serif';
+    ctx.fillStyle = '#059669';
+    ctx.textAlign = 'left';
+    ctx.fillText('(0, 4)  ← x=0!', px + 10, py - 6);
+    // y축 강조 표시
+    ctx.strokeStyle = '#059669';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(px, toY(-3)); ctx.lineTo(px, toY(7)); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // x절편 그래프 — x축과 만나는 점 강조
+  const gi2 = initCanvas('g4int2', -4, 4, -3, 7);
+  if (gi2) {
+    drawLine(gi2, 2, 4, '#4f46e5', 'y=2x+4');
+    const { ctx, toX, toY } = gi2;
+    // x절편 점 (-2, 0) 강조
+    const px = toX(-2), py = toY(0);
+    ctx.beginPath();
+    ctx.arc(px, py, 7, 0, Math.PI * 2);
+    ctx.fillStyle = '#d97706';
+    ctx.fill();
+    ctx.font = 'bold 12px sans-serif';
+    ctx.fillStyle = '#d97706';
+    ctx.textAlign = 'left';
+    ctx.fillText('(−2, 0)  ← y=0!', px + 10, py - 8);
+    // x축 강조 표시
+    ctx.strokeStyle = '#d97706';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(toX(-4), py); ctx.lineTo(toX(4), py); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // 기울기 삼각형 시각화
+  const gs = initCanvas('g4slope', -1, 5, -1, 9);
+  if (gs) {
+    drawLine(gs, 2, 1, '#4f46e5', 'y=2x+1');
+    const { ctx, toX, toY } = gs;
+    const p1x = toX(1), p1y = toY(3);
+    const p2x = toX(3), p2y = toY(7);
+    const p3x = toX(3), p3y = toY(3);
+
+    // x 증가량 (초록 점선)
+    ctx.strokeStyle = '#059669';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(p1x, p1y); ctx.lineTo(p3x, p3y); ctx.stroke();
+
+    // y 증가량 (주황 점선)
+    ctx.strokeStyle = '#d97706';
+    ctx.beginPath(); ctx.moveTo(p3x, p3y); ctx.lineTo(p2x, p2y); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 직각 표시
+    const sq = 8;
+    ctx.strokeStyle = '#9ca3af';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(p3x - sq, p3y);
+    ctx.lineTo(p3x - sq, p3y - sq);
+    ctx.lineTo(p3x, p3y - sq);
+    ctx.stroke();
+
+    // 두 점
+    drawPoint(gs, 1, 3, '#4f46e5', '(1, 3)');
+    drawPoint(gs, 3, 7, '#4f46e5', '(3, 7)');
+
+    // 라벨
+    ctx.font = 'bold 12px sans-serif';
+    ctx.fillStyle = '#059669';
+    ctx.textAlign = 'center';
+    ctx.fillText('x 증가량 = 2', (p1x + p3x) / 2, p3y + 17);
+    ctx.fillStyle = '#d97706';
+    ctx.textAlign = 'left';
+    ctx.fillText('y 증가량 = 4', p2x + 7, (p2y + p3y) / 2 + 4);
+  }
+
+  // 평행이동 — y=2x, y=2x+3, y=2x-2 세 직선
+  const gp = initCanvas('g4para', -4, 4, -5, 7);
+  if (gp) {
+    const { ctx, toX, toY } = gp;
+    drawLine(gp, 2, 0,  '#4f46e5', '');
+    drawLine(gp, 2, 3,  '#059669', '');
+    drawLine(gp, 2, -2, '#d97706', '');
+    // 라벨
+    ctx.font = 'bold 12px sans-serif';
+    ctx.fillStyle = '#4f46e5';
+    ctx.textAlign = 'left';
+    ctx.fillText('y = 2x', toX(1.2), toY(2.4) - 6);
+    ctx.fillStyle = '#059669';
+    ctx.fillText('y = 2x + 3', toX(0.5), toY(4.0) - 6);
+    ctx.fillStyle = '#d97706';
+    ctx.fillText('y = 2x − 2', toX(1.5), toY(1.0) - 6);
+    // 화살표: 위로 +3, 아래로 -2 표시
+    const ax = toX(-3.2);
+    ctx.strokeStyle = '#059669'; ctx.lineWidth = 1.5;
+    ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(ax, toY(0)); ctx.lineTo(ax, toY(3)); ctx.stroke();
+    ctx.strokeStyle = '#d97706';
+    ctx.beginPath(); ctx.moveTo(ax, toY(0)); ctx.lineTo(ax, toY(-2)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = '11px sans-serif';
+    ctx.fillStyle = '#059669'; ctx.textAlign = 'left';
+    ctx.fillText('+3↑', ax + 4, toY(1.5));
+    ctx.fillStyle = '#d97706';
+    ctx.fillText('−2↓', ax + 4, toY(-0.8));
+  }
+
+  // 부호 비교 (y=ax, b=0)
+  const g4a = initCanvas('g4a', -3, 3, -5, 5);
+  drawLine(g4a, 2, 0, '#4f46e5', 'y=2x');
+  const g4b = initCanvas('g4b', -3, 3, -5, 5);
+  drawLine(g4b, -2, 0, '#dc2626', 'y=−2x');
+  const g4c = initCanvas('g4c', -3, 3, -5, 7);
+  drawLine(g4c, 3, 0, '#4f46e5', 'y=3x');
+  const g4d = initCanvas('g4d', -3, 3, -3, 4);
+  drawLine(g4d, 0.5, 0, '#059669', 'y=½x');
+
+  // a,b 부호 케이스 4개
+  [
+    { id: 'g4s1', a:  1.2, b:  2, lc: '#4f46e5', dc: '#059669' },
+    { id: 'g4s2', a:  1.2, b: -2, lc: '#4f46e5', dc: '#dc2626' },
+    { id: 'g4s3', a: -1.2, b:  2, lc: '#dc2626', dc: '#059669' },
+    { id: 'g4s4', a: -1.2, b: -2, lc: '#dc2626', dc: '#dc2626' },
+  ].forEach(({ id, a, b, lc, dc }) => {
+    const g = initCanvas(id, -3, 3, -4, 4);
+    if (!g) return;
+    drawLine(g, a, b, lc, '');
+    const { ctx, toX, toY } = g;
+    // y절편 강조
+    ctx.beginPath();
+    ctx.arc(toX(0), toY(b), 6, 0, Math.PI * 2);
+    ctx.fillStyle = dc;
+    ctx.fill();
+    // y절편 값 표시
+    ctx.font = 'bold 10px sans-serif';
+    ctx.fillStyle = dc;
+    ctx.textAlign = b >= 0 ? 'left' : 'right';
+    ctx.fillText('b=' + (b > 0 ? b : b), toX(0) + (b >= 0 ? 9 : -9), toY(b) - 8);
+  });
+}
+
+function drawS6() {
+  const g = initCanvas('g6', -4, 4, -3, 6);
+  drawLine(g, 1, 1, '#4f46e5', 'y=x+1');
+  drawLine(g, -1, 3, '#dc2626', 'y=−x+3');
+  drawPoint(g, 1, 2, '#d97706', '(1,2)');
+}
+
+/* ── 확인 문제 ── */
+const qMsg = {
+  q1: { ok:'y = 3x − 2 는 x의 차수가 1이고 a=3≠0이니까 일차함수예요!', no:'x가 1차로만 나오고 a≠0인 것을 찾아요. y = 3x − 2가 맞아요.' },
+  q1b: { ok:'x + 1 = 0 은 방정식이에요. x의 특정 값(x = −1)을 구하는 식이지, x와 y의 관계를 나타내는 게 아니에요.', no:'x + 1 = 0 은 방정식이에요. y = x+1, f(x) = x+1, "x 넣으면 y 하나 결정"은 모두 같은 함수 관계를 표현한 거예요.' },
+  q1c: { ok:'f(1) = 2×1 + 1 = 3. x 자리에 1을 집어넣으면 돼요!', no:'x 자리에 1을 대입해봐요. 2×1 + 1 = 3이에요.' },
+  q1d: { ok:'f(−3) = 2×(−3) + 1 = −6 + 1 = −5. 음수도 똑같이 대입하면 돼요!', no:'x 자리에 −3을 대입해봐요. 2×(−3) + 1 = −6 + 1 = −5예요.' },
+  q2: { ok:'f(3) = −2×3 + 5 = −6 + 5 = −1. 맞아요!', no:'x 자리에 3을 대입해봐요. −2×3 + 5 = −1이에요.' },
+  q3: { ok:'y = −2x + b 에 (1,3) 대입: 3 = −2 + b → b = 5. 정답!', no:'y = −2x + b 에 x=1, y=3을 대입해봐요. b=5가 나와요.' },
+};
+
+function q(el, id, correct) {
+  const opts = el.parentNode.querySelectorAll('.qopt');
+  opts.forEach(o => { o.disabled = true; });
+  el.classList.add(correct ? 'correct' : 'wrong');
+  const fb = document.getElementById('qfb-' + id);
+  fb.textContent = correct ? qMsg[id].ok : qMsg[id].no;
+  fb.className = 'quiz-fb ' + (correct ? 'ok' : 'no');
+  const secEl = el.closest('.section');
+  trackQuiz(secEl ? secEl.id : (_curSec || 'unknown'), id, correct);
+}
+
+/* ── 종합 퀴즈 ── */
+const finAnswers = {};
+const fMsg = {
+  f1: { ok:'y = −3x + 2에서 a = −3, b = 2. a가 x의 계수예요!', no:'y = ax + b 에서 x의 계수가 기울기, 상수항이 y절편이에요.' },
+  f2: { ok:'f(2) = 4×2 − 1 = 8 − 1 = 7. 맞아요!', no:'x 자리에 2를 대입해봐요. 4×2 − 1 = 7이에요.' },
+  f3: { ok:'y = 0 → 0 = 2x − 4 → x = 2. x절편은 2예요!', no:'y = 0을 대입해봐요. 2x − 4 = 0 → x = 2예요.' },
+  f4: { ok:'기울기 = (7−3)/(2−0) = 2, y절편 = 3 → y = 2x + 3!', no:'두 점에서 기울기 = (7−3)/(2−0) = 2, y절편은 x=0일 때 y=3이에요.' },
+  f5: { ok:'기울기가 모두 2로 같고 y절편만 달라요. → 평행!', no:'기울기가 같으면 평행이에요. 둘 다 기울기 2인데 y절편만 달라요.' },
+};
+
+function fin(el, id, correct) {
+  const opts = el.parentNode.querySelectorAll('.qopt');
+  opts.forEach(o => { o.disabled = true; });
+  el.classList.add(correct ? 'correct' : 'wrong');
+  finAnswers[id] = correct;
+  const fb = document.getElementById('qfb-' + id);
+  fb.textContent = correct ? fMsg[id].ok : fMsg[id].no;
+  fb.className = 'quiz-fb ' + (correct ? 'ok' : 'no');
+  trackQuiz('s7', id, correct);
+  const allIds = ['f1','f2','f3','f4','f5'];
+  if (allIds.every(k => k in finAnswers)) {
+    const btn = document.getElementById('score-btn');
+    btn.className = 'score-check-btn ready';
+  }
+}
+
+function showScore() {
+  const allIds = ['f1','f2','f3','f4','f5'];
+  if (!allIds.every(k => k in finAnswers)) return;
+  const score = allIds.filter(k => finAnswers[k]).length * 20;
+  document.getElementById('score-num').textContent = score;
+  const msgs = {
+    100: '완벽해! 일차함수 마스터!',
+    80: '거의 다 왔어. 한 개만 더!',
+    60: '절반 이상이야. 복습하면 돼.',
+    40: '다시 한 번 개념 정리해보자.',
+    20: '처음부터 차근차근 다시 해보자.',
+    0: '포기하지 마. 다시 시작하면 돼.'
+  };
+  document.getElementById('score-msg').textContent = msgs[score] || '';
+  const wrong = allIds.filter(k => !finAnswers[k]).length;
+  document.getElementById('score-detail').textContent = wrong > 0 ? `${wrong}문제 틀림 — 해설을 다시 읽어봐요.` : '전부 맞았어요!';
+  document.getElementById('score-panel').style.display = 'block';
+  trackComplete('s7');
+  if (score === 100) confetti();
+}
+
+function restart() {
+  Object.keys(finAnswers).forEach(k => delete finAnswers[k]);
+  document.getElementById('score-panel').style.display = 'none';
+  document.getElementById('score-btn').className = 'score-check-btn';
+  document.querySelectorAll('.qopt').forEach(o => {
+    o.disabled = false;
+    o.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.quiz-fb').forEach(f => { f.textContent = ''; f.className = 'quiz-fb'; });
+}
+
+/* ── 수정 요청 메모 ── */
+const MEMO_PREFIX = 'fn-memo-';
+const sectionNames = {
+  s1:'개념 1 — 함수의 뜻', s2:'개념 2 — 일차함수의 뜻',
+  s3:'개념 3 — 그래프', s4:'개념 4 — 기울기와 y절편',
+  s5:'개념 5 — 식 구하기', s6:'개념 6 — 일차방정식 관계',
+  s7:'종합 퀴즈'
+};
+
+function initMemos() {
+  let count = 0;
+  Object.keys(sectionNames).forEach(id => {
+    const val = localStorage.getItem(MEMO_PREFIX + id);
+    if (val) { count++; showMemoBanner(id, val); markBtn(id, true); }
+  });
+  updateFloatBtn(count);
+}
+
+function openMemo(id) {
+  const area = document.getElementById('mi-' + id);
+  const ta = document.getElementById('mt-' + id);
+  const saved = localStorage.getItem(MEMO_PREFIX + id);
+  ta.value = saved || '';
+  area.classList.add('show');
+  ta.focus();
+}
+
+function closeMemo(id) { document.getElementById('mi-' + id).classList.remove('show'); }
+
+function saveMemo(id) {
+  const val = document.getElementById('mt-' + id).value.trim();
+  if (!val) { deleteMemo(id); return; }
+  localStorage.setItem(MEMO_PREFIX + id, val);
+  showMemoBanner(id, val);
+  markBtn(id, true);
+  closeMemo(id);
+  updateFloatBtn(countMemos());
+}
+
+function deleteMemo(id) {
+  localStorage.removeItem(MEMO_PREFIX + id);
+  document.getElementById('mb-' + id).classList.remove('show');
+  markBtn(id, false);
+  closeMemo(id);
+  updateFloatBtn(countMemos());
+}
+
+function showMemoBanner(id, val) {
+  const b = document.getElementById('mb-' + id);
+  document.getElementById('mbt-' + id).textContent = val;
+  b.classList.add('show');
+}
+
+function markBtn(id, has) {
+  document.getElementById('eb-' + id).classList.toggle('has-memo', has);
+}
+
+function countMemos() {
+  return Object.keys(sectionNames).filter(id => localStorage.getItem(MEMO_PREFIX + id)).length;
+}
+
+function updateFloatBtn(count) {
+  const btn = document.getElementById('memo-float-btn');
+  btn.style.display = count > 0 ? 'block' : 'none';
+  document.getElementById('memo-float-count').textContent = count;
+}
+
+function openMemoList() {
+  const body = document.getElementById('memo-list-body');
+  body.innerHTML = '';
+  let has = false;
+  Object.keys(sectionNames).forEach(id => {
+    const val = localStorage.getItem(MEMO_PREFIX + id);
+    if (val) {
+      has = true;
+      body.innerHTML += `<div class="memo-list-item"><div class="memo-list-item-label">${sectionNames[id]}</div><div class="memo-list-item-text">${val}</div></div>`;
+    }
+  });
+  if (!has) body.innerHTML = '<p style="color:var(--gray-400); font-size:14px;">수정 요청이 없어요.</p>';
+  document.getElementById('memo-list-overlay').classList.add('open');
+}
+
+function closeMemoList() {
+  document.getElementById('memo-list-overlay').classList.remove('open');
+}
+
+/* ── 콘페티 ── */
+function confetti() {
+  const colors = ['#4f46e5','#059669','#dc2626','#d97706','#0ea5e9'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'cf';
+    el.style.cssText = `left:${Math.random()*100}vw;top:-10px;width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*1.5}s;animation-delay:${Math.random()*0.5}s;`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+}
+
+window.onload = () => { show(1); initMemos(); initStudentNames(); };
+</script>
+</body>
+</html>
