@@ -179,11 +179,6 @@ body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacS
         <span class="unit-badge badge-new">학습 가능</span>
       </div>
     </a>
-  </div>
-
-  <!-- 중2 2학기 -->
-  <div class="term-block">
-    <div class="term-label">중학교 2학년 2학기</div>
 
     <a class="unit-card" href="일차함수_인터랙티브교재.html" id="card-일차함수">
       <div class="unit-icon indigo">📈</div>
@@ -197,7 +192,7 @@ body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacS
     </a>
 
     <a class="unit-card" href="일차함수활용_인터랙티브교재.html" id="card-일차함수활용">
-      <div class="unit-icon teal">🚀</div>
+      <div class="unit-icon teal">📊</div>
       <div class="unit-main">
         <div class="unit-title">일차함수 활용</div>
         <div class="unit-sub">실생활 적용, 거리-시간 그래프, 교점</div>
@@ -212,35 +207,57 @@ body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacS
   <div class="term-block">
     <div class="term-label">중학교 3학년</div>
 
-    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+    <a class="unit-card" href="제곱근_인터랙티브교재.html" id="card-제곱근">
       <div class="unit-icon green">√</div>
       <div class="unit-main">
         <div class="unit-title">제곱근과 실수</div>
         <div class="unit-sub">제곱수, 무리수, 근호 계산</div>
+      </div>
+      <div class="unit-right" id="prog-제곱근">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+
+    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-icon orange">( )</div>
+      <div class="unit-main">
+        <div class="unit-title">곱셈공식</div>
+        <div class="unit-sub">다항식 전개, 합차공식, 제곱 공식</div>
       </div>
       <div class="unit-right">
         <span class="unit-badge badge-soon">준비 중</span>
       </div>
     </div>
 
-    <a class="unit-card" href="이차함수_인터랙티브교재.html" id="card-이차함수">
-      <div class="unit-icon indigo">📉</div>
+    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-icon teal">ax</div>
       <div class="unit-main">
-        <div class="unit-title">이차함수</div>
-        <div class="unit-sub">포물선, 꼭짓점, 평행이동, 표준형</div>
+        <div class="unit-title">인수분해</div>
+        <div class="unit-sub">공통인수, 완전제곱식, 합차공식 역이용</div>
       </div>
-      <div class="unit-right" id="prog-이차함수">
-        <span class="unit-badge badge-new">학습 가능</span>
+      <div class="unit-right">
+        <span class="unit-badge badge-soon">준비 중</span>
       </div>
-    </a>
+    </div>
 
     <a class="unit-card" href="이차방정식_인터랙티브교재.html" id="card-이차방정식">
-      <div class="unit-icon orange">🔷</div>
+      <div class="unit-icon orange">x²</div>
       <div class="unit-main">
         <div class="unit-title">이차방정식</div>
         <div class="unit-sub">인수분해, 제곱근, 근의 공식, 활용</div>
       </div>
       <div class="unit-right" id="prog-이차방정식">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+
+    <a class="unit-card" href="이차함수_인터랙티브교재.html" id="card-이차함수">
+      <div class="unit-icon indigo">U</div>
+      <div class="unit-main">
+        <div class="unit-title">이차함수</div>
+        <div class="unit-sub">포물선, 꼭짓점, 평행이동, 표준형</div>
+      </div>
+      <div class="unit-right" id="prog-이차함수">
         <span class="unit-badge badge-new">학습 가능</span>
       </div>
     </a>
@@ -274,6 +291,7 @@ const UNIT_META = {
   '일차함수활용': { total:5, domId:'prog-일차함수활용' },
   '이차방정식':  { total:6, domId:'prog-이차방정식' },
   '이차함수':    { total:6, domId:'prog-이차함수' },
+  '제곱근':      { total:6, domId:'prog-제곱근' },
 };
 
 function renderGreet() {
