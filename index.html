@@ -135,30 +135,36 @@ body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacS
   <!-- 중1 1학기 -->
   <div class="term-block">
     <div class="term-label">중학교 1학년 1학기</div>
-    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+    <a class="unit-card" href="수와연산_인터랙티브교재.html" id="card-수와연산">
       <div class="unit-icon orange">N</div>
       <div class="unit-main">
         <div class="unit-title">수와 연산</div>
         <div class="unit-sub">소인수분해, 정수와 유리수</div>
       </div>
-      <div class="unit-right"><span class="unit-badge badge-soon">준비 중</span></div>
-    </div>
-    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-right" id="prog-수와연산">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+    <a class="unit-card" href="방정식_인터랙티브교재.html" id="card-방정식">
       <div class="unit-icon indigo">x</div>
       <div class="unit-main">
         <div class="unit-title">방정식</div>
         <div class="unit-sub">문자와 식, 일차방정식</div>
       </div>
-      <div class="unit-right"><span class="unit-badge badge-soon">준비 중</span></div>
-    </div>
-    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-right" id="prog-방정식">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+    <a class="unit-card" href="그래프와비례_인터랙티브교재.html" id="card-그래프와비례">
       <div class="unit-icon teal">∝</div>
       <div class="unit-main">
         <div class="unit-title">그래프와 비례</div>
         <div class="unit-sub">좌표평면과 그래프, 정비례와 반비례</div>
       </div>
-      <div class="unit-right"><span class="unit-badge badge-soon">준비 중</span></div>
-    </div>
+      <div class="unit-right" id="prog-그래프와비례">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
   </div>
 
   <!-- 중1 2학기 -->
@@ -389,6 +395,9 @@ const TRACK_KEY = 'mathTalk_progress';
 function getProgress() { try { return JSON.parse(localStorage.getItem(TRACK_KEY)) || {}; } catch(e) { return {}; } }
 
 const UNIT_META = {
+  '수와연산':    { total:7, domId:'prog-수와연산' },
+  '방정식':      { total:7, domId:'prog-방정식' },
+  '그래프와비례': { total:6, domId:'prog-그래프와비례' },
   '연립방정식':  { total:7, domId:'prog-연립방정식' },
   '일차함수':    { total:7, domId:'prog-일차함수' },
   '일차함수활용': { total:5, domId:'prog-일차함수활용' },
