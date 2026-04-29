@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>땡중샘 수학톡 | 학습 현황</title>
+<style>
+:root {
+  --primary: #4f46e5;
+  --primary-bg: #eef2ff;
+  --green: #059669;
+  --green-bg: #d1fae5;
+  --orange: #d97706;
+  --orange-bg: #fef3c7;
+  --red: #dc2626;
+  --red-bg: #fee2e2;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', BlinkMacSystemFont, sans-serif;
+  background: #f5f5f7;
+  color: var(--gray-800);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+.header { background: var(--gray-900); color: white; padding: 40px 24px 36px; text-align: center; }
+.header-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #a5b4fc; margin-bottom: 10px; }
+.header h1 { font-size: clamp(22px, 5vw, 28px); font-weight: 800; letter-spacing: -0.5px; }
+.header p { margin-top: 8px; font-size: 14px; color: #9ca3af; }
+
+.page-wrap { max-width: 680px; margin: 0 auto; padding: 0 16px 60px; }
+
+/* 학생 카드 */
+.student-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 20px 0 6px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.student-info { display: flex; align-items: center; gap: 14px; }
+.student-avatar {
+  width: 48px; height: 48px;
+  background: var(--primary);
+  border-radius: 99px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 900; color: white;
+}
+.student-name-text { font-size: 18px; font-weight: 800; color: var(--gray-900); }
+.student-last { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+.refresh-btn {
+  background: var(--gray-100); border: none; border-radius: 8px;
+  padding: 9px 18px; font-size: 13px; font-weight: 700;
+  color: var(--gray-600); cursor: pointer; font-family: inherit;
+}
+.refresh-btn:hover { background: var(--gray-200); }
+
+.share-bar {
+  background: white; border-radius: 14px;
+  padding: 16px 20px; margin: 0 0 6px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+  display: flex; gap: 10px;
+}
+.share-btn {
+  flex: 1; border: none; border-radius: 10px;
+  padding: 13px 10px; font-size: 14px; font-weight: 800;
+  cursor: pointer; font-family: inherit; transition: opacity 0.15s;
+}
+.share-btn:active { opacity: 0.75; }
+.share-kakao {
+  background: #FEE500; color: #3C1E1E;
+}
+.share-copy {
+  background: var(--gray-100); color: var(--gray-700);
+  font-size: 13px;
+}
+
+/* 아무 데이터 없을 때 */
+.no-data {
+  background: white; border-radius: 16px; padding: 48px 24px;
+  text-align: center; margin: 20px 0;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+}
+.no-data-icon { font-size: 40px; margin-bottom: 12px; }
+.no-data p { color: var(--gray-500); font-size: 15px; line-height: 1.8; }
+
+/* 단원 섹션 */
+.unit-block {
+  background: white; border-radius: 16px;
+  margin: 14px 0;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+.unit-header {
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+}
+.unit-title { font-size: 16px; font-weight: 800; color: var(--gray-900); }
+.unit-progress-row { display: flex; align-items: center; gap: 10px; }
+.unit-prog-bar { width: 100px; height: 6px; background: var(--gray-200); border-radius: 99px; overflow: hidden; }
+.unit-prog-fill { height: 100%; background: var(--primary); border-radius: 99px; transition: width 0.6s ease; }
+.unit-prog-label { font-size: 12px; font-weight: 700; color: var(--gray-500); }
+.unit-study-link {
+  display: block; background: var(--gray-900); color: white;
+  text-decoration: none; text-align: center;
+  padding: 13px; font-size: 14px; font-weight: 700;
+  transition: background 0.15s;
+}
+.unit-study-link:hover { background: var(--primary); }
+
+/* 개념 행 */
+.concept-list { padding: 8px 0; }
+.concept-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 22px;
+  border-bottom: 1px solid var(--gray-50);
+}
+.concept-row:last-child { border-bottom: none; }
+.concept-dot {
+  width: 10px; height: 10px; border-radius: 99px; flex-shrink: 0;
+  background: var(--gray-200);
+}
+.concept-dot.visited { background: var(--green); }
+.concept-dot.rushed { background: var(--orange); }
+.concept-main { flex: 1; }
+.concept-name { font-size: 14px; font-weight: 700; color: var(--gray-800); }
+.concept-time { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+.concept-badge {
+  font-size: 11px; font-weight: 800; border-radius: 6px; padding: 3px 9px; white-space: nowrap;
+}
+.badge-done { background: var(--green-bg); color: var(--green); }
+.badge-rush { background: var(--orange-bg); color: var(--orange); }
+.badge-none { background: var(--gray-100); color: var(--gray-400); }
+
+/* 섹션 설명 */
+.section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+  color: var(--gray-400); padding: 10px 22px 4px;
+  text-transform: uppercase;
+}
+
+/* 하단 안내 */
+.guide-box {
+  background: var(--primary-bg); border-radius: 12px;
+  padding: 18px 20px; margin: 20px 0;
+  border-left: 3px solid var(--primary);
+}
+.guide-box p { font-size: 13px; color: var(--gray-700); line-height: 1.8; }
+.guide-box strong { color: var(--primary); }
+
+@media (max-width: 520px) {
+  .student-card { flex-direction: column; align-items: flex-start; }
+  .unit-prog-bar { width: 70px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">땡중샘 수학톡 (중학수학)</div>
+  <h1>학습 현황</h1>
+  <p>자녀가 어떤 개념을 얼마나 공부했는지 확인하세요</p>
+</div>
+
+<div class="page-wrap">
+  <div id="dashboard"></div>
+
+  <div class="guide-box">
+    <p>
+      <strong>● 초록 점</strong> — 충분히 학습함 &nbsp;
+      <strong>● 주황 점</strong> — 빠르게 넘어간 것 같아요<br>
+      <strong>○ 회색 점</strong> — 아직 학습하지 않음<br><br>
+      개념 이름을 누르면 해당 학습 파일이 열립니다.
+    </p>
+  </div>
+</div>
+
+<script>
+const TRACK_KEY = 'mathTalk_progress';
+
+/* 단원별 개념 정보 */
+const UNITS = [
+  {
+    key: '일차함수',
+    title: '일차함수 (중2)',
+    file: '일차함수_인터랙티브교재.html',
+    minTimes: { s1:90, s2:90, s3:75, s4:90, s5:90, s6:75, s7:60 },
+    concepts: [
+      { id:'s1', name:'함수란 무엇인가' },
+      { id:'s2', name:'일차함수의 뜻' },
+      { id:'s3', name:'일차함수의 그래프' },
+      { id:'s4', name:'기울기와 y절편 · x절편' },
+      { id:'s5', name:'일차함수의 식 구하기' },
+      { id:'s6', name:'일차방정식과의 관계' },
+      { id:'s7', name:'종합 퀴즈' },
+    ]
+  },
+  {
+    key: '연립방정식',
+    title: '연립방정식 (중2)',
+    file: '연립방정식_인터랙티브교재.html',
+    minTimes: { s1:90, s2:90, s3:90, s4:90, s5:90, s6:75, s7:60 },
+    concepts: [
+      { id:'s1', name:'방정식과 해' },
+      { id:'s2', name:'연립방정식의 뜻' },
+      { id:'s3', name:'가감법' },
+      { id:'s4', name:'대입법' },
+      { id:'s5', name:'복잡한 연립방정식' },
+      { id:'s6', name:'활용 문제' },
+      { id:'s7', name:'종합 퀴즈' },
+    ]
+  },
+  {
+    key: '제곱근',
+    title: '제곱근 (중3)',
+    file: '제곱근_인터랙티브교재.html',
+    minTimes: { s1:90, s2:90, s3:90, s4:90, s5:75, s6:60 },
+    concepts: [
+      { id:'s1', name:'제곱수와 제곱근의 뜻' },
+      { id:'s2', name:'제곱근의 성질' },
+      { id:'s3', name:'무리수와 실수' },
+      { id:'s4', name:'근호 포함 식의 계산' },
+      { id:'s5', name:'분모의 유리화' },
+      { id:'s6', name:'종합 퀴즈' },
+    ]
+  },
+  {
+    key: '이차방정식',
+    title: '이차방정식 (중3)',
+    file: '이차방정식_인터랙티브교재.html',
+    minTimes: { s1:90, s2:90, s3:90, s4:90, s5:90, s6:60 },
+    concepts: [
+      { id:'s1', name:'이차방정식의 뜻과 표준형' },
+      { id:'s2', name:'인수분해로 풀기' },
+      { id:'s3', name:'제곱근으로 풀기' },
+      { id:'s4', name:'근의 공식' },
+      { id:'s5', name:'이차방정식의 활용' },
+      { id:'s6', name:'종합 퀴즈' },
+    ]
+  },
+  {
+    key: '이차함수',
+    title: '이차함수 (중3)',
+    file: '이차함수_인터랙티브교재.html',
+    minTimes: { s1:90, s2:90, s3:90, s4:90, s5:90, s6:60 },
+    concepts: [
+      { id:'s1', name:'이차함수의 뜻' },
+      { id:'s2', name:'y = ax² 그래프' },
+      { id:'s3', name:'평행이동' },
+      { id:'s4', name:'표준형 변환' },
+      { id:'s5', name:'이차함수의 식 구하기' },
+      { id:'s6', name:'종합 퀴즈' },
+    ]
+  }
+];
+
+function fmtTime(secs) {
+  if (!secs || secs <= 0) return '–';
+  if (secs < 60) return secs + '초';
+  return Math.floor(secs / 60) + '분 ' + (secs % 60) + '초';
+}
+
+function fmtDate(ts) {
+  if (!ts) return null;
+  const d = new Date(ts);
+  return d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' +
+         String(d.getDate()).padStart(2,'0') + ' ' +
+         String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+
+function isRushed(secData, minTime) {
+  if (!secData) return false;
+  const t = secData.totalTime || 0;
+  if (t > 0 && t < minTime) return true;
+  const st = secData.stepTimes || [];
+  const rushSteps = st.filter(s => s < 3).length;
+  return rushSteps >= 3;
+}
+
+function render() {
+  let prog;
+  try { prog = JSON.parse(localStorage.getItem(TRACK_KEY)) || {}; }
+  catch(e) { prog = {}; }
+
+  const studentName = prog.studentName || null;
+  const units = prog.units || {};
+
+  /* 마지막 학습 시각 */
+  let lastTs = 0;
+  UNITS.forEach(u => {
+    const ud = units[u.key] || {};
+    Object.values(ud).forEach(sec => {
+      if (sec.lastVisit && sec.lastVisit > lastTs) lastTs = sec.lastVisit;
+    });
+  });
+
+  const dash = document.getElementById('dashboard');
+
+  /* 학생 카드 */
+  dash.innerHTML = `
+    <div class="student-card">
+      <div class="student-info">
+        <div class="student-avatar">${studentName ? studentName.charAt(0) : '?'}</div>
+        <div>
+          <div class="student-name-text">${studentName || '(이름 미설정)'}</div>
+          <div class="student-last">${lastTs ? '마지막 학습: ' + fmtDate(lastTs) : '아직 학습 기록 없음'}</div>
+        </div>
+      </div>
+      <button class="refresh-btn" onclick="render()">새로고침</button>
+    </div>
+    <div class="share-bar">
+      <button class="share-btn share-kakao" onclick="sendReport('share')">카카오톡으로 보내기</button>
+      <button class="share-btn share-copy" onclick="sendReport('copy')">텍스트 복사</button>
+    </div>`;
+
+  /* 데이터 없을 때 */
+  if (!studentName && Object.keys(units).length === 0) {
+    dash.innerHTML += `
+      <div class="no-data">
+        <div class="no-data-icon">📚</div>
+        <p>아직 학습 기록이 없어요.<br>학생이 앱을 열고 공부를 시작하면<br>여기에 현황이 표시돼요.</p>
+      </div>`;
+    return;
+  }
+
+  /* 단원별 카드 */
+  UNITS.forEach(u => {
+    const ud = units[u.key] || {};
+    const visited = u.concepts.filter(c => !!ud[c.id]).length;
+    const pct = Math.round((visited / u.concepts.length) * 100);
+
+    let rows = '';
+    u.concepts.forEach(c => {
+      const sec = ud[c.id];
+      const visited = !!sec;
+      const rushed = visited && isRushed(sec, u.minTimes[c.id] || 60);
+      const dotClass = !visited ? '' : rushed ? 'rushed' : 'visited';
+      const badge = !visited
+        ? '<span class="concept-badge badge-none">미학습</span>'
+        : rushed
+          ? '<span class="concept-badge badge-rush">빠르게 넘어감</span>'
+          : '<span class="concept-badge badge-done">학습 완료</span>';
+      const timeStr = sec ? fmtTime(sec.totalTime) : '';
+      rows += `
+        <div class="concept-row">
+          <div class="concept-dot ${dotClass}"></div>
+          <div class="concept-main">
+            <div class="concept-name">${c.name}</div>
+            ${timeStr ? `<div class="concept-time">학습 시간: ${timeStr}</div>` : ''}
+          </div>
+          ${badge}
+        </div>`;
+    });
+
+    dash.innerHTML += `
+      <div class="unit-block">
+        <div class="unit-header">
+          <div class="unit-title">${u.title}</div>
+          <div class="unit-progress-row">
+            <div class="unit-prog-bar"><div class="unit-prog-fill" style="width:${pct}%"></div></div>
+            <div class="unit-prog-label">${visited}/${u.concepts.length} 개념</div>
+          </div>
+        </div>
+        <div class="section-label">개념별 학습 현황</div>
+        <div class="concept-list">${rows}</div>
+        <a class="unit-study-link" href="${u.file}">${u.title} 학습하기 →</a>
+      </div>`;
+  });
+}
+
+function buildReportText() {
+  let prog;
+  try { prog = JSON.parse(localStorage.getItem(TRACK_KEY)) || {}; }
+  catch(e) { prog = {}; }
+
+  const name = prog.studentName || '(이름 미설정)';
+  const units = prog.units || {};
+  const today = new Date().toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric' });
+
+  let lines = [];
+  lines.push('[땡중샘 수학톡] ' + name + ' 학습 현황');
+  lines.push(today);
+  lines.push('');
+
+  let hasAny = false;
+  UNITS.forEach(u => {
+    const ud = units[u.key] || {};
+    const visited = u.concepts.filter(c => !!ud[c.id]).length;
+    if (visited === 0 && Object.keys(ud).length === 0) return;
+    hasAny = true;
+    const pct = Math.round((visited / u.concepts.length) * 100);
+    lines.push('[' + u.title + '] ' + visited + '/' + u.concepts.length + '개 (' + pct + '%)');
+    u.concepts.forEach(c => {
+      const sec = ud[c.id];
+      const rushed = sec && isRushed(sec, u.minTimes[c.id] || 60);
+      const mark = !sec ? '- ' : rushed ? '~ ' : 'O ';
+      const timeStr = sec ? ' (' + fmtTime(sec.totalTime) + ')' : '';
+      lines.push('  ' + mark + c.name + timeStr);
+    });
+    lines.push('');
+  });
+
+  if (!hasAny) {
+    lines.push('아직 학습 기록이 없어요.');
+  }
+
+  lines.push('O 완료  ~ 빠르게 넘어감  - 미학습');
+
+  return lines.join('\n');
+}
+
+function sendReport(mode) {
+  const text = buildReportText();
+
+  if (mode === 'share' && navigator.share) {
+    navigator.share({ text }).catch(() => {});
+    return;
+  }
+
+  // 복사 fallback
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('클립보드에 복사됐어요.\n카카오톡에서 붙여넣기 하세요.');
+    }).catch(() => legacyCopy(text));
+  } else {
+    legacyCopy(text);
+  }
+}
+
+function legacyCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  alert('클립보드에 복사됐어요.\n카카오톡에서 붙여넣기 하세요.');
+}
+
+render();
+</script>
+</body>
+</html>
