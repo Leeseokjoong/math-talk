@@ -1113,7 +1113,7 @@ function confetti() {
   }
 }
 
-window.onload = () => { show(1); initMemos(); initStudentNames(); };
+window.onload = () => { const n = parseInt(location.hash.replace("#","")) || 1; show(n); initMemos(); initStudentNames(); };
 </script>
 </body>
 </html>

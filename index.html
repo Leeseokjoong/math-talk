@@ -82,6 +82,20 @@ body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacS
 .unit-prog-fill { height:100%; background:var(--primary); border-radius:99px; }
 .unit-prog-pct { font-size:11px; font-weight:700; color:var(--gray-400); }
 
+/* ── 소단원 확장 카드 ── */
+.unit-expand { background:white; border-radius:14px; margin-bottom:10px; box-shadow:0 1px 4px rgba(0,0,0,0.06); border:2px solid transparent; overflow:hidden; transition:all 0.18s; }
+.unit-expand:hover { border-color:var(--primary); box-shadow:0 4px 16px rgba(79,70,229,0.12); }
+.unit-expand-top { display:flex; align-items:center; gap:16px; padding:16px 20px; text-decoration:none; color:inherit; }
+.unit-expand-subs { border-top:1px solid var(--gray-100); }
+.sub-row { display:flex; align-items:center; gap:10px; padding:9px 20px 9px 24px; text-decoration:none; color:inherit; border-bottom:1px solid var(--gray-50); transition:background 0.12s; }
+.sub-row:last-child { border-bottom:none; }
+.sub-row:hover { background:var(--primary-bg); }
+.sub-dot { width:8px; height:8px; border-radius:50%; background:var(--gray-200); flex-shrink:0; transition:background 0.2s; }
+.sub-dot.visited { background:var(--green); }
+.sub-name { flex:1; font-size:13px; font-weight:600; color:var(--gray-600); }
+.sub-row:hover .sub-name { color:var(--primary); }
+.sub-arrow { font-size:13px; color:var(--gray-300); }
+
 /* ── 학부모 링크 ── */
 .parent-btn {
   display:flex; align-items:center; gap:14px;
@@ -135,81 +149,163 @@ body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacS
   <!-- 중1 1학기 -->
   <div class="term-block">
     <div class="term-label">중학교 1학년 1학기</div>
-    <a class="unit-card" href="수와연산_인터랙티브교재.html" id="card-수와연산">
-      <div class="unit-icon orange">N</div>
-      <div class="unit-main">
-        <div class="unit-title">수와 연산</div>
-        <div class="unit-sub">소인수분해, 정수와 유리수</div>
+
+    <div class="unit-expand" id="card-수와연산">
+      <a class="unit-expand-top" href="수와연산_인터랙티브교재.html">
+        <div class="unit-icon orange">N</div>
+        <div class="unit-main">
+          <div class="unit-title">수와 연산</div>
+          <div class="unit-sub">소인수분해, 정수와 유리수</div>
+        </div>
+        <div class="unit-right" id="prog-수와연산">
+          <span class="unit-badge badge-new">학습 가능</span>
+        </div>
+      </a>
+      <div class="unit-expand-subs">
+        <a class="sub-row" href="수와연산_인터랙티브교재.html#1"><span class="sub-dot" id="sub-수와연산-s1"></span><span class="sub-name">소수와 합성수</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="수와연산_인터랙티브교재.html#2"><span class="sub-dot" id="sub-수와연산-s2"></span><span class="sub-name">소인수분해</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="수와연산_인터랙티브교재.html#3"><span class="sub-dot" id="sub-수와연산-s3"></span><span class="sub-name">최대공약수</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="수와연산_인터랙티브교재.html#4"><span class="sub-dot" id="sub-수와연산-s4"></span><span class="sub-name">최소공배수</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="수와연산_인터랙티브교재.html#5"><span class="sub-dot" id="sub-수와연산-s5"></span><span class="sub-name">정수와 유리수</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="수와연산_인터랙티브교재.html#6"><span class="sub-dot" id="sub-수와연산-s6"></span><span class="sub-name">절댓값과 수의 대소</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="수와연산_인터랙티브교재.html#7"><span class="sub-dot" id="sub-수와연산-s7"></span><span class="sub-name">종합 퀴즈</span><span class="sub-arrow">›</span></a>
       </div>
-      <div class="unit-right" id="prog-수와연산">
-        <span class="unit-badge badge-new">학습 가능</span>
+    </div>
+
+    <div class="unit-expand" id="card-방정식">
+      <a class="unit-expand-top" href="방정식_인터랙티브교재.html">
+        <div class="unit-icon indigo">x</div>
+        <div class="unit-main">
+          <div class="unit-title">방정식</div>
+          <div class="unit-sub">문자와 식, 일차방정식</div>
+        </div>
+        <div class="unit-right" id="prog-방정식">
+          <span class="unit-badge badge-new">학습 가능</span>
+        </div>
+      </a>
+      <div class="unit-expand-subs">
+        <a class="sub-row" href="방정식_인터랙티브교재.html#1"><span class="sub-dot" id="sub-방정식-s1"></span><span class="sub-name">문자와 식 — 대입의 뜻</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="방정식_인터랙티브교재.html#2"><span class="sub-dot" id="sub-방정식-s2"></span><span class="sub-name">일차식과 동류항</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="방정식_인터랙티브교재.html#3"><span class="sub-dot" id="sub-방정식-s3"></span><span class="sub-name">등식과 방정식</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="방정식_인터랙티브교재.html#4"><span class="sub-dot" id="sub-방정식-s4"></span><span class="sub-name">등식의 성질과 이항</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="방정식_인터랙티브교재.html#5"><span class="sub-dot" id="sub-방정식-s5"></span><span class="sub-name">일차방정식 풀기</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="방정식_인터랙티브교재.html#6"><span class="sub-dot" id="sub-방정식-s6"></span><span class="sub-name">일차방정식의 활용</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="방정식_인터랙티브교재.html#7"><span class="sub-dot" id="sub-방정식-s7"></span><span class="sub-name">종합 퀴즈</span><span class="sub-arrow">›</span></a>
       </div>
-    </a>
-    <a class="unit-card" href="방정식_인터랙티브교재.html" id="card-방정식">
-      <div class="unit-icon indigo">x</div>
-      <div class="unit-main">
-        <div class="unit-title">방정식</div>
-        <div class="unit-sub">문자와 식, 일차방정식</div>
+    </div>
+
+    <div class="unit-expand" id="card-그래프와비례">
+      <a class="unit-expand-top" href="그래프와비례_인터랙티브교재.html">
+        <div class="unit-icon teal">∝</div>
+        <div class="unit-main">
+          <div class="unit-title">그래프와 비례</div>
+          <div class="unit-sub">좌표평면과 그래프, 정비례와 반비례</div>
+        </div>
+        <div class="unit-right" id="prog-그래프와비례">
+          <span class="unit-badge badge-new">학습 가능</span>
+        </div>
+      </a>
+      <div class="unit-expand-subs">
+        <a class="sub-row" href="그래프와비례_인터랙티브교재.html#1"><span class="sub-dot" id="sub-그래프와비례-s1"></span><span class="sub-name">순서쌍과 좌표</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="그래프와비례_인터랙티브교재.html#2"><span class="sub-dot" id="sub-그래프와비례-s2"></span><span class="sub-name">사분면</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="그래프와비례_인터랙티브교재.html#3"><span class="sub-dot" id="sub-그래프와비례-s3"></span><span class="sub-name">그래프의 뜻과 해석</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="그래프와비례_인터랙티브교재.html#4"><span class="sub-dot" id="sub-그래프와비례-s4"></span><span class="sub-name">정비례</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="그래프와비례_인터랙티브교재.html#5"><span class="sub-dot" id="sub-그래프와비례-s5"></span><span class="sub-name">반비례</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="그래프와비례_인터랙티브교재.html#6"><span class="sub-dot" id="sub-그래프와비례-s6"></span><span class="sub-name">종합 퀴즈</span><span class="sub-arrow">›</span></a>
       </div>
-      <div class="unit-right" id="prog-방정식">
-        <span class="unit-badge badge-new">학습 가능</span>
-      </div>
-    </a>
-    <a class="unit-card" href="그래프와비례_인터랙티브교재.html" id="card-그래프와비례">
-      <div class="unit-icon teal">∝</div>
-      <div class="unit-main">
-        <div class="unit-title">그래프와 비례</div>
-        <div class="unit-sub">좌표평면과 그래프, 정비례와 반비례</div>
-      </div>
-      <div class="unit-right" id="prog-그래프와비례">
-        <span class="unit-badge badge-new">학습 가능</span>
-      </div>
-    </a>
+    </div>
   </div>
 
   <!-- 중1 2학기 -->
   <div class="term-block">
     <div class="term-label">중학교 1학년 2학기</div>
-    <a class="unit-card" href="기본도형_인터랙티브교재.html" id="card-기본도형">
-      <div class="unit-icon green">△</div>
-      <div class="unit-main">
-        <div class="unit-title">기본도형</div>
-        <div class="unit-sub">기본도형, 작도와 합동</div>
+
+    <div class="unit-expand" id="card-기본도형">
+      <a class="unit-expand-top" href="기본도형_인터랙티브교재.html">
+        <div class="unit-icon green">△</div>
+        <div class="unit-main">
+          <div class="unit-title">기본도형</div>
+          <div class="unit-sub">기본도형, 작도와 합동</div>
+        </div>
+        <div class="unit-right" id="prog-기본도형">
+          <span class="unit-badge badge-new">학습 가능</span>
+        </div>
+      </a>
+      <div class="unit-expand-subs">
+        <a class="sub-row" href="기본도형_인터랙티브교재.html#1"><span class="sub-dot" id="sub-기본도형-s1"></span><span class="sub-name">점, 선, 면, 각</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="기본도형_인터랙티브교재.html#2"><span class="sub-dot" id="sub-기본도형-s2"></span><span class="sub-name">맞꼭지각, 수직, 평행</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="기본도형_인터랙티브교재.html#3"><span class="sub-dot" id="sub-기본도형-s3"></span><span class="sub-name">위치 관계</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="기본도형_인터랙티브교재.html#4"><span class="sub-dot" id="sub-기본도형-s4"></span><span class="sub-name">동위각과 엇각</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="기본도형_인터랙티브교재.html#5"><span class="sub-dot" id="sub-기본도형-s5"></span><span class="sub-name">삼각형의 작도</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="기본도형_인터랙티브교재.html#6"><span class="sub-dot" id="sub-기본도형-s6"></span><span class="sub-name">삼각형의 합동</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="기본도형_인터랙티브교재.html#7"><span class="sub-dot" id="sub-기본도형-s7"></span><span class="sub-name">종합 퀴즈</span><span class="sub-arrow">›</span></a>
       </div>
-      <div class="unit-right" id="prog-기본도형">
-        <span class="unit-badge badge-new">학습 가능</span>
+    </div>
+
+    <div class="unit-expand" id="card-평면도형">
+      <a class="unit-expand-top" href="평면도형_인터랙티브교재.html">
+        <div class="unit-icon green">○</div>
+        <div class="unit-main">
+          <div class="unit-title">평면도형</div>
+          <div class="unit-sub">다각형, 원과 부채꼴</div>
+        </div>
+        <div class="unit-right" id="prog-평면도형">
+          <span class="unit-badge badge-new">학습 가능</span>
+        </div>
+      </a>
+      <div class="unit-expand-subs">
+        <a class="sub-row" href="평면도형_인터랙티브교재.html#1"><span class="sub-dot" id="sub-평면도형-s1"></span><span class="sub-name">다각형의 뜻과 종류</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="평면도형_인터랙티브교재.html#2"><span class="sub-dot" id="sub-평면도형-s2"></span><span class="sub-name">다각형의 내각과 외각</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="평면도형_인터랙티브교재.html#3"><span class="sub-dot" id="sub-평면도형-s3"></span><span class="sub-name">원과 부채꼴 — 기본 개념</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="평면도형_인터랙티브교재.html#4"><span class="sub-dot" id="sub-평면도형-s4"></span><span class="sub-name">부채꼴의 호와 넓이</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="평면도형_인터랙티브교재.html#5"><span class="sub-dot" id="sub-평면도형-s5"></span><span class="sub-name">원과 부채꼴 — 활용</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="평면도형_인터랙티브교재.html#6"><span class="sub-dot" id="sub-평면도형-s6"></span><span class="sub-name">부채꼴 심화 + 공식 정리</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="평면도형_인터랙티브교재.html#7"><span class="sub-dot" id="sub-평면도형-s7"></span><span class="sub-name">종합 퀴즈</span><span class="sub-arrow">›</span></a>
       </div>
-    </a>
-    <a class="unit-card" href="평면도형_인터랙티브교재.html" id="card-평면도형">
-      <div class="unit-icon green">○</div>
-      <div class="unit-main">
-        <div class="unit-title">평면도형</div>
-        <div class="unit-sub">다각형, 원과 부채꼴</div>
+    </div>
+
+    <div class="unit-expand" id="card-입체도형">
+      <a class="unit-expand-top" href="입체도형_인터랙티브교재.html">
+        <div class="unit-icon green">□</div>
+        <div class="unit-main">
+          <div class="unit-title">입체도형</div>
+          <div class="unit-sub">다면체와 회전체, 겉넓이와 부피</div>
+        </div>
+        <div class="unit-right" id="prog-입체도형">
+          <span class="unit-badge badge-new">학습 가능</span>
+        </div>
+      </a>
+      <div class="unit-expand-subs">
+        <a class="sub-row" href="입체도형_인터랙티브교재.html#1"><span class="sub-dot" id="sub-입체도형-s1"></span><span class="sub-name">다면체</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="입체도형_인터랙티브교재.html#2"><span class="sub-dot" id="sub-입체도형-s2"></span><span class="sub-name">각기둥과 각뿔</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="입체도형_인터랙티브교재.html#3"><span class="sub-dot" id="sub-입체도형-s3"></span><span class="sub-name">회전체</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="입체도형_인터랙티브교재.html#4"><span class="sub-dot" id="sub-입체도형-s4"></span><span class="sub-name">겉넓이 — 기둥과 뿔</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="입체도형_인터랙티브교재.html#5"><span class="sub-dot" id="sub-입체도형-s5"></span><span class="sub-name">부피 — 기둥과 뿔</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="입체도형_인터랙티브교재.html#6"><span class="sub-dot" id="sub-입체도형-s6"></span><span class="sub-name">구의 겉넓이와 부피</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="입체도형_인터랙티브교재.html#7"><span class="sub-dot" id="sub-입체도형-s7"></span><span class="sub-name">종합 퀴즈</span><span class="sub-arrow">›</span></a>
       </div>
-      <div class="unit-right" id="prog-평면도형">
-        <span class="unit-badge badge-new">학습 가능</span>
+    </div>
+
+    <div class="unit-expand" id="card-통계1">
+      <a class="unit-expand-top" href="통계_인터랙티브교재.html">
+        <div class="unit-icon teal">bar</div>
+        <div class="unit-main">
+          <div class="unit-title">통계</div>
+          <div class="unit-sub">자료의 정리, 자료의 해석</div>
+        </div>
+        <div class="unit-right" id="prog-통계1">
+          <span class="unit-badge badge-new">학습 가능</span>
+        </div>
+      </a>
+      <div class="unit-expand-subs">
+        <a class="sub-row" href="통계_인터랙티브교재.html#1"><span class="sub-dot" id="sub-통계1-s1"></span><span class="sub-name">줄기와 잎 그림</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="통계_인터랙티브교재.html#2"><span class="sub-dot" id="sub-통계1-s2"></span><span class="sub-name">도수분포표</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="통계_인터랙티브교재.html#3"><span class="sub-dot" id="sub-통계1-s3"></span><span class="sub-name">히스토그램과 도수분포다각형</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="통계_인터랙티브교재.html#4"><span class="sub-dot" id="sub-통계1-s4"></span><span class="sub-name">상대도수의 분포</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="통계_인터랙티브교재.html#5"><span class="sub-dot" id="sub-통계1-s5"></span><span class="sub-name">자료의 해석 — 대표값</span><span class="sub-arrow">›</span></a>
+        <a class="sub-row" href="통계_인터랙티브교재.html#6"><span class="sub-dot" id="sub-통계1-s6"></span><span class="sub-name">종합 퀴즈</span><span class="sub-arrow">›</span></a>
       </div>
-    </a>
-    <a class="unit-card" href="입체도형_인터랙티브교재.html" id="card-입체도형">
-      <div class="unit-icon green">□</div>
-      <div class="unit-main">
-        <div class="unit-title">입체도형</div>
-        <div class="unit-sub">다면체와 회전체, 겉넓이와 부피</div>
-      </div>
-      <div class="unit-right" id="prog-입체도형">
-        <span class="unit-badge badge-new">학습 가능</span>
-      </div>
-    </a>
-    <a class="unit-card" href="통계_인터랙티브교재.html" id="card-통계1">
-      <div class="unit-icon teal">bar</div>
-      <div class="unit-main">
-        <div class="unit-title">통계</div>
-        <div class="unit-sub">자료의 정리, 자료의 해석</div>
-      </div>
-      <div class="unit-right" id="prog-통계1">
-        <span class="unit-badge badge-new">학습 가능</span>
-      </div>
-    </a>
+    </div>
   </div>
 
   <!-- 중2 1학기 -->
@@ -409,13 +505,13 @@ const TRACK_KEY = 'mathTalk_progress';
 function getProgress() { try { return JSON.parse(localStorage.getItem(TRACK_KEY)) || {}; } catch(e) { return {}; } }
 
 const UNIT_META = {
-  '수와연산':    { total:7, domId:'prog-수와연산' },
-  '방정식':      { total:7, domId:'prog-방정식' },
-  '그래프와비례': { total:6, domId:'prog-그래프와비례' },
-  '기본도형':    { total:7, domId:'prog-기본도형' },
-  '평면도형':    { total:7, domId:'prog-평면도형' },
-  '입체도형':    { total:7, domId:'prog-입체도형' },
-  '통계1':       { total:6, domId:'prog-통계1' },
+  '수와연산':    { total:7, domId:'prog-수와연산',    subs:['s1','s2','s3','s4','s5','s6','s7'] },
+  '방정식':      { total:7, domId:'prog-방정식',      subs:['s1','s2','s3','s4','s5','s6','s7'] },
+  '그래프와비례': { total:6, domId:'prog-그래프와비례', subs:['s1','s2','s3','s4','s5','s6'] },
+  '기본도형':    { total:7, domId:'prog-기본도형',    subs:['s1','s2','s3','s4','s5','s6','s7'] },
+  '평면도형':    { total:7, domId:'prog-평면도형',    subs:['s1','s2','s3','s4','s5','s6','s7'] },
+  '입체도형':    { total:7, domId:'prog-입체도형',    subs:['s1','s2','s3','s4','s5','s6','s7'] },
+  '통계1':       { total:6, domId:'prog-통계1',       subs:['s1','s2','s3','s4','s5','s6'] },
   '유리수와소수': { total:6, domId:'prog-유리수와소수' },
   '식의계산':    { total:7, domId:'prog-식의계산' },
   '일차부등식':  { total:6, domId:'prog-일차부등식' },
@@ -452,13 +548,19 @@ function renderProgress() {
     if (visited === 0) {
       el.innerHTML = '<span class="unit-badge badge-new">학습 가능</span>';
     } else if (pct >= 100) {
-      el.innerHTML = '<span class="unit-badge badge-done">완료 ✓</span>';
+      el.innerHTML = '<span class="unit-badge badge-done">완료</span>';
     } else {
       el.innerHTML = `
         <div class="unit-prog-row">
           <div class="unit-prog-bar"><div class="unit-prog-fill" style="width:${pct}%"></div></div>
           <span class="unit-prog-pct">${pct}%</span>
         </div>`;
+    }
+    if (meta.subs) {
+      meta.subs.forEach(sid => {
+        const dot = document.getElementById(`sub-${key}-${sid}`);
+        if (dot) dot.className = 'sub-dot' + (ud[sid] ? ' visited' : '');
+      });
     }
   });
 }
