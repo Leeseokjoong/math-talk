@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>땡중샘 수학톡 | 입체도형</title>
+<style>
+:root {
+  --primary: #4f46e5; --primary-bg: #eef2ff; --primary-border: #c7d2fe;
+  --accent: #0ea5e9; --accent-bg: #e0f2fe;
+  --green: #059669; --green-bg: #d1fae5;
+  --red: #dc2626; --red-bg: #fee2e2;
+  --orange: #d97706; --orange-bg: #fef3c7;
+  --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+  --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280;
+  --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacSystemFont,sans-serif; background:#f5f5f7; color:var(--gray-800); line-height:1.75; -webkit-font-smoothing:antialiased; }
+
+.header { background:var(--gray-900); color:white; padding:40px 24px 36px; text-align:center; }
+.header-eyebrow { font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#a5b4fc; margin-bottom:10px; }
+.header h1 { font-size:clamp(24px,5vw,32px); font-weight:800; letter-spacing:-0.5px; }
+.header p { margin-top:10px; font-size:14px; color:#9ca3af; }
+
+.progress-wrap { background:white; padding:14px 24px; border-bottom:1px solid var(--gray-200); position:sticky; top:0; z-index:100; box-shadow:0 1px 8px rgba(0,0,0,0.06); }
+.progress-meta { display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:var(--gray-500); margin-bottom:8px; }
+.progress-bar { height:4px; background:var(--gray-200); border-radius:99px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--primary); border-radius:99px; transition:width 0.5s ease; width:0%; }
+
+.section { background:white; border-radius:16px; margin:20px 16px; box-shadow:0 1px 6px rgba(0,0,0,0.07); display:none; animation:fadeUp 0.35s ease; }
+.section.active { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)} }
+.sec-top { padding:22px 28px 0; }
+.sec-badge { display:inline-block; font-size:11px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:var(--primary); background:var(--primary-bg); border-radius:6px; padding:3px 10px; }
+.sec-badge.teal { color:var(--accent); background:var(--accent-bg); }
+.sec-badge.green { color:var(--green); background:var(--green-bg); }
+.sec-title { font-size:18px; font-weight:800; color:var(--gray-900); margin-top:8px; padding:0 28px; line-height:1.4; }
+
+/* -- 대화형 -- */
+.chat-bg { background:#b2c7d9; border-radius:0 0 16px 16px; padding:18px 16px 24px !important; }
+.chat-step { display:none; animation:fadeUp 0.35s ease; }
+.chat-step.visible { display:block; }
+.t-name { font-size:11px; font-weight:800; color:var(--gray-500); letter-spacing:0.8px; margin-bottom:8px; }
+.t-msg { background:white; color:var(--gray-800); border-radius:4px 16px 16px 16px; padding:14px 16px; margin-bottom:6px; box-shadow:0 1px 4px rgba(0,0,0,0.10); }
+.t-msg p { font-size:14px; line-height:1.85; }
+.s-name { font-size:11px; font-weight:800; color:#b8960a; letter-spacing:0.8px; margin-bottom:6px; }
+.s-msg { background:#FEE500; border-radius:16px 4px 16px 16px; padding:14px 16px; margin-bottom:6px; margin-left:24px; box-shadow:0 1px 4px rgba(0,0,0,0.10); }
+.s-msg p { font-size:14px; line-height:1.85; color:var(--gray-800); }
+.chat-gap { height:8px; }
+.cont-wrap { text-align:center; margin-top:18px; }
+.cont-btn { background:white; color:var(--gray-700); border:1.5px solid var(--gray-300); border-radius:99px; padding:10px 28px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+.cont-btn:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-bg); }
+
+/* -- 콘텐츠 블록 -- */
+.math-block { background:var(--gray-900); color:#a5b4fc; border-radius:10px; padding:16px 20px; font-family:'Courier New',monospace; font-size:15px; margin:8px 0 10px; line-height:2; }
+.eq-steps { background:var(--gray-50); border-radius:10px; overflow:hidden; margin:8px 0 10px; }
+.eq-row { display:flex; align-items:baseline; gap:12px; padding:11px 16px; border-bottom:1px solid var(--gray-100); font-size:14px; }
+.eq-row:last-child { border-bottom:none; }
+.eq-row.highlight { background:var(--primary-bg); }
+.eq-row.result { background:var(--gray-900); color:white; }
+.eq-num { font-size:11px; font-weight:700; color:var(--gray-400); min-width:60px; flex-shrink:0; }
+.eq-row.result .eq-num { color:#6b7280; }
+.eq-content { flex:1; }
+.mv { color:var(--primary); font-weight:700; }
+.eq-row.result .mv { color:#a5b4fc; }
+.mr { color:var(--red); font-weight:700; }
+.eq-row.result .mr { color:#fca5a5; }
+.hi { color:var(--orange); font-weight:700; }
+.note { font-size:12px; color:var(--gray-400); }
+.point-box { background:var(--primary-bg); border-left:3px solid var(--primary); border-radius:0 10px 10px 0; padding:16px 18px; margin:8px 0 10px; }
+.point-box p { font-size:14px; line-height:1.8; color:var(--gray-700); }
+.warn-box { background:var(--red-bg); border-left:3px solid var(--red); border-radius:0 10px 10px 0; padding:16px 18px; margin:8px 0 10px; }
+.warn-box p { font-size:14px; line-height:1.8; color:var(--gray-700); }
+.summary-box { border-radius:10px; padding:18px 20px; margin:8px 0 10px; }
+.summary-box.indigo { background:var(--primary-bg); border:1.5px solid var(--primary-border); }
+.sb-head { font-size:13px; font-weight:800; color:var(--primary); margin-bottom:6px; }
+.sb-body { font-size:15px; font-weight:700; color:var(--gray-900); }
+.sb-sub { font-size:13px; color:var(--gray-500); margin-top:4px; }
+
+/* -- 표 -- */
+.tbl { width:100%; border-collapse:collapse; font-size:14px; margin:8px 0 10px; }
+.tbl th { background:var(--gray-900); color:white; padding:10px 14px; font-weight:700; font-size:13px; text-align:left; }
+.tbl td { padding:10px 14px; border-bottom:1px solid var(--gray-100); vertical-align:middle; }
+.tbl tbody tr:last-child td { border-bottom:none; }
+.tbl tbody tr:nth-child(even) { background:var(--gray-50); }
+.tbl-var { color:var(--primary); font-weight:700; }
+.tbl-given { color:var(--red); font-weight:700; }
+.tbl-formula { color:var(--orange); font-weight:700; font-size:13px; }
+.th-p { color:#a5b4fc; }
+.th-g { color:var(--green-bg); }
+.th-o { color:var(--orange-bg); }
+.th-r { color:#fca5a5; }
+.th-a { color:var(--accent-bg); }
+
+/* -- 퀴즈 -- */
+.quiz { background:var(--gray-50); border-radius:12px; padding:18px; margin:8px 0 10px; }
+.quiz-label { font-size:11px; font-weight:800; color:var(--primary); letter-spacing:0.8px; margin-bottom:8px; }
+.quiz-q { font-size:15px; font-weight:700; color:var(--gray-900); margin-bottom:14px; line-height:1.6; }
+.quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.qopt { background:white; border:1.5px solid var(--gray-200); border-radius:8px; padding:11px 14px; font-size:14px; font-family:inherit; font-weight:600; color:var(--gray-700); cursor:pointer; transition:all 0.15s; text-align:left; }
+.qopt:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-bg); }
+.qopt.correct { background:var(--green-bg); border-color:var(--green); color:var(--green); }
+.qopt.wrong { background:var(--red-bg); border-color:var(--red); color:var(--red); }
+.qopt:disabled { cursor:not-allowed; }
+.quiz-fb { font-size:13px; color:var(--gray-600); margin-top:10px; min-height:18px; line-height:1.6; }
+.quiz-fb.ok { color:var(--green); font-weight:600; }
+.quiz-fb.no { color:var(--red); font-weight:600; }
+
+/* -- 점수 패널 -- */
+.score-panel { display:none; background:var(--gray-900); color:white; border-radius:12px; padding:36px; text-align:center; margin-top:20px; animation:fadeUp 0.4s ease; }
+.score-num { font-size:60px; font-weight:900; line-height:1; }
+.score-of { font-size:14px; color:#6b7280; margin-top:4px; }
+.score-msg { font-size:20px; font-weight:800; margin-top:18px; }
+.score-detail { font-size:14px; color:#9ca3af; margin-top:6px; }
+.restart-btn { margin-top:20px; background:white; color:var(--gray-900); border:none; border-radius:8px; padding:11px 28px; font-size:14px; font-weight:700; cursor:pointer; }
+.toc-btn { margin-top:12px; display:block; background:transparent; color:#9ca3af; border:1.5px solid #374151; border-radius:8px; padding:10px 28px; font-size:13px; font-weight:700; cursor:pointer; }
+
+/* -- 버튼 -- */
+.next-wrap { text-align:center; margin-top:22px; }
+.next-btn { background:var(--gray-900); color:white; border:none; border-radius:8px; padding:13px 36px; font-size:15px; font-weight:700; cursor:pointer; transition:all 0.18s; }
+.next-btn:hover { background:var(--primary); }
+.score-check-btn { background:var(--gray-300); color:var(--gray-500); border:none; border-radius:8px; padding:13px 36px; font-size:15px; font-weight:700; cursor:not-allowed; transition:all 0.2s; }
+.score-check-btn.ready { background:var(--primary); color:white; cursor:pointer; }
+
+/* -- 수정 요청 -- */
+.edit-bar { display:flex; align-items:center; justify-content:flex-end; padding:10px 20px 14px; border-top:1px solid var(--gray-100); margin-top:4px; }
+.edit-request-btn { background:none; border:1.5px dashed var(--gray-300); border-radius:6px; padding:5px 12px; font-size:12px; font-weight:600; color:var(--gray-400); cursor:pointer; transition:all 0.15s; }
+.edit-request-btn:hover { border-color:var(--orange); color:var(--orange); background:var(--orange-bg); }
+.edit-request-btn.has-memo { border-color:var(--orange); color:var(--orange); background:var(--orange-bg); border-style:solid; }
+.memo-banner { margin:0 20px 14px; background:#fffbeb; border:1.5px solid #fcd34d; border-radius:8px; padding:12px 14px; display:none; }
+.memo-banner.show { display:block; }
+.memo-banner-label { font-size:11px; font-weight:700; color:var(--orange); margin-bottom:4px; }
+.memo-banner-text { font-size:14px; color:var(--gray-700); white-space:pre-wrap; }
+.memo-input-area { display:none; margin:0 20px 14px; background:#fffbeb; border:1.5px solid #fcd34d; border-radius:8px; padding:14px; }
+.memo-input-area.show { display:block; }
+.memo-textarea { width:100%; border:1px solid #fcd34d; border-radius:6px; padding:10px 12px; font-size:14px; font-family:inherit; resize:vertical; min-height:80px; outline:none; background:white; }
+.memo-textarea:focus { border-color:var(--orange); }
+.memo-actions { display:flex; gap:8px; margin-top:10px; }
+.memo-save-btn { background:var(--orange); color:white; border:none; border-radius:6px; padding:8px 18px; font-size:13px; font-weight:700; cursor:pointer; }
+.memo-delete-btn { background:white; color:var(--red); border:1.5px solid var(--red); border-radius:6px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; }
+.memo-cancel-btn { background:white; color:var(--gray-500); border:1.5px solid var(--gray-200); border-radius:6px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; }
+.memo-float-btn { position:fixed; bottom:24px; right:20px; background:var(--orange); color:white; border:none; border-radius:99px; padding:12px 20px; font-size:13px; font-weight:700; cursor:pointer; box-shadow:0 4px 16px rgba(217,119,6,0.4); z-index:50; transition:all 0.2s; display:none; }
+.memo-count { background:white; color:var(--orange); border-radius:99px; padding:1px 7px; font-size:12px; font-weight:900; margin-left:6px; }
+.memo-list-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:200; align-items:flex-end; justify-content:center; }
+.memo-list-overlay.open { display:flex; }
+.memo-list-sheet { background:white; border-radius:16px 16px 0 0; padding:24px 22px 36px; width:100%; max-width:740px; max-height:70vh; overflow-y:auto; animation:slideUp 0.25s ease; }
+@keyframes slideUp { from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1} }
+.memo-list-title { font-size:17px; font-weight:900; color:var(--gray-900); margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; }
+.memo-list-close { background:var(--gray-100); border:none; border-radius:6px; padding:6px 14px; font-size:13px; font-weight:700; cursor:pointer; color:var(--gray-700); }
+.memo-list-item { background:#fffbeb; border:1.5px solid #fcd34d; border-radius:8px; padding:12px 14px; margin-bottom:10px; }
+.memo-list-item-label { font-size:11px; font-weight:700; color:var(--orange); margin-bottom:4px; }
+.memo-list-item-text { font-size:14px; color:var(--gray-700); white-space:pre-wrap; }
+
+/* -- 분수 -- */
+.frac { display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; font-size:0.88em; line-height:1.15; margin:0 2px; }
+.frac .num { border-bottom:1.5px solid currentColor; padding:0 4px 2px; text-align:center; white-space:nowrap; }
+.frac .den { padding:2px 4px 0; text-align:center; white-space:nowrap; }
+
+/* -- confetti -- */
+.cf { position:fixed; border-radius:2px; pointer-events:none; z-index:9999; animation:cfFall linear forwards; }
+@keyframes cfFall { 0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)} }
+
+@media(max-width:520px){
+  .sec-top,.sec-body{padding-left:18px;padding-right:18px;}
+  .sec-title{padding-left:18px;padding-right:18px;}
+  .quiz-opts{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">땡중샘 수학톡 (중학수학)</div>
+  <h1>입체도형</h1>
+  <p>중학교 1학년 · 대화로 배우는 수학</p>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-meta">
+    <span id="prog-label">개념 1 — 다면체</span>
+    <span id="prog-pct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+</div>
+
+<!-- ===== 1. 다면체 ===== -->
+<div class="section active" id="s1">
+  <div class="sec-top"><div class="sec-badge">개념 1</div></div>
+  <div class="sec-title">다면체</div>
+  <div class="sec-body chat-bg" id="chat-s1">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><span class="s-name-slot">태린</span>아, 입체도형 단원 시작이야. 첫 번째는 <strong>다면체</strong>. 다면체가 뭔지 알아?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>면이 여러 개 있는 입체도형 아닌가요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>거의 맞아. 정확히는 <strong>다각형인 면으로만 둘러싸인 입체도형</strong>이야. 포인트는 "다각형"이라는 거야. 곡면이 하나라도 있으면 다면체가 아니야.</p>
+        <div class="point-box" style="margin-top:10px;">
+          <p><strong>다면체의 3요소</strong><br>
+          · 면(Face) : 다면체를 이루는 각각의 다각형<br>
+          · 모서리(Edge) : 두 면이 만나는 선분<br>
+          · 꼭짓점(Vertex) : 세 면 이상이 만나는 점</p>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>그럼 원기둥은 다면체가 아니에요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아! 원기둥 옆면은 곡면이잖아. 그래서 다면체가 아니야. 구, 원기둥, 원뿔은 모두 다면체가 아니야.</p>
+        <p style="margin-top:10px;">이제 아주 중요한 공식 하나 — <strong>오일러 공식</strong>이야.</p>
+        <div class="math-block" style="margin-top:10px;">
+          꼭짓점 - 모서리 + 면 = 2<br>
+          V &nbsp;-&nbsp; E &nbsp;+&nbsp; F &nbsp;=&nbsp; 2
+        </div>
+        <p style="font-size:13px; opacity:.8;">볼록 다면체에서 항상 성립하는 공식이야. 예를 들어 정육면체: 꼭짓점 8, 모서리 12, 면 6 → 8 − 12 + 6 = 2. 맞지?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>이제 <strong>정다면체</strong> 이야기야. 정다면체란 모든 면이 합동인 정다각형이고, 각 꼭짓점에 모이는 면의 수가 같은 다면체야. 정다면체는 딱 5종류만 존재해.</p>
+        <table class="tbl" style="margin-top:10px;">
+          <thead><tr>
+            <th>이름</th>
+            <th class="th-p">면의 모양</th>
+            <th class="th-g">면(F)</th>
+            <th class="th-o">모서리(E)</th>
+            <th class="th-r">꼭짓점(V)</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>정사면체</td><td class="tbl-var">정삼각형</td><td>4</td><td>6</td><td>4</td></tr>
+            <tr><td>정육면체</td><td class="tbl-var">정사각형</td><td>6</td><td>12</td><td>8</td></tr>
+            <tr><td>정팔면체</td><td class="tbl-var">정삼각형</td><td>8</td><td>12</td><td>6</td></tr>
+            <tr><td>정십이면체</td><td class="tbl-var">정오각형</td><td>12</td><td>30</td><td>20</td></tr>
+            <tr><td>정이십면체</td><td class="tbl-var">정삼각형</td><td>20</td><td>30</td><td>12</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:12px; color:var(--gray-500);">각 행마다 V - E + F = 2 인지 직접 확인해봐!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>정다면체가 왜 5개밖에 없어요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>좋은 질문이야! 한 꼭짓점에 정다각형이 모일 때, 각도의 합이 반드시 360도 미만이어야 입체가 만들어져. 꼭 닫혀야 하거든.</p>
+        <div class="point-box" style="margin-top:8px;">
+          <p>· 정삼각형(60도): 3개(180), 4개(240), 5개(300) 가능 → 정사면체, 정팔면체, 정이십면체<br>
+          · 정사각형(90도): 3개(270) 가능 → 정육면체<br>
+          · 정오각형(108도): 3개(324) 가능 → 정십이면체<br>
+          · 정육각형(120도): 3개(360) → 평면이 돼버려서 불가</p>
+        </div>
+        <p style="font-size:13px; opacity:.8;">그래서 딱 5가지만 존재해. 수학적으로 이것 이상 만들 수 없어.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">정육면체의 꼭짓점은 몇 개인가?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q1',false)">6개</button>
+          <button class="qopt" onclick="q(this,'q1',true)">8개</button>
+          <button class="qopt" onclick="q(this,'q1',false)">10개</button>
+          <button class="qopt" onclick="q(this,'q1',false)">12개</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q1"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(2)">각기둥과 각뿔 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s1" onclick="openMemo('s1')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s1"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s1"></div></div>
+  <div class="memo-input-area" id="mi-s1">
+    <textarea class="memo-textarea" id="mt-s1" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s1')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s1')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s1')">취소</button></div>
+  </div>
+</div>
+
+<!-- ===== 2. 각기둥과 각뿔 ===== -->
+<div class="section" id="s2">
+  <div class="sec-top"><div class="sec-badge">개념 2</div></div>
+  <div class="sec-title">각기둥과 각뿔</div>
+  <div class="sec-body chat-bg" id="chat-s2">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>이번엔 <strong>각기둥</strong>이야. 각기둥은 두 밑면이 서로 평행하고 합동인 다각형이고, 옆면은 모두 직사각형이야.</p>
+        <div class="point-box" style="margin-top:8px;">
+          <p><strong>n각기둥의 공식</strong><br>
+          · 꼭짓점: 2n개<br>
+          · 모서리: 3n개<br>
+          · 면: n + 2개 (위아래 밑면 2개 + 옆면 n개)</p>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>각기둥이랑 각뿔 헷갈려요. 어떻게 구별해요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>아주 쉽게 기억해. <strong>기둥은 위아래 뚜껑이 2개</strong>, <strong>뿔은 뚜껑이 1개</strong>야. 뿔은 위로 갈수록 뾰족하게 한 점(꼭짓점)으로 모이잖아.</p>
+        <p style="margin-top:10px;">각뿔은 밑면이 다각형이고, 옆면은 모두 삼각형이야. 꼭짓점이 하나만 있어.</p>
+        <div class="point-box" style="margin-top:8px;">
+          <p><strong>n각뿔의 공식</strong><br>
+          · 꼭짓점: n + 1개 (밑면 꼭짓점 n개 + 뾰족한 꼭짓점 1개)<br>
+          · 모서리: 2n개<br>
+          · 면: n + 1개 (밑면 1개 + 옆면 n개)</p>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>비교표로 정리해볼게.</p>
+        <table class="tbl" style="margin-top:8px;">
+          <thead><tr>
+            <th>구분</th>
+            <th class="th-p">밑면</th>
+            <th class="th-g">옆면</th>
+            <th class="th-o">꼭짓점</th>
+            <th class="th-r">모서리</th>
+            <th class="th-a">면</th>
+          </tr></thead>
+          <tbody>
+            <tr><td><strong>n각기둥</strong></td><td class="tbl-var">2개 (합동)</td><td>직사각형</td><td>2n</td><td>3n</td><td>n+2</td></tr>
+            <tr><td><strong>n각뿔</strong></td><td class="tbl-var">1개</td><td>삼각형</td><td>n+1</td><td>2n</td><td>n+1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>그럼 오각기둥이면 꼭짓점이 10개, 모서리가 15개네요!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>정확해! n=5를 넣으면 꼭짓점 10개, 모서리 15개, 면 7개야. 오일러 공식으로 확인해봐. 10 − 15 + 7 = 2. 딱 맞지!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">사각뿔의 모서리는 몇 개인가?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q2',false)">6개</button>
+          <button class="qopt" onclick="q(this,'q2',false)">7개</button>
+          <button class="qopt" onclick="q(this,'q2',true)">8개</button>
+          <button class="qopt" onclick="q(this,'q2',false)">10개</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q2"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(3)">회전체 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s2" onclick="openMemo('s2')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s2"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s2"></div></div>
+  <div class="memo-input-area" id="mi-s2">
+    <textarea class="memo-textarea" id="mt-s2" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s2')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s2')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s2')">취소</button></div>
+  </div>
+</div>
+
+<!-- ===== 3. 회전체 ===== -->
+<div class="section" id="s3">
+  <div class="sec-top"><div class="sec-badge teal">개념 3</div></div>
+  <div class="sec-title">회전체</div>
+  <div class="sec-body chat-bg" id="chat-s3">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>이번엔 <strong>회전체</strong>야. 평면도형을 한 직선(축)을 기준으로 1회전시켜 만든 입체도형이야. 이 직선을 <strong>회전축</strong>이라고 해.</p>
+        <table class="tbl" style="margin-top:10px;">
+          <thead><tr>
+            <th>회전체</th>
+            <th class="th-p">회전시키는 도형</th>
+            <th class="th-g">특징</th>
+          </tr></thead>
+          <tbody>
+            <tr><td><strong>원기둥</strong></td><td class="tbl-var">직사각형</td><td>밑면 2개 (원), 옆면 1개 (곡면)</td></tr>
+            <tr><td><strong>원뿔</strong></td><td class="tbl-var">직각삼각형</td><td>밑면 1개 (원), 옆면 1개 (곡면), 모선</td></tr>
+            <tr><td><strong>구</strong></td><td class="tbl-var">반원</td><td>면이 1개 (곡면 전체)</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px; opacity:.8; margin-top:6px;"><strong>모선</strong> : 원뿔의 옆면 곡면을 이루는 선분, 즉 꼭짓점과 밑면 원 위의 점을 이은 선분. 길이가 모두 같아.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>회전체 단면이 항상 원인가요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>아니야! 단면은 자르는 방향에 따라 달라져.</p>
+        <div class="point-box" style="margin-top:8px;">
+          <p><strong>원기둥의 단면</strong><br>
+          · 회전축에 수직으로 자름 → 원<br>
+          · 회전축에 평행하게 자름 → 직사각형</p>
+        </div>
+        <div class="point-box" style="margin-top:6px;">
+          <p><strong>원뿔의 단면</strong><br>
+          · 회전축에 수직으로 자름 → 원<br>
+          · 회전축을 포함하여 자름 → 이등변삼각형</p>
+        </div>
+        <div class="point-box" style="margin-top:6px;">
+          <p><strong>구의 단면</strong><br>
+          · 어떤 방향으로 잘라도 → 항상 원</p>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>구는 어떻게 잘라도 원이에요? 신기하다!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아. 구의 중심에서 모든 방향으로 거리가 같으니까, 어느 방향으로 잘라도 원이 나와. 단면의 크기는 중심에서 얼마나 떨어져 자르느냐에 따라 달라지지.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">직사각형을 한 변을 축으로 회전시키면 어떤 입체가 생기나?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q3',false)">원뿔</button>
+          <button class="qopt" onclick="q(this,'q3',true)">원기둥</button>
+          <button class="qopt" onclick="q(this,'q3',false)">구</button>
+          <button class="qopt" onclick="q(this,'q3',false)">각기둥</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q3"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(4)">겉넓이 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s3" onclick="openMemo('s3')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s3"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s3"></div></div>
+  <div class="memo-input-area" id="mi-s3">
+    <textarea class="memo-textarea" id="mt-s3" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s3')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s3')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s3')">취소</button></div>
+  </div>
+</div>
+
+<!-- ===== 4. 겉넓이 ===== -->
+<div class="section" id="s4">
+  <div class="sec-top"><div class="sec-badge teal">개념 4</div></div>
+  <div class="sec-title">겉넓이 — 기둥과 뿔</div>
+  <div class="sec-body chat-bg" id="chat-s4">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>이번 개념은 <strong>겉넓이</strong>야. 입체도형의 표면 전체 넓이야. <strong>전개도</strong>를 펼쳐서 생각하면 이해하기 쉬워.</p>
+        <div class="point-box" style="margin-top:8px;">
+          <p><strong>각기둥의 겉넓이</strong> = (밑넓이 × 2) + 옆넓이<br>
+          <strong>각뿔의 겉넓이</strong> = 밑넓이 + 옆넓이</p>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>원기둥 겉넓이 공식은 이래.</p>
+        <div class="math-block">
+          원기둥 겉넓이 = 2πr² + 2πrh<br>
+          (밑면 원 2개) + (옆면 직사각형)
+        </div>
+        <p>원뿔 겉넓이는?</p>
+        <div class="math-block">
+          원뿔 겉넓이 = πr² + πrl<br>
+          (밑면 원 1개) + (옆면 부채꼴)<br>
+          l = 모선 길이
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>원기둥 옆면을 펼치면 왜 직사각형이 돼요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>옆면을 쭉 펼쳐봐. 가로는 밑면 원의 둘레(원주)가 되고, 세로는 원기둥의 높이가 돼. 그래서 가로 = 2πr, 세로 = h인 직사각형이 나오는 거야.</p>
+        <div class="eq-steps" style="margin-top:10px;">
+          <div class="eq-row highlight"><span class="eq-num">옆면</span><span class="eq-content">가로 = <span class="mv">2πr</span> (밑면 원주), 세로 = <span class="mv">h</span></span></div>
+          <div class="eq-row"><span class="eq-num">옆넓이</span><span class="eq-content"><span class="mv">2πr</span> × <span class="mv">h</span> = <span class="mr">2πrh</span></span></div>
+          <div class="eq-row result"><span class="eq-num">전체</span><span class="eq-content"><span class="mv">2πr²</span> + <span class="mr">2πrh</span></span></div>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>예제를 풀어봐. 반지름 3, 높이 5인 원기둥의 겉넓이는?</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">밑넓이×2</span><span class="eq-content">2 × π × <span class="mv">3²</span> = <span class="mr">18π</span></span></div>
+        <div class="eq-row"><span class="eq-num">옆넓이</span><span class="eq-content">2π × <span class="mv">3</span> × <span class="mv">5</span> = <span class="mr">30π</span></span></div>
+        <div class="eq-row result"><span class="eq-num">겉넓이</span><span class="eq-content"><span class="mv">18π</span> + <span class="mr">30π</span> = <span class="mv">48π</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">반지름 2, 높이 6인 원기둥의 겉넓이는?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q4',false)">20π</button>
+          <button class="qopt" onclick="q(this,'q4',false)">28π</button>
+          <button class="qopt" onclick="q(this,'q4',true)">32π</button>
+          <button class="qopt" onclick="q(this,'q4',false)">40π</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q4"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(5)">부피 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s4" onclick="openMemo('s4')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s4"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s4"></div></div>
+  <div class="memo-input-area" id="mi-s4">
+    <textarea class="memo-textarea" id="mt-s4" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s4')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s4')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s4')">취소</button></div>
+  </div>
+</div>
+
+<!-- ===== 5. 부피 ===== -->
+<div class="section" id="s5">
+  <div class="sec-top"><div class="sec-badge green">개념 5</div></div>
+  <div class="sec-title">부피 — 기둥과 뿔</div>
+  <div class="sec-body chat-bg" id="chat-s5">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>이번엔 <strong>부피</strong>야. 입체가 차지하는 공간의 크기야.</p>
+        <div class="math-block">
+          기둥의 부피 = 밑넓이 × 높이<br>
+          원기둥 = πr²h<br><br>
+          뿔의 부피 = (1/3) × 밑넓이 × 높이<br>
+          원뿔 = (1/3)πr²h
+        </div>
+        <p style="font-size:13px; opacity:.8; margin-top:6px;">핵심 포인트: 뿔은 같은 밑면과 높이를 가진 기둥의 정확히 1/3이야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>왜 뿔이 기둥의 1/3이에요? 그냥 암기해야 하나요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>암기하지 말고 실험으로 기억해. 밑면과 높이가 같은 원기둥과 원뿔을 준비해서, 원뿔에 물을 가득 담아 원기둥에 부어봐. 3번 부어야 딱 원기둥이 가득 찬다는 걸 확인할 수 있어.</p>
+        <div class="point-box" style="margin-top:8px;">
+          <p>원뿔 3개 분량 = 원기둥 1개 분량<br>
+          → 원뿔의 부피 = <strong><span class="frac"><span class="num">1</span><span class="den">3</span></span></strong> × 원기둥의 부피</p>
+        </div>
+        <p style="font-size:13px; opacity:.8; margin-top:6px;">수학적 증명은 적분이 필요해서 중학교에서는 실험으로 받아들이면 돼.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>각기둥·각뿔도 마찬가지야. 같은 밑면, 같은 높이인 사각기둥과 사각뿔 비교하면 사각뿔이 사각기둥의 <strong>1/3</strong>이야.</p>
+        <div class="eq-steps" style="margin-top:10px;">
+          <div class="eq-row highlight"><span class="eq-num">기둥</span><span class="eq-content">부피 = <span class="mv">S</span> × <span class="mv">h</span></span></div>
+          <div class="eq-row"><span class="eq-num">뿔</span><span class="eq-content">부피 = <span class="mr"><span class="frac"><span class="num">1</span><span class="den">3</span></span></span> × <span class="mv">S</span> × <span class="mv">h</span></span></div>
+          <div class="eq-row result"><span class="eq-num">관계</span><span class="eq-content">뿔 = <span class="mv"><span class="frac"><span class="num">1</span><span class="den">3</span></span></span> 기둥 (밑면, 높이 같을 때)</span></div>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">밑넓이 12, 높이 9인 삼각뿔의 부피는?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q5',false)">27</button>
+          <button class="qopt" onclick="q(this,'q5',true)">36</button>
+          <button class="qopt" onclick="q(this,'q5',false)">108</button>
+          <button class="qopt" onclick="q(this,'q5',false)">48</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q5"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(6)">구의 겉넓이와 부피 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s5" onclick="openMemo('s5')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s5"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s5"></div></div>
+  <div class="memo-input-area" id="mi-s5">
+    <textarea class="memo-textarea" id="mt-s5" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s5')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s5')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s5')">취소</button></div>
+  </div>
+</div>
+
+<!-- ===== 6. 구의 겉넓이와 부피 ===== -->
+<div class="section" id="s6">
+  <div class="sec-top"><div class="sec-badge green">개념 6</div></div>
+  <div class="sec-title">구의 겉넓이와 부피</div>
+  <div class="sec-body chat-bg" id="chat-s6">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>마지막 개념은 <strong>구</strong>야. 구의 반지름을 r이라 하면:</p>
+        <div class="math-block">
+          구의 겉넓이 = 4πr²<br>
+          구의 부피 = <span style="font-size:13px;">(4/3)</span>πr³
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>구 공식은 외우기 너무 어려워요. 방법 없나요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>패턴으로 기억해봐. 원의 넓이는 πr²이잖아. 구 겉넓이는 그것의 <strong>4배</strong>야 → 4πr². 부피는 겉넓이에 r을 곱하고 3으로 나눈 것 → <span class="frac"><span class="num">4</span><span class="den">3</span></span>πr³.</p>
+        <p style="margin-top:10px;">또 아르키메데스가 발견한 재미있는 사실이 있어. 반지름이 같은 구와 원기둥(높이=지름=2r)이 있을 때:</p>
+        <div class="point-box" style="margin-top:8px;">
+          <p>구의 부피 : 원기둥의 부피 = 2 : 3<br>
+          구의 겉넓이 = 원기둥의 옆넓이<br>
+          (아르키메데스가 가장 자랑스러워 했던 발견이야!)</p>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>예제: 반지름 3인 구의 겉넓이와 부피를 구해봐.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">겉넓이</span><span class="eq-content">4π × <span class="mv">3²</span> = <span class="mr">36π</span></span></div>
+        <div class="eq-row result"><span class="eq-num">부피</span><span class="eq-content"><span class="frac"><span class="num">4</span><span class="den">3</span></span>π × <span class="mv">3³</span> = <span class="frac"><span class="num">4</span><span class="den">3</span></span>π × 27 = <span class="mr">36π</span></span></div>
+      </div>
+      <p style="font-size:12px; color:var(--gray-500); padding:0 4px;">이 예제에서는 겉넓이와 부피가 같은 값(36π)이 나왔어. r=3일 때만 그래!</p>
+      <div class="cont-wrap" style="margin-top:12px;"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>지금까지 배운 공식을 한눈에 정리해줄게.</p>
+        <table class="tbl" style="margin-top:8px;">
+          <thead><tr>
+            <th>도형</th>
+            <th class="th-p">겉넓이</th>
+            <th class="th-g">부피</th>
+          </tr></thead>
+          <tbody>
+            <tr><td><strong>각기둥</strong></td><td class="tbl-var">2×밑넓이+옆넓이</td><td>밑넓이×높이</td></tr>
+            <tr><td><strong>각뿔</strong></td><td class="tbl-var">밑넓이+옆넓이</td><td class="tbl-given"><span class="frac"><span class="num">1</span><span class="den">3</span></span>×밑넓이×높이</td></tr>
+            <tr><td><strong>원기둥</strong></td><td class="tbl-var">2πr²+2πrh</td><td>πr²h</td></tr>
+            <tr><td><strong>원뿔</strong></td><td class="tbl-var">πr²+πrl</td><td class="tbl-given"><span class="frac"><span class="num">1</span><span class="den">3</span></span>πr²h</td></tr>
+            <tr><td><strong>구</strong></td><td class="tbl-var">4πr²</td><td class="tbl-given"><span class="frac"><span class="num">4</span><span class="den">3</span></span>πr³</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">반지름 6인 구의 겉넓이는?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q6',false)">72π</button>
+          <button class="qopt" onclick="q(this,'q6',false)">108π</button>
+          <button class="qopt" onclick="q(this,'q6',true)">144π</button>
+          <button class="qopt" onclick="q(this,'q6',false)">288π</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q6"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(7)">종합 퀴즈 풀기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s6" onclick="openMemo('s6')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s6"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s6"></div></div>
+  <div class="memo-input-area" id="mi-s6">
+    <textarea class="memo-textarea" id="mt-s6" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s6')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s6')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s6')">취소</button></div>
+  </div>
+</div>
+
+<!-- ===== 7. 종합 퀴즈 ===== -->
+<div class="section" id="s7">
+  <div class="sec-top"><div class="sec-badge" style="color:#d97706;background:#fef3c7;">종합 퀴즈</div></div>
+  <div class="sec-title">종합 퀴즈 (5문제)</div>
+  <div class="sec-body chat-bg" id="chat-s7">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><span class="s-name-slot">태린</span>아, 입체도형 전체 내용 확인이야. 5문제 모두 풀고 점수를 확인해봐!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s7')">시작 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 1 / 5</div>
+        <div class="quiz-q">다음 중 다면체가 아닌 것은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f1',false)">정사면체</button>
+          <button class="qopt" onclick="fin(this,'f1',false)">육각기둥</button>
+          <button class="qopt" onclick="fin(this,'f1',true)">원기둥</button>
+          <button class="qopt" onclick="fin(this,'f1',false)">사각뿔</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f1"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s7')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 2 / 5</div>
+        <div class="quiz-q">육각기둥의 꼭짓점은 몇 개인가?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f2',false)">8개</button>
+          <button class="qopt" onclick="fin(this,'f2',false)">10개</button>
+          <button class="qopt" onclick="fin(this,'f2',true)">12개</button>
+          <button class="qopt" onclick="fin(this,'f2',false)">14개</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f2"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s7')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 3 / 5</div>
+        <div class="quiz-q">원뿔을 회전축을 포함하여 자른 단면의 모양은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f3',false)">원</button>
+          <button class="qopt" onclick="fin(this,'f3',false)">직사각형</button>
+          <button class="qopt" onclick="fin(this,'f3',true)">이등변삼각형</button>
+          <button class="qopt" onclick="fin(this,'f3',false)">타원</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f3"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s7')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 4 / 5</div>
+        <div class="quiz-q">반지름 4, 높이 3인 원기둥의 겉넓이는?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f4',false)">40π</button>
+          <button class="qopt" onclick="fin(this,'f4',false)">48π</button>
+          <button class="qopt" onclick="fin(this,'f4',true)">56π</button>
+          <button class="qopt" onclick="fin(this,'f4',false)">64π</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f4"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s7')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 5 / 5</div>
+        <div class="quiz-q">밑면 반지름 3, 높이 4인 원뿔의 부피는?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f5',false)">9π</button>
+          <button class="qopt" onclick="fin(this,'f5',true)">12π</button>
+          <button class="qopt" onclick="fin(this,'f5',false)">36π</button>
+          <button class="qopt" onclick="fin(this,'f5',false)">48π</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f5"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;">
+        <button class="score-check-btn" id="score-btn" onclick="showScore()">점수 확인하기</button>
+      </div>
+      <div id="score-panel" class="score-panel">
+        <div class="score-num" id="score-num">0</div>
+        <div class="score-of">/ 100점</div>
+        <div class="score-msg" id="score-msg"></div>
+        <div class="score-detail" id="score-detail"></div>
+        <button class="restart-btn" onclick="location.reload()">처음부터 다시 풀기</button>
+        <button class="toc-btn" onclick="go(1)">개념 1로 돌아가기</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s7" onclick="openMemo('s7')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s7"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s7"></div></div>
+  <div class="memo-input-area" id="mi-s7">
+    <textarea class="memo-textarea" id="mt-s7" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s7')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s7')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s7')">취소</button></div>
+  </div>
+</div>
+
+<button class="memo-float-btn" id="memo-float-btn" onclick="openMemoList()">수정 요청 목록 <span class="memo-count" id="memo-float-count">0</span></button>
+<div class="memo-list-overlay" id="memo-list-overlay" onclick="if(event.target===this)closeMemoList()">
+  <div class="memo-list-sheet">
+    <div class="memo-list-title">수정 요청 목록 <button class="memo-list-close" onclick="closeMemoList()">닫기</button></div>
+    <div id="memo-list-body"></div>
+  </div>
+</div>
+
+<script>
+/* -- 학생 이름 -- */
+const STUDENT_NAME = localStorage.getItem('studentName') || '태린';
+function hasJongseong(name) {
+  const code = name.charCodeAt(name.length - 1);
+  return (code - 0xAC00) % 28 > 0;
+}
+const STUDENT_CALL = STUDENT_NAME + (hasJongseong(STUDENT_NAME) ? '아' : '야');
+function initStudentNames() {
+  document.querySelectorAll('.s-name-slot').forEach(el => { el.textContent = STUDENT_NAME; });
+  document.querySelectorAll('.s-call-slot').forEach(el => { el.textContent = STUDENT_CALL; });
+  const p = getProgress(); p.studentName = STUDENT_NAME; saveProgress(p);
+}
+
+/* -- 학습 추적 -- */
+const TRACK_KEY = 'mathTalk_progress';
+const UNIT_KEY = '입체도형';
+function getProgress() { try { return JSON.parse(localStorage.getItem(TRACK_KEY)) || {}; } catch(e) { return {}; } }
+function saveProgress(d) { localStorage.setItem(TRACK_KEY, JSON.stringify(d)); }
+let _curSec = null, _secStart = null, _stepStart = null;
+function trackEnter(secId) {
+  const now = Date.now(); _curSec = secId; _secStart = now; _stepStart = now;
+  const p = getProgress();
+  if (!p.units) p.units = {};
+  if (!p.units[UNIT_KEY]) p.units[UNIT_KEY] = {};
+  if (!p.units[UNIT_KEY][secId]) p.units[UNIT_KEY][secId] = { firstVisit:now, totalTime:0, stepTimes:[], quizzes:{} };
+  p.units[UNIT_KEY][secId].lastVisit = now; saveProgress(p);
+}
+function trackLeave() {
+  if (!_curSec || !_secStart) return;
+  const elapsed = Math.floor((Date.now()-_secStart)/1000);
+  const p = getProgress();
+  if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][_curSec])
+    p.units[UNIT_KEY][_curSec].totalTime = (p.units[UNIT_KEY][_curSec].totalTime||0)+elapsed;
+  saveProgress(p); _curSec = null; _secStart = null;
+}
+function trackStep(secId) {
+  const now = Date.now();
+  if (_stepStart) {
+    const elapsed = Math.floor((now-_stepStart)/1000);
+    const p = getProgress();
+    if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][secId])
+      p.units[UNIT_KEY][secId].stepTimes.push(elapsed);
+    saveProgress(p);
+  }
+  _stepStart = now;
+}
+function trackQuiz(secId, qId, correct) {
+  const p = getProgress();
+  if (!p.units) p.units = {};
+  if (!p.units[UNIT_KEY]) p.units[UNIT_KEY] = {};
+  if (!p.units[UNIT_KEY][secId]) p.units[UNIT_KEY][secId] = { totalTime:0, stepTimes:[], quizzes:{} };
+  if (!p.units[UNIT_KEY][secId].quizzes) p.units[UNIT_KEY][secId].quizzes = {};
+  p.units[UNIT_KEY][secId].quizzes[qId] = { correct, time:Date.now() }; saveProgress(p);
+}
+function trackComplete(secId) {
+  const p = getProgress();
+  if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][secId]) {
+    p.units[UNIT_KEY][secId].completed = true;
+    p.units[UNIT_KEY][secId].completedAt = Date.now();
+  }
+  saveProgress(p);
+}
+
+/* -- 대화 진행 -- */
+function nextStep(secId) {
+  const steps = Array.from(document.querySelectorAll('#chat-'+secId+' .chat-step'));
+  let lastIdx = -1;
+  steps.forEach((s,i) => { if(s.classList.contains('visible')) lastIdx = i; });
+  if (lastIdx < steps.length-1) {
+    trackStep(secId);
+    const next = steps[lastIdx+1];
+    next.classList.add('visible');
+    setTimeout(() => next.scrollIntoView({behavior:'smooth',block:'start'}), 60);
+  }
+}
+
+/* -- 섹션 이동 -- */
+const labels = {
+  s1:'개념 1 — 다면체',
+  s2:'개념 2 — 각기둥과 각뿔',
+  s3:'개념 3 — 회전체',
+  s4:'개념 4 — 겉넓이 (기둥과 뿔)',
+  s5:'개념 5 — 부피 (기둥과 뿔)',
+  s6:'개념 6 — 구의 겉넓이와 부피',
+  s7:'종합 퀴즈'
+};
+const TOTAL = 7;
+
+function show(n) {
+  trackLeave();
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('s'+n);
+  el.classList.add('active');
+  document.getElementById('prog-label').textContent = labels['s'+n];
+  const pct = Math.round((n/TOTAL)*100);
+  document.getElementById('prog-pct').textContent = pct+'%';
+  document.getElementById('prog-fill').style.width = pct+'%';
+  setTimeout(() => window.scrollTo(0,0), 30);
+  trackEnter('s'+n);
+}
+function go(n) { show(n); }
+
+/* -- 확인 문제 -- */
+const qMsg = {
+  q1:{ ok:'정육면체는 꼭짓점이 8개야. n각기둥에서 n=4(정사각형), 꼭짓점=2n=8!', no:'정육면체는 사각기둥이야. n각기둥 꼭짓점 공식은 2n이야. n=4이면 2×4=8개야.' },
+  q2:{ ok:'사각뿔 n=4, 모서리 = 2n = 8개. 밑면 4개 + 옆면 4개!', no:'n각뿔의 모서리는 2n개야. 사각뿔은 n=4이니까 2×4=8개야.' },
+  q3:{ ok:'직사각형을 한 변을 축으로 1회전하면 원기둥이 생겨!', no:'직사각형을 회전축으로 돌리면 원기둥이야. 직각삼각형을 돌리면 원뿔이고.' },
+  q4:{ ok:'밑넓이×2 = 2×π×4 = 8π, 옆넓이 = 2×π×2×6 = 24π, 합계 32π!', no:'겉넓이 = 2πr² + 2πrh = 2π×4 + 2π×2×6 = 8π + 24π = 32π야.' },
+  q5:{ ok:'뿔 부피 = (1/3)×밑넓이×높이 = (1/3)×12×9 = 36!', no:'뿔 부피 = (1/3)×밑넓이×높이야. (1/3)×12×9 = 36이야.' },
+  q6:{ ok:'구 겉넓이 = 4πr² = 4×π×36 = 144π!', no:'구 겉넓이 = 4πr²이야. r=6이면 4×π×36 = 144π야.' },
+};
+function q(el, id, correct) {
+  const opts = el.parentNode.querySelectorAll('.qopt');
+  opts.forEach(o => { o.disabled = true; });
+  el.classList.add(correct ? 'correct' : 'wrong');
+  const fb = document.getElementById('qfb-'+id);
+  fb.textContent = correct ? qMsg[id].ok : qMsg[id].no;
+  fb.className = 'quiz-fb '+(correct?'ok':'no');
+  const secEl = el.closest('.section');
+  trackQuiz(secEl ? secEl.id : (_curSec||'unknown'), id, correct);
+}
+
+/* -- 종합 퀴즈 -- */
+const finAnswers = {};
+const fMsg = {
+  f1:{ ok:'원기둥의 옆면은 곡면이라 다면체가 아니야. 다면체는 다각형 면으로만 이루어져야 해!', no:'원기둥은 곡면(옆면)이 있어서 다면체가 아니야. 나머지는 모두 다각형 면만 가진 다면체야.' },
+  f2:{ ok:'육각기둥 n=6, 꼭짓점 = 2n = 12개. 위아래 각각 6개씩!', no:'n각기둥 꼭짓점 = 2n이야. 육각기둥 n=6이면 2×6 = 12개야.' },
+  f3:{ ok:'원뿔을 회전축 포함하여 자르면 이등변삼각형이 나와. 양쪽 모선이 두 등변이야!', no:'원뿔을 회전축 포함해서 자르면 이등변삼각형이야. 수직으로 자르면 원이 나오고.' },
+  f4:{ ok:'2πr²+2πrh = 2π×16 + 2π×4×3 = 32π + 24π = 56π!', no:'겉넓이 = 2πr²+2πrh야. r=4, h=3 대입하면 32π+24π = 56π야.' },
+  f5:{ ok:'원뿔 부피 = (1/3)πr²h = (1/3)×π×9×4 = 12π!', no:'원뿔 부피 = (1/3)πr²h야. r=3, h=4 → (1/3)×π×9×4 = 12π야.' },
+};
+function fin(el, id, correct) {
+  const opts = el.parentNode.querySelectorAll('.qopt');
+  opts.forEach(o => { o.disabled = true; });
+  el.classList.add(correct ? 'correct' : 'wrong');
+  finAnswers[id] = correct;
+  const fb = document.getElementById('qfb-'+id);
+  fb.textContent = correct ? fMsg[id].ok : fMsg[id].no;
+  fb.className = 'quiz-fb '+(correct?'ok':'no');
+  trackQuiz('s7', id, correct);
+  const allIds = ['f1','f2','f3','f4','f5'];
+  if (allIds.every(k => k in finAnswers)) {
+    document.getElementById('score-btn').className = 'score-check-btn ready';
+  }
+}
+function showScore() {
+  const allIds = ['f1','f2','f3','f4','f5'];
+  if (!allIds.every(k => k in finAnswers)) return;
+  const score = allIds.filter(k => finAnswers[k]).length * 20;
+  document.getElementById('score-num').textContent = score;
+  const msgs = {
+    100:'완벽해! 입체도형 마스터!',
+    80:'거의 다 왔어! 한 문제만 더 잡으면 완벽해.',
+    60:'절반 이상이야. 틀린 개념만 다시 봐봐.',
+    40:'다시 한 번 공식 정리를 읽어보자.',
+    20:'처음부터 차근차근 다시 해보자.',
+    0:'포기하지 마. 다시 시작하면 돼.'
+  };
+  document.getElementById('score-msg').textContent = msgs[score] || '';
+  const wrong = allIds.filter(k => !finAnswers[k]).length;
+  document.getElementById('score-detail').textContent = wrong > 0 ? wrong+'문제 틀림 — 해설을 다시 읽어봐요.' : '전부 맞았어요!';
+  document.getElementById('score-panel').style.display = 'block';
+  trackComplete('s7');
+  if (score === 100) confetti();
+}
+
+/* -- 수정 요청 메모 -- */
+const MEMO_PREFIX = 'solid-memo-';
+const sectionNames = { s1:'개념 1', s2:'개념 2', s3:'개념 3', s4:'개념 4', s5:'개념 5', s6:'개념 6', s7:'종합 퀴즈' };
+function initMemos() {
+  let count = 0;
+  Object.keys(sectionNames).forEach(id => {
+    const val = localStorage.getItem(MEMO_PREFIX+id);
+    if (val) { count++; showMemoBanner(id,val); markBtn(id,true); }
+  });
+  updateFloatBtn(count);
+}
+function openMemo(id) {
+  const area = document.getElementById('mi-'+id);
+  const ta = document.getElementById('mt-'+id);
+  const saved = localStorage.getItem(MEMO_PREFIX+id);
+  ta.value = saved||''; area.classList.add('show'); ta.focus();
+}
+function closeMemo(id) { document.getElementById('mi-'+id).classList.remove('show'); }
+function saveMemo(id) {
+  const val = document.getElementById('mt-'+id).value.trim();
+  if (!val) { deleteMemo(id); return; }
+  localStorage.setItem(MEMO_PREFIX+id, val); showMemoBanner(id,val); markBtn(id,true); closeMemo(id); updateFloatBtn(countMemos());
+}
+function deleteMemo(id) {
+  localStorage.removeItem(MEMO_PREFIX+id);
+  document.getElementById('mb-'+id).classList.remove('show'); markBtn(id,false); closeMemo(id); updateFloatBtn(countMemos());
+}
+function showMemoBanner(id,val) {
+  const b = document.getElementById('mb-'+id); document.getElementById('mbt-'+id).textContent = val; b.classList.add('show');
+}
+function markBtn(id,has) { document.getElementById('eb-'+id).classList.toggle('has-memo',has); }
+function countMemos() { return Object.keys(sectionNames).filter(id => localStorage.getItem(MEMO_PREFIX+id)).length; }
+function updateFloatBtn(count) {
+  const btn = document.getElementById('memo-float-btn');
+  btn.style.display = count > 0 ? 'block' : 'none';
+  document.getElementById('memo-float-count').textContent = count;
+}
+function openMemoList() {
+  const body = document.getElementById('memo-list-body'); body.innerHTML = ''; let has = false;
+  Object.keys(sectionNames).forEach(id => {
+    const val = localStorage.getItem(MEMO_PREFIX+id);
+    if (val) { has = true; body.innerHTML += '<div class="memo-list-item"><div class="memo-list-item-label">'+sectionNames[id]+'</div><div class="memo-list-item-text">'+val+'</div></div>'; }
+  });
+  if (!has) body.innerHTML = '<p style="color:var(--gray-400);font-size:14px;">수정 요청이 없어요.</p>';
+  document.getElementById('memo-list-overlay').classList.add('open');
+}
+function closeMemoList() { document.getElementById('memo-list-overlay').classList.remove('open'); }
+
+/* -- confetti -- */
+function confetti() {
+  const colors = ['#4f46e5','#059669','#dc2626','#d97706','#0ea5e9'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div'); el.className = 'cf';
+    el.style.cssText = 'left:'+Math.random()*100+'vw;top:-10px;width:'+(6+Math.random()*6)+'px;height:'+(6+Math.random()*6)+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';animation-duration:'+(1.5+Math.random()*1.5)+'s;animation-delay:'+(Math.random()*0.5)+'s;';
+    document.body.appendChild(el); setTimeout(() => el.remove(), 3500);
+  }
+}
+
+window.onload = () => { show(1); initMemos(); initStudentNames(); };
+</script>
+</body>
+</html>

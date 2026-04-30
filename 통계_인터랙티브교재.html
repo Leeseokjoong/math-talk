@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>땡중샘 수학톡 | 통계</title>
+<style>
+:root {
+  --primary: #4f46e5; --primary-bg: #eef2ff; --primary-border: #c7d2fe;
+  --accent: #0ea5e9; --accent-bg: #e0f2fe;
+  --green: #059669; --green-bg: #d1fae5;
+  --red: #dc2626; --red-bg: #fee2e2;
+  --orange: #d97706; --orange-bg: #fef3c7;
+  --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+  --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280;
+  --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacSystemFont,sans-serif; background:#f5f5f7; color:var(--gray-800); line-height:1.75; -webkit-font-smoothing:antialiased; }
+
+.header { background:var(--gray-900); color:white; padding:40px 24px 36px; text-align:center; }
+.header-eyebrow { font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#a5b4fc; margin-bottom:10px; }
+.header h1 { font-size:clamp(24px,5vw,32px); font-weight:800; letter-spacing:-0.5px; }
+.header p { margin-top:10px; font-size:14px; color:#9ca3af; }
+
+.progress-wrap { background:white; padding:14px 24px; border-bottom:1px solid var(--gray-200); position:sticky; top:0; z-index:100; box-shadow:0 1px 8px rgba(0,0,0,0.06); }
+.progress-meta { display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:var(--gray-500); margin-bottom:8px; }
+.progress-bar { height:4px; background:var(--gray-200); border-radius:99px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--primary); border-radius:99px; transition:width 0.5s ease; width:0%; }
+
+.section { background:white; border-radius:16px; margin:20px 16px; box-shadow:0 1px 6px rgba(0,0,0,0.07); display:none; animation:fadeUp 0.35s ease; }
+.section.active { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)} }
+.sec-top { padding:22px 28px 0; }
+.sec-badge { display:inline-block; font-size:11px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:var(--primary); background:var(--primary-bg); border-radius:6px; padding:3px 10px; }
+.sec-badge.teal { color:var(--accent); background:var(--accent-bg); }
+.sec-badge.green { color:var(--green); background:var(--green-bg); }
+.sec-title { font-size:18px; font-weight:800; color:var(--gray-900); margin-top:8px; padding:0 28px; line-height:1.4; }
+
+/* 대화형 */
+.chat-bg { background:#b2c7d9; border-radius:0 0 16px 16px; padding:18px 16px 24px !important; }
+.chat-step { display:none; animation:fadeUp 0.35s ease; }
+.chat-step.visible { display:block; }
+.t-name { font-size:11px; font-weight:800; color:var(--gray-500); letter-spacing:0.8px; margin-bottom:8px; }
+.t-msg { background:white; color:var(--gray-800); border-radius:4px 16px 16px 16px; padding:14px 16px; margin-bottom:6px; box-shadow:0 1px 4px rgba(0,0,0,0.10); }
+.t-msg p { font-size:14px; line-height:1.85; }
+.s-name { font-size:11px; font-weight:800; color:#b8960a; letter-spacing:0.8px; margin-bottom:6px; }
+.s-msg { background:#FEE500; border-radius:16px 4px 16px 16px; padding:14px 16px; margin-bottom:6px; margin-left:24px; box-shadow:0 1px 4px rgba(0,0,0,0.10); }
+.s-msg p { font-size:14px; line-height:1.85; color:var(--gray-800); }
+.chat-gap { height:8px; }
+.cont-wrap { text-align:center; margin-top:18px; }
+.cont-btn { background:white; color:var(--gray-700); border:1.5px solid var(--gray-300); border-radius:99px; padding:10px 28px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+.cont-btn:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-bg); }
+
+/* 콘텐츠 블록 */
+.math-block { background:var(--gray-900); color:#a5b4fc; border-radius:10px; padding:16px 20px; font-family:'Courier New',monospace; font-size:15px; margin:8px 0 10px; line-height:2; }
+.eq-steps { background:var(--gray-50); border-radius:10px; overflow:hidden; margin:8px 0 10px; }
+.eq-row { display:flex; align-items:baseline; gap:12px; padding:11px 16px; border-bottom:1px solid var(--gray-100); font-size:14px; }
+.eq-row:last-child { border-bottom:none; }
+.eq-row.highlight { background:var(--primary-bg); }
+.eq-row.result { background:var(--gray-900); color:white; }
+.eq-num { font-size:11px; font-weight:700; color:var(--gray-400); min-width:60px; flex-shrink:0; }
+.eq-row.result .eq-num { color:#6b7280; }
+.eq-content { flex:1; }
+.mv { color:var(--primary); font-weight:700; }
+.eq-row.result .mv { color:#a5b4fc; }
+.mr { color:var(--red); font-weight:700; }
+.eq-row.result .mr { color:#fca5a5; }
+.hi { color:var(--orange); font-weight:700; }
+.note { font-size:12px; color:var(--gray-400); }
+.point-box { background:var(--primary-bg); border-left:3px solid var(--primary); border-radius:0 10px 10px 0; padding:16px 18px; margin:8px 0 10px; }
+.point-box p { font-size:14px; line-height:1.8; color:var(--gray-700); }
+.warn-box { background:var(--red-bg); border-left:3px solid var(--red); border-radius:0 10px 10px 0; padding:16px 18px; margin:8px 0 10px; }
+.warn-box p { font-size:14px; line-height:1.8; color:var(--gray-700); }
+.summary-box { border-radius:10px; padding:18px 20px; margin:8px 0 10px; }
+.summary-box.indigo { background:var(--primary-bg); border:1.5px solid var(--primary-border); }
+.sb-head { font-size:13px; font-weight:800; color:var(--primary); margin-bottom:6px; }
+.sb-body { font-size:15px; font-weight:700; color:var(--gray-900); }
+.sb-sub { font-size:13px; color:var(--gray-500); margin-top:4px; }
+
+/* 표 */
+.tbl { width:100%; border-collapse:collapse; font-size:14px; margin:8px 0 10px; }
+.tbl th { background:var(--gray-900); color:white; padding:10px 14px; font-weight:700; font-size:13px; text-align:center; }
+.tbl td { padding:10px 14px; border-bottom:1px solid var(--gray-100); vertical-align:middle; text-align:center; }
+.tbl tbody tr:last-child td { border-bottom:none; }
+.tbl tbody tr:nth-child(even) { background:var(--gray-50); }
+.tbl-var { color:var(--primary); font-weight:700; }
+.tbl-given { color:var(--red); font-weight:700; }
+.tbl-formula { color:var(--orange); font-weight:700; font-size:13px; }
+.tbl-total { background:var(--gray-900) !important; color:white; font-weight:700; }
+.th-p { color:#a5b4fc; }
+.th-g { color:var(--green-bg); }
+.th-o { color:var(--orange-bg); }
+.th-r { color:#fca5a5; }
+.th-a { color:var(--accent-bg); }
+
+/* 줄기잎 그림 */
+.stem-leaf-wrap { overflow-x:auto; margin:8px 0 10px; }
+.stem-leaf { border-collapse:collapse; font-family:'Courier New',monospace; font-size:15px; }
+.stem-leaf th { background:var(--gray-900); color:white; padding:8px 16px; font-size:13px; font-weight:700; }
+.stem-leaf td { padding:8px 16px; border:1px solid var(--gray-200); vertical-align:middle; }
+.stem-cell { background:var(--primary-bg); color:var(--primary); font-weight:900; font-size:17px; text-align:center; min-width:48px; }
+.leaf-cell { background:white; letter-spacing:6px; text-align:left; color:var(--gray-700); }
+
+/* 히스토그램 canvas */
+.canvas-wrap { background:white; border-radius:10px; padding:12px; margin:8px 0 10px; text-align:center; border:1px solid var(--gray-200); }
+canvas { max-width:100%; }
+
+/* 퀴즈 */
+.quiz { background:var(--gray-50); border-radius:12px; padding:18px; margin:8px 0 10px; }
+.quiz-label { font-size:11px; font-weight:800; color:var(--primary); letter-spacing:0.8px; margin-bottom:8px; }
+.quiz-q { font-size:15px; font-weight:700; color:var(--gray-900); margin-bottom:14px; line-height:1.6; }
+.quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.qopt { background:white; border:1.5px solid var(--gray-200); border-radius:8px; padding:11px 14px; font-size:14px; font-family:inherit; font-weight:600; color:var(--gray-700); cursor:pointer; transition:all 0.15s; text-align:left; }
+.qopt:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-bg); }
+.qopt.correct { background:var(--green-bg); border-color:var(--green); color:var(--green); }
+.qopt.wrong { background:var(--red-bg); border-color:var(--red); color:var(--red); }
+.qopt:disabled { cursor:not-allowed; }
+.quiz-fb { font-size:13px; color:var(--gray-600); margin-top:10px; min-height:18px; line-height:1.6; }
+.quiz-fb.ok { color:var(--green); font-weight:600; }
+.quiz-fb.no { color:var(--red); font-weight:600; }
+
+/* 점수 패널 */
+.score-panel { display:none; background:var(--gray-900); color:white; border-radius:12px; padding:36px; text-align:center; margin-top:20px; animation:fadeUp 0.4s ease; }
+.score-num { font-size:60px; font-weight:900; line-height:1; }
+.score-of { font-size:14px; color:#6b7280; margin-top:4px; }
+.score-msg { font-size:20px; font-weight:800; margin-top:18px; }
+.score-detail { font-size:14px; color:#9ca3af; margin-top:6px; }
+.restart-btn { margin-top:20px; background:white; color:var(--gray-900); border:none; border-radius:8px; padding:11px 28px; font-size:14px; font-weight:700; cursor:pointer; margin-right:8px; }
+.toc-btn { margin-top:20px; background:var(--primary); color:white; border:none; border-radius:8px; padding:11px 28px; font-size:14px; font-weight:700; cursor:pointer; }
+
+/* 버튼 */
+.next-wrap { text-align:center; margin-top:22px; }
+.next-btn { background:var(--gray-900); color:white; border:none; border-radius:8px; padding:13px 36px; font-size:15px; font-weight:700; cursor:pointer; transition:all 0.18s; }
+.next-btn:hover { background:var(--primary); }
+.score-check-btn { background:var(--gray-300); color:var(--gray-500); border:none; border-radius:8px; padding:13px 36px; font-size:15px; font-weight:700; cursor:not-allowed; transition:all 0.2s; }
+.score-check-btn.ready { background:var(--primary); color:white; cursor:pointer; }
+
+/* 수정 요청 */
+.edit-bar { display:flex; align-items:center; justify-content:flex-end; padding:10px 20px 14px; border-top:1px solid var(--gray-100); margin-top:4px; }
+.edit-request-btn { background:none; border:1.5px dashed var(--gray-300); border-radius:6px; padding:5px 12px; font-size:12px; font-weight:600; color:var(--gray-400); cursor:pointer; transition:all 0.15s; }
+.edit-request-btn:hover { border-color:var(--orange); color:var(--orange); background:var(--orange-bg); }
+.edit-request-btn.has-memo { border-color:var(--orange); color:var(--orange); background:var(--orange-bg); border-style:solid; }
+.memo-banner { margin:0 20px 14px; background:#fffbeb; border:1.5px solid #fcd34d; border-radius:8px; padding:12px 14px; display:none; }
+.memo-banner.show { display:block; }
+.memo-banner-label { font-size:11px; font-weight:700; color:var(--orange); margin-bottom:4px; }
+.memo-banner-text { font-size:14px; color:var(--gray-700); white-space:pre-wrap; }
+.memo-input-area { display:none; margin:0 20px 14px; background:#fffbeb; border:1.5px solid #fcd34d; border-radius:8px; padding:14px; }
+.memo-input-area.show { display:block; }
+.memo-textarea { width:100%; border:1px solid #fcd34d; border-radius:6px; padding:10px 12px; font-size:14px; font-family:inherit; resize:vertical; min-height:80px; outline:none; background:white; }
+.memo-textarea:focus { border-color:var(--orange); }
+.memo-actions { display:flex; gap:8px; margin-top:10px; }
+.memo-save-btn { background:var(--orange); color:white; border:none; border-radius:6px; padding:8px 18px; font-size:13px; font-weight:700; cursor:pointer; }
+.memo-delete-btn { background:white; color:var(--red); border:1.5px solid var(--red); border-radius:6px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; }
+.memo-cancel-btn { background:white; color:var(--gray-500); border:1.5px solid var(--gray-200); border-radius:6px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; }
+.memo-float-btn { position:fixed; bottom:24px; right:20px; background:var(--orange); color:white; border:none; border-radius:99px; padding:12px 20px; font-size:13px; font-weight:700; cursor:pointer; box-shadow:0 4px 16px rgba(217,119,6,0.4); z-index:50; transition:all 0.2s; display:none; }
+.memo-count { background:white; color:var(--orange); border-radius:99px; padding:1px 7px; font-size:12px; font-weight:900; margin-left:6px; }
+.memo-list-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:200; align-items:flex-end; justify-content:center; }
+.memo-list-overlay.open { display:flex; }
+.memo-list-sheet { background:white; border-radius:16px 16px 0 0; padding:24px 22px 36px; width:100%; max-width:740px; max-height:70vh; overflow-y:auto; animation:slideUp 0.25s ease; }
+@keyframes slideUp { from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1} }
+.memo-list-title { font-size:17px; font-weight:900; color:var(--gray-900); margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; }
+.memo-list-close { background:var(--gray-100); border:none; border-radius:6px; padding:6px 14px; font-size:13px; font-weight:700; cursor:pointer; color:var(--gray-700); }
+.memo-list-item { background:#fffbeb; border:1.5px solid #fcd34d; border-radius:8px; padding:12px 14px; margin-bottom:10px; }
+.memo-list-item-label { font-size:11px; font-weight:700; color:var(--orange); margin-bottom:4px; }
+.memo-list-item-text { font-size:14px; color:var(--gray-700); white-space:pre-wrap; }
+
+/* 분수 */
+.frac { display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; font-size:0.88em; line-height:1.15; margin:0 2px; }
+.frac .num { border-bottom:1.5px solid currentColor; padding:0 4px 2px; text-align:center; white-space:nowrap; }
+.frac .den { padding:2px 4px 0; text-align:center; white-space:nowrap; }
+
+/* confetti */
+.cf { position:fixed; border-radius:2px; pointer-events:none; z-index:9999; animation:cfFall linear forwards; }
+@keyframes cfFall { 0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)} }
+
+@media(max-width:520px){
+  .sec-top,.sec-body{padding-left:18px;padding-right:18px;}
+  .sec-title{padding-left:18px;padding-right:18px;}
+  .quiz-opts{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">땡중샘 수학톡 (중학수학)</div>
+  <h1>통계</h1>
+  <p>중학교 1학년 · 대화로 배우는 수학</p>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-meta">
+    <span id="prog-label">개념 1 — 줄기와 잎 그림</span>
+    <span id="prog-pct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+</div>
+
+<!-- ════ 1. 줄기와 잎 그림 ════ -->
+<div class="section active" id="s1">
+  <div class="sec-top"><div class="sec-badge">개념 1</div></div>
+  <div class="sec-title">줄기와 잎 그림</div>
+  <div class="sec-body chat-bg" id="chat-s1">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><span class="s-call-slot">태린아</span>, 수학 점수 10개를 받았어. 그냥 나열하면 뭐가 보여?</p>
+        <div class="math-block" style="margin-top:10px;">72, 85, 91, 68, 75, 83, 90, 64, 77, 88</div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>숫자들이 많아서 잘 모르겠는데요. 뭔가 규칙이 있는 것 같기도 하고...</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아. 그냥 나열하면 패턴을 알기 어려워. 그래서 <strong>줄기와 잎 그림</strong>을 써. 십의 자리를 <span style="color:var(--primary);font-weight:700;">줄기</span>, 일의 자리를 <span style="color:var(--red);font-weight:700;">잎</span>으로 분리하는 거야.</p>
+        <p style="margin-top:8px;font-size:13px;opacity:.8;">나무를 생각해봐. 줄기 하나에 잎이 여러 개 달리듯이 — 줄기 6에는 4, 8이 달리고, 줄기 7에는 2, 5, 7이 달리는 식이야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>아, 줄기가 뭐고 잎이 뭐예요? 잘 모르겠어요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>예를 들어 72라는 수에서 십의 자리 <strong>7</strong>이 줄기, 일의 자리 <strong>2</strong>가 잎이야. 64는 줄기 6, 잎 4가 되는 거지. 10개 자료를 정리하면 이렇게 돼.</p>
+      </div>
+      <div class="stem-leaf-wrap">
+        <table class="stem-leaf">
+          <thead><tr><th>줄기</th><th style="text-align:left; padding-left:24px;">잎</th></tr></thead>
+          <tbody>
+            <tr><td class="stem-cell">6</td><td class="leaf-cell">4 &nbsp; 8</td></tr>
+            <tr><td class="stem-cell">7</td><td class="leaf-cell">2 &nbsp; 5 &nbsp; 7</td></tr>
+            <tr><td class="stem-cell">8</td><td class="leaf-cell">3 &nbsp; 5 &nbsp; 8</td></tr>
+            <tr><td class="stem-cell">9</td><td class="leaf-cell">0 &nbsp; 1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="point-box">
+        <p><strong>줄기와 잎 그림의 장점</strong><br>
+        원래 자료값이 그대로 보존돼서 데이터를 잃지 않아. 또 분포 모양을 한눈에 파악할 수 있어 — 어느 구간에 자료가 몰려있는지 바로 보여.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>잎을 보면 작은 수부터 순서대로 적혀있네요. 그러면 중앙값도 쉽게 찾을 수 있겠어요!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>바로 그거야. 잎을 순서대로 적어두면 중앙값, 최솟값, 최댓값을 바로 찾을 수 있어. 자, 확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">위 줄기와 잎 그림에서 중앙값(5번째와 6번째 값의 평균)은?<br><span style="font-size:13px;color:var(--gray-500);">자료: 64, 68, 72, 75, 77, 83, 85, 88, 90, 91 (오름차순)</span></div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q1',false)">77</button>
+          <button class="qopt" onclick="q(this,'q1',true)">80</button>
+          <button class="qopt" onclick="q(this,'q1',false)">83</button>
+          <button class="qopt" onclick="q(this,'q1',false)">75</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q1"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(2)">도수분포표 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s1" onclick="openMemo('s1')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s1"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s1"></div></div>
+  <div class="memo-input-area" id="mi-s1">
+    <textarea class="memo-textarea" id="mt-s1" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s1')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s1')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s1')">취소</button></div>
+  </div>
+</div>
+
+<!-- ════ 2. 도수분포표 ════ -->
+<div class="section" id="s2">
+  <div class="sec-top"><div class="sec-badge">개념 2</div></div>
+  <div class="sec-title">도수분포표</div>
+  <div class="sec-body chat-bg" id="chat-s2">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>자료가 많아지면 줄기와 잎 그림도 복잡해져. 그래서 쓰는 게 <strong>도수분포표</strong>야. 먼저 용어 정리부터.</p>
+      </div>
+      <div class="eq-steps">
+        <div class="eq-row"><span class="eq-num">변량</span><span class="eq-content">자료에서 조사한 값 (예: 수학 점수 72, 85, ...)</span></div>
+        <div class="eq-row"><span class="eq-num">계급</span><span class="eq-content">변량을 나눈 구간 (예: 60이상 70미만)</span></div>
+        <div class="eq-row highlight"><span class="eq-num">계급의 크기</span><span class="eq-content">계급의 양 끝값 차 (예: 70 - 60 = <span class="mr">10</span>)</span></div>
+        <div class="eq-row"><span class="eq-num">계급값</span><span class="eq-content">계급의 양 끝값의 평균 (예: (60+70)÷2 = <span class="mv">65</span>)</span></div>
+        <div class="eq-row"><span class="eq-num">도수</span><span class="eq-content">각 계급에 속하는 자료의 수 (개수)</span></div>
+        <div class="eq-row result"><span class="eq-num">상대도수</span><span class="eq-content">도수 &divide; 전체 도수 (비율 — 0~1 사이)</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>계급 크기를 왜 일정하게 해요? 마음대로 정하면 안 돼요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>크기가 다르면 막대 너비가 달라져서 비교가 어려워. 예를 들어 한 계급이 10짜리고 다른 계급이 20짜리면, 20짜리가 더 넓어서 도수가 커 보일 수 있어. 일정하게 해야 공평하게 비교할 수 있는 거야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>아까 10개 점수로 도수분포표를 만들면 이렇게 돼. 전체 도수는 10이야.</p>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>계급 (점)</th>
+              <th>계급값</th>
+              <th>도수 (명)</th>
+              <th>상대도수</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>60이상 70미만</td><td class="tbl-var">65</td><td>2</td><td class="tbl-formula">0.2</td></tr>
+            <tr><td>70이상 80미만</td><td class="tbl-var">75</td><td>3</td><td class="tbl-formula">0.3</td></tr>
+            <tr><td>80이상 90미만</td><td class="tbl-var">85</td><td>3</td><td class="tbl-formula">0.3</td></tr>
+            <tr><td>90이상 100미만</td><td class="tbl-var">95</td><td>2</td><td class="tbl-formula">0.2</td></tr>
+            <tr class="tbl-total"><td>합계</td><td></td><td>10</td><td>1.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>상대도수가 도수를 전체로 나눈 거면, 합하면 항상 1이 되는 거네요!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>정확해. 상대도수의 합은 항상 1이야. 비율이니까. 자, 확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">전체 도수가 25명이고, 어떤 계급의 도수가 5명이라면 상대도수는?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q2',false)">0.1</button>
+          <button class="qopt" onclick="q(this,'q2',true)">0.2</button>
+          <button class="qopt" onclick="q(this,'q2',false)">0.25</button>
+          <button class="qopt" onclick="q(this,'q2',false)">0.5</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q2"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(3)">히스토그램 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s2" onclick="openMemo('s2')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s2"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s2"></div></div>
+  <div class="memo-input-area" id="mi-s2">
+    <textarea class="memo-textarea" id="mt-s2" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s2')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s2')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s2')">취소</button></div>
+  </div>
+</div>
+
+<!-- ════ 3. 히스토그램과 도수분포다각형 ════ -->
+<div class="section" id="s3">
+  <div class="sec-top"><div class="sec-badge teal">개념 3</div></div>
+  <div class="sec-title">히스토그램과 도수분포다각형</div>
+  <div class="sec-body chat-bg" id="chat-s3">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>도수분포표를 그래프로 나타낸 게 <strong>히스토그램</strong>이야. 막대가 붙어 있어서 일반 막대그래프와 달라 보여.</p>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="gHist" width="280" height="200"></canvas>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>히스토그램이랑 막대그래프랑 다른 게 뭐예요? 막대가 붙어있는 것 말고요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>일반 막대그래프는 각 항목이 독립적이야 — 예를 들어 국어, 수학, 영어 점수 비교. 근데 히스토그램은 연속적인 수치 자료를 나타내. 점수가 60에서 100까지 이어지는 것처럼. 막대를 붙이는 건 <strong>계급이 연속</strong>된다는 뜻이야.</p>
+      </div>
+      <div class="eq-steps">
+        <div class="eq-row"><span class="eq-num">막대그래프</span><span class="eq-content">항목 간 간격 있음, 독립적 범주 비교</span></div>
+        <div class="eq-row highlight"><span class="eq-num">히스토그램</span><span class="eq-content">막대 간 간격 없음, <strong>연속 수치 자료</strong> 표현</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><strong>도수분포다각형</strong>은 히스토그램 각 막대의 꼭대기 중점을 선으로 연결한 그래프야. 양 끝에는 도수가 0인 계급을 하나씩 추가해서 선이 x축과 만나게 해줘.</p>
+      </div>
+      <div class="point-box">
+        <p><strong>도수분포다각형 그리는 법</strong><br>
+        1. 각 계급 막대의 꼭대기 중점에 점을 찍는다.<br>
+        2. 양 끝에 도수 0인 가상 계급을 추가한다.<br>
+        3. 모든 점을 직선으로 연결한다.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>도수분포다각형은 히스토그램이랑 같은 정보를 담고 있는 거 아닌가요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아. 같은 정보를 다른 방식으로 표현한 거야. 근데 다각형이 편리한 점이 있어 — <strong>두 집단을 같은 그래프에 겹쳐 그릴 수 있어.</strong> 히스토그램은 막대가 겹쳐서 보기 어렵거든. 자, 확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">위 히스토그램에서 80점 이상 90점 미만인 학생 수는?<br><span style="font-size:13px;color:var(--gray-500);">(도수분포표: 60~70: 2명, 70~80: 3명, 80~90: 3명, 90~100: 2명)</span></div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q3',false)">2명</button>
+          <button class="qopt" onclick="q(this,'q3',true)">3명</button>
+          <button class="qopt" onclick="q(this,'q3',false)">4명</button>
+          <button class="qopt" onclick="q(this,'q3',false)">5명</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q3"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(4)">상대도수의 분포 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s3" onclick="openMemo('s3')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s3"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s3"></div></div>
+  <div class="memo-input-area" id="mi-s3">
+    <textarea class="memo-textarea" id="mt-s3" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s3')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s3')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s3')">취소</button></div>
+  </div>
+</div>
+
+<!-- ════ 4. 상대도수의 분포 ════ -->
+<div class="section" id="s4">
+  <div class="sec-top"><div class="sec-badge teal">개념 4</div></div>
+  <div class="sec-title">상대도수의 분포</div>
+  <div class="sec-body chat-bg" id="chat-s4">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>상대도수에 대해 좀 더 깊이 들어가 보자. 상대도수의 합은?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>항상 1이라고 하셨잖아요!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아. 항상 1이야. 그럼 왜 도수 대신 상대도수를 쓰는 걸까? 예를 들어 1반(30명)과 2반(40명)의 수학 성적을 비교한다고 해봐.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>왜 도수 대신 상대도수를 써요? 집단 크기가 다를 때 뭔가 문제가 있어요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>좋은 질문이야. 1반에서 80점 이상이 12명, 2반에서 80점 이상이 14명이면 2반이 더 잘한 것 같지? 근데 1반은 30명, 2반은 40명이야. 상대도수로 보면 달라.</p>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="tbl">
+          <thead>
+            <tr><th></th><th>1반 (30명)</th><th>2반 (40명)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>80점 이상 도수</strong></td><td>12명</td><td>14명</td></tr>
+            <tr><td><strong>상대도수</strong></td><td class="tbl-given">12÷30 = 0.4</td><td class="tbl-formula">14÷40 = 0.35</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="warn-box">
+        <p>상대도수로 보면 1반(0.4)이 2반(0.35)보다 80점 이상 비율이 더 높아. 전체 수가 다를 때는 도수만 보면 오해할 수 있어.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><strong>누적상대도수</strong>는 처음 계급부터 해당 계급까지의 상대도수를 모두 더한 값이야. 예를 들어 70점 미만인 학생의 비율을 알고 싶을 때 써.</p>
+      </div>
+      <div class="eq-steps">
+        <div class="eq-row"><span class="eq-num">60~70</span><span class="eq-content">상대도수 0.2 &nbsp;→&nbsp; 누적 <span class="mr">0.2</span></span></div>
+        <div class="eq-row"><span class="eq-num">70~80</span><span class="eq-content">상대도수 0.3 &nbsp;→&nbsp; 누적 0.2+0.3 = <span class="mr">0.5</span></span></div>
+        <div class="eq-row highlight"><span class="eq-num">80~90</span><span class="eq-content">상대도수 0.3 &nbsp;→&nbsp; 누적 0.5+0.3 = <span class="mr">0.8</span></span></div>
+        <div class="eq-row result"><span class="eq-num">90~100</span><span class="eq-content">상대도수 0.2 &nbsp;→&nbsp; 누적 0.8+0.2 = <span class="mr">1.0</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">전체 50명 중 어떤 계급의 누적상대도수가 0.6이라면, 그 계급까지의 누적 학생 수는?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q4',false)">20명</button>
+          <button class="qopt" onclick="q(this,'q4',false)">25명</button>
+          <button class="qopt" onclick="q(this,'q4',true)">30명</button>
+          <button class="qopt" onclick="q(this,'q4',false)">40명</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q4"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(5)">자료의 해석 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s4" onclick="openMemo('s4')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s4"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s4"></div></div>
+  <div class="memo-input-area" id="mi-s4">
+    <textarea class="memo-textarea" id="mt-s4" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s4')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s4')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s4')">취소</button></div>
+  </div>
+</div>
+
+<!-- ════ 5. 자료의 해석 ════ -->
+<div class="section" id="s5">
+  <div class="sec-top"><div class="sec-badge">개념 5</div></div>
+  <div class="sec-title">자료의 해석 — 대표값</div>
+  <div class="sec-body chat-bg" id="chat-s5">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>자료를 하나의 값으로 대표할 때 쓰는 게 <strong>대표값</strong>이야. 세 가지를 알아야 해.</p>
+      </div>
+      <div class="eq-steps">
+        <div class="eq-row"><span class="eq-num">평균</span><span class="eq-content">전체 합 &divide; 개수 &nbsp;&nbsp; <span class="note">— 모든 값을 반영</span></span></div>
+        <div class="eq-row highlight"><span class="eq-num">중앙값</span><span class="eq-content">크기순 나열 시 가운데 값 &nbsp;&nbsp; <span class="note">— 극단값에 덜 영향받음</span></span></div>
+        <div class="eq-row"><span class="eq-num">최빈값</span><span class="eq-content">가장 많이 나타나는 값 &nbsp;&nbsp; <span class="note">— 여러 개일 수도 있음</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>평균이 대표값인데 중앙값을 왜 따로 써요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>예를 들어볼게. 5명이 사는 동네에서 연봉을 조사했어.</p>
+        <div class="math-block" style="margin-top:10px;">3000만, 3500만, 4000만, 4500만, <span style="color:#f87171;">100000만</span></div>
+        <p style="margin-top:10px;font-size:14px;">평균: (3000+3500+4000+4500+100000) &divide; 5 = <strong>23000만원</strong></p>
+        <p style="font-size:14px; margin-top:4px;">중앙값: 크기순 가운데 → <strong>4000만원</strong></p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name"><span class="s-name-slot">태린</span></div>
+        <p>억만장자 한 명 때문에 평균이 23000만원이 됐어요? 그럼 대부분의 사람은 평균보다 훨씬 적게 버는 건데...</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>바로 그거야. 평균은 <strong>극단값(outlier)에 크게 영향</strong>받아. 이런 경우엔 중앙값(4000만원)이 실제 분포를 더 잘 나타내. 신문에서 "평균 연봉 5000만원"이라고 해도 중앙값은 훨씬 낮을 수 있어.</p>
+      </div>
+      <div class="eq-steps">
+        <div class="eq-row"><span class="eq-num">평균이 적합</span><span class="eq-content">극단값 없는 고른 분포 자료</span></div>
+        <div class="eq-row highlight"><span class="eq-num">중앙값이 적합</span><span class="eq-content">극단값이 있거나 분포가 치우친 자료</span></div>
+        <div class="eq-row"><span class="eq-num">최빈값이 적합</span><span class="eq-content">수치보다 범주형 자료 (예: 선호 색상)</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제! 자료 7개야.</p>
+        <div class="math-block" style="margin-top:8px;">3, 5, 5, 7, 8, 9, 9</div>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">위 자료의 평균, 중앙값, 최빈값을 순서대로 고른 것은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q5',false)" style="font-size:13px;">6, 7, 9</button>
+          <button class="qopt" onclick="q(this,'q5',true)" style="font-size:13px;">평균 6.57, 중앙값 7, 최빈값 5와 9</button>
+          <button class="qopt" onclick="q(this,'q5',false)" style="font-size:13px;">7, 7, 5</button>
+          <button class="qopt" onclick="q(this,'q5',false)" style="font-size:13px;">평균 7, 중앙값 7, 최빈값 7</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q5"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(6)">종합 퀴즈 풀기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s5" onclick="openMemo('s5')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s5"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s5"></div></div>
+  <div class="memo-input-area" id="mi-s5">
+    <textarea class="memo-textarea" id="mt-s5" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s5')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s5')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s5')">취소</button></div>
+  </div>
+</div>
+
+<!-- ════ 6. 종합 퀴즈 ════ -->
+<div class="section" id="s6">
+  <div class="sec-top"><div class="sec-badge green">종합 퀴즈</div></div>
+  <div class="sec-title">지금까지 이해한 것 점검</div>
+  <div class="sec-body chat-bg" id="chat-s6">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>5문제야. 모두 풀면 점수 확인 버튼이 활성화돼.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">시작 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 1 / 5 — 줄기와 잎 그림</div>
+        <div class="quiz-q">아래 줄기와 잎 그림에서 줄기가 8인 자료는 몇 개인가?<br>
+          <div style="margin-top:10px; font-family:'Courier New',monospace; background:var(--gray-900); color:white; padding:12px 16px; border-radius:8px; font-size:14px; line-height:2;">
+            7 | 2 &nbsp; 5 &nbsp; 8<br>
+            8 | 1 &nbsp; 4 &nbsp; 6 &nbsp; 9<br>
+            9 | 0 &nbsp; 3
+          </div>
+        </div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f1',false)">3개</button>
+          <button class="qopt" onclick="fin(this,'f1',true)">4개</button>
+          <button class="qopt" onclick="fin(this,'f1',false)">5개</button>
+          <button class="qopt" onclick="fin(this,'f1',false)">2개</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f1"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 2 / 5 — 도수분포표 계산</div>
+        <div class="quiz-q">전체 40명 중 60점 이상 70점 미만의 도수가 8명이라면, 이 계급의 상대도수는?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f2',false)">0.1</button>
+          <button class="qopt" onclick="fin(this,'f2',true)">0.2</button>
+          <button class="qopt" onclick="fin(this,'f2',false)">0.3</button>
+          <button class="qopt" onclick="fin(this,'f2',false)">0.8</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f2"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 3 / 5 — 상대도수</div>
+        <div class="quiz-q">두 반의 성적을 비교할 때 반 인원이 서로 다르다면, 어떤 값을 사용해서 비교하는 것이 적절한가?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f3',false)">도수</button>
+          <button class="qopt" onclick="fin(this,'f3',true)">상대도수</button>
+          <button class="qopt" onclick="fin(this,'f3',false)">계급값</button>
+          <button class="qopt" onclick="fin(this,'f3',false)">계급의 크기</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f3"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 4 / 5 — 히스토그램 해석</div>
+        <div class="quiz-q">히스토그램에서 막대와 막대 사이에 간격이 없는 이유는?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f4',false)" style="font-size:13px;">그래프를 예쁘게 그리기 위해서</button>
+          <button class="qopt" onclick="fin(this,'f4',true)" style="font-size:13px;">계급이 연속적으로 이어지기 때문에</button>
+          <button class="qopt" onclick="fin(this,'f4',false)" style="font-size:13px;">도수가 크기 때문에</button>
+          <button class="qopt" onclick="fin(this,'f4',false)" style="font-size:13px;">막대그래프와 구별하지 않아도 되기 때문에</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f4"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 5 / 5 — 대표값</div>
+        <div class="quiz-q">자료: 2, 4, 4, 6, 100<br>이 자료에서 실제 분포를 가장 잘 나타내는 대표값은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f5',false)">평균 (23.2)</button>
+          <button class="qopt" onclick="fin(this,'f5',true)">중앙값 (4)</button>
+          <button class="qopt" onclick="fin(this,'f5',false)">최빈값 (4)</button>
+          <button class="qopt" onclick="fin(this,'f5',false)">셋 다 같다</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f5"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;">
+        <button class="score-check-btn" id="score-btn" onclick="showScore()">점수 확인하기</button>
+      </div>
+      <div id="score-panel" class="score-panel">
+        <div class="score-num" id="score-num">0</div>
+        <div class="score-of">/ 100점</div>
+        <div class="score-msg" id="score-msg"></div>
+        <div class="score-detail" id="score-detail"></div>
+        <button class="restart-btn" onclick="location.reload()">처음부터 다시 풀기</button>
+        <button class="toc-btn" onclick="go(1)">목차로 돌아가기</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s6" onclick="openMemo('s6')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s6"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s6"></div></div>
+  <div class="memo-input-area" id="mi-s6">
+    <textarea class="memo-textarea" id="mt-s6" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s6')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s6')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s6')">취소</button></div>
+  </div>
+</div>
+
+<button class="memo-float-btn" id="memo-float-btn" onclick="openMemoList()">수정 요청 목록 <span class="memo-count" id="memo-float-count">0</span></button>
+<div class="memo-list-overlay" id="memo-list-overlay" onclick="if(event.target===this)closeMemoList()">
+  <div class="memo-list-sheet">
+    <div class="memo-list-title">수정 요청 목록 <button class="memo-list-close" onclick="closeMemoList()">닫기</button></div>
+    <div id="memo-list-body"></div>
+  </div>
+</div>
+
+<script>
+/* 학생 이름 */
+const STUDENT_NAME = localStorage.getItem('studentName') || '태린';
+function hasJongseong(name) {
+  const code = name.charCodeAt(name.length - 1);
+  return (code - 0xAC00) % 28 > 0;
+}
+const STUDENT_CALL = STUDENT_NAME + (hasJongseong(STUDENT_NAME) ? '아' : '야');
+function initStudentNames() {
+  document.querySelectorAll('.s-name-slot').forEach(el => { el.textContent = STUDENT_NAME; });
+  document.querySelectorAll('.s-call-slot').forEach(el => { el.textContent = STUDENT_CALL; });
+  const p = getProgress(); p.studentName = STUDENT_NAME; saveProgress(p);
+}
+
+/* 학습 추적 */
+const TRACK_KEY = 'mathTalk_progress';
+const UNIT_KEY = '통계1';
+function getProgress() { try { return JSON.parse(localStorage.getItem(TRACK_KEY)) || {}; } catch(e) { return {}; } }
+function saveProgress(d) { localStorage.setItem(TRACK_KEY, JSON.stringify(d)); }
+let _curSec = null, _secStart = null, _stepStart = null;
+function trackEnter(secId) {
+  const now = Date.now(); _curSec = secId; _secStart = now; _stepStart = now;
+  const p = getProgress();
+  if (!p.units) p.units = {};
+  if (!p.units[UNIT_KEY]) p.units[UNIT_KEY] = {};
+  if (!p.units[UNIT_KEY][secId]) p.units[UNIT_KEY][secId] = { firstVisit:now, totalTime:0, stepTimes:[], quizzes:{} };
+  p.units[UNIT_KEY][secId].lastVisit = now; saveProgress(p);
+}
+function trackLeave() {
+  if (!_curSec || !_secStart) return;
+  const elapsed = Math.floor((Date.now()-_secStart)/1000);
+  const p = getProgress();
+  if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][_curSec])
+    p.units[UNIT_KEY][_curSec].totalTime = (p.units[UNIT_KEY][_curSec].totalTime||0)+elapsed;
+  saveProgress(p); _curSec = null; _secStart = null;
+}
+function trackStep(secId) {
+  const now = Date.now();
+  if (_stepStart) {
+    const elapsed = Math.floor((now-_stepStart)/1000);
+    const p = getProgress();
+    if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][secId])
+      p.units[UNIT_KEY][secId].stepTimes.push(elapsed);
+    saveProgress(p);
+  }
+  _stepStart = now;
+}
+function trackQuiz(secId, qId, correct) {
+  const p = getProgress();
+  if (!p.units) p.units = {};
+  if (!p.units[UNIT_KEY]) p.units[UNIT_KEY] = {};
+  if (!p.units[UNIT_KEY][secId]) p.units[UNIT_KEY][secId] = { totalTime:0, stepTimes:[], quizzes:{} };
+  if (!p.units[UNIT_KEY][secId].quizzes) p.units[UNIT_KEY][secId].quizzes = {};
+  p.units[UNIT_KEY][secId].quizzes[qId] = { correct, time:Date.now() }; saveProgress(p);
+}
+function trackComplete(secId) {
+  const p = getProgress();
+  if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][secId]) {
+    p.units[UNIT_KEY][secId].completed = true;
+    p.units[UNIT_KEY][secId].completedAt = Date.now();
+  }
+  saveProgress(p);
+}
+
+/* 대화 진행 */
+function nextStep(secId) {
+  const steps = Array.from(document.querySelectorAll('#chat-'+secId+' .chat-step'));
+  let lastIdx = -1;
+  steps.forEach((s,i) => { if(s.classList.contains('visible')) lastIdx = i; });
+  if (lastIdx < steps.length-1) {
+    trackStep(secId);
+    const next = steps[lastIdx+1];
+    next.classList.add('visible');
+    setTimeout(() => next.scrollIntoView({behavior:'smooth',block:'start'}), 60);
+  }
+}
+
+/* 섹션 이동 */
+const labels = {
+  s1:'개념 1 — 줄기와 잎 그림',
+  s2:'개념 2 — 도수분포표',
+  s3:'개념 3 — 히스토그램과 도수분포다각형',
+  s4:'개념 4 — 상대도수의 분포',
+  s5:'개념 5 — 자료의 해석',
+  s6:'종합 퀴즈'
+};
+const TOTAL = 6;
+
+function show(n) {
+  trackLeave();
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('s'+n);
+  el.classList.add('active');
+  document.getElementById('prog-label').textContent = labels['s'+n];
+  const pct = Math.round((n/TOTAL)*100);
+  document.getElementById('prog-pct').textContent = pct+'%';
+  document.getElementById('prog-fill').style.width = pct+'%';
+  setTimeout(() => window.scrollTo(0,0), 30);
+  trackEnter('s'+n);
+  if (n === 3) setTimeout(drawHist, 100);
+}
+function go(n) { show(n); }
+
+/* 히스토그램 canvas 그리기 */
+function drawHist() {
+  const canvas = document.getElementById('gHist');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const data = [
+    { label:'60~70', freq:2 },
+    { label:'70~80', freq:3 },
+    { label:'80~90', freq:3 },
+    { label:'90~100', freq:2 }
+  ];
+  const maxFreq = 4;
+  const padL = 44, padR = 16, padT = 20, padB = 44;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+  const barW = chartW / data.length;
+
+  /* 배경 격자 */
+  ctx.strokeStyle = '#e5e7eb';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= maxFreq; i++) {
+    const y = padT + chartH - (i / maxFreq) * chartH;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + chartW, y); ctx.stroke();
+    ctx.fillStyle = '#9ca3af';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(i, padL - 6, y + 4);
+  }
+
+  /* 막대 */
+  const colors = ['#a5b4fc','#818cf8','#6366f1','#4f46e5'];
+  data.forEach((d, i) => {
+    const x = padL + i * barW;
+    const barH = (d.freq / maxFreq) * chartH;
+    const y = padT + chartH - barH;
+    ctx.fillStyle = colors[i];
+    ctx.fillRect(x, y, barW, barH);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, barW, barH);
+    /* 도수 숫자 */
+    ctx.fillStyle = '#1f2937';
+    ctx.font = 'bold 12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(d.freq, x + barW/2, y - 5);
+  });
+
+  /* x축 레이블 */
+  ctx.fillStyle = '#374151';
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'center';
+  data.forEach((d, i) => {
+    const x = padL + i * barW + barW / 2;
+    ctx.fillText(d.label, x, H - padB + 16);
+  });
+
+  /* 축 */
+  ctx.strokeStyle = '#374151';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + chartH); ctx.lineTo(padL + chartW, padT + chartH);
+  ctx.stroke();
+
+  /* y축 제목 */
+  ctx.save();
+  ctx.translate(12, padT + chartH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = '#6b7280';
+  ctx.font = '11px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('도수 (명)', 0, 0);
+  ctx.restore();
+}
+
+/* 확인 문제 */
+const qMsg = {
+  q1:{ ok:'5번째 값 77, 6번째 값 83. 평균은 (77+83)÷2 = 80이에요.', no:'자료를 오름차순으로 나열하면 64,68,72,75,77,83,85,88,90,91. 5번째=77, 6번째=83. 중앙값=(77+83)÷2=80이에요.' },
+  q2:{ ok:'5÷25 = 0.2. 상대도수는 도수를 전체 도수로 나눈 값이에요.', no:'상대도수 = 도수 ÷ 전체 도수 = 5 ÷ 25 = 0.2예요.' },
+  q3:{ ok:'히스토그램에서 80~90 막대의 높이(도수)를 읽으면 3이에요.', no:'도수분포표에서 80이상 90미만의 도수는 3명이에요.' },
+  q4:{ ok:'누적상대도수 0.6 × 전체 50명 = 30명이에요.', no:'누적 학생 수 = 누적상대도수 × 전체 도수 = 0.6 × 50 = 30명이에요.' },
+  q5:{ ok:'합계=46÷7≈6.57. 가운데(4번째)=7. 5와 9 각각 2번씩 나와 최빈값 둘 다예요.', no:'평균=(3+5+5+7+8+9+9)÷7=46÷7≈6.57. 중앙값=7(4번째). 최빈값=5와 9(각 2번).' },
+};
+function q(el, id, correct) {
+  const opts = el.parentNode.querySelectorAll('.qopt');
+  opts.forEach(o => { o.disabled = true; });
+  el.classList.add(correct ? 'correct' : 'wrong');
+  const fb = document.getElementById('qfb-'+id);
+  fb.textContent = correct ? qMsg[id].ok : qMsg[id].no;
+  fb.className = 'quiz-fb '+(correct?'ok':'no');
+  const secEl = el.closest('.section');
+  trackQuiz(secEl ? secEl.id : (_curSec||'unknown'), id, correct);
+}
+
+/* 종합 퀴즈 */
+const finAnswers = {};
+const fMsg = {
+  f1:{ ok:'줄기 8에 달린 잎이 1, 4, 6, 9로 4개예요.', no:'줄기 8 | 1 4 6 9 — 잎이 4개이므로 자료는 81, 84, 86, 89로 4개예요.' },
+  f2:{ ok:'8 ÷ 40 = 0.2. 상대도수 = 도수 ÷ 전체 도수예요.', no:'상대도수 = 8 ÷ 40 = 0.2예요.' },
+  f3:{ ok:'인원이 다를 때는 비율인 상대도수로 비교해야 공평해요.', no:'전체 도수가 다르면 도수는 직접 비교하기 어려워요. 상대도수(비율)를 사용해야 해요.' },
+  f4:{ ok:'수치 자료는 연속적이라서 계급 사이에 빈 구간이 없어요. 그래서 막대를 붙여요.', no:'히스토그램은 연속적인 수치 자료를 나타내기 때문에 계급이 끊기지 않고 이어져요. 막대 사이 간격이 없는 이유예요.' },
+  f5:{ ok:'100이라는 극단값 때문에 평균이 왜곡돼요. 중앙값(4)이 실제 분포를 더 잘 나타내요.', no:'평균=(2+4+4+6+100)÷5=23.2로 극단값에 많이 영향받아요. 중앙값(4)이 더 대표적이에요.' },
+};
+function fin(el, id, correct) {
+  const opts = el.parentNode.querySelectorAll('.qopt');
+  opts.forEach(o => { o.disabled = true; });
+  el.classList.add(correct ? 'correct' : 'wrong');
+  finAnswers[id] = correct;
+  const fb = document.getElementById('qfb-'+id);
+  fb.textContent = correct ? fMsg[id].ok : fMsg[id].no;
+  fb.className = 'quiz-fb '+(correct?'ok':'no');
+  trackQuiz('s6', id, correct);
+  const allIds = ['f1','f2','f3','f4','f5'];
+  if (allIds.every(k => k in finAnswers)) {
+    document.getElementById('score-btn').className = 'score-check-btn ready';
+  }
+}
+function showScore() {
+  const allIds = ['f1','f2','f3','f4','f5'];
+  if (!allIds.every(k => k in finAnswers)) return;
+  const score = allIds.filter(k => finAnswers[k]).length * 20;
+  document.getElementById('score-num').textContent = score;
+  const msgs = {
+    100:'완벽해! 통계 마스터!',
+    80:'거의 다 왔어! 한 문제만 더!',
+    60:'절반 이상이야. 복습하면 돼.',
+    40:'다시 한 번 개념 정리해보자.',
+    20:'처음부터 차근차근 다시 해보자.',
+    0:'포기하지 마. 다시 시작하면 돼.'
+  };
+  document.getElementById('score-msg').textContent = msgs[score] || '';
+  const wrong = allIds.filter(k => !finAnswers[k]).length;
+  document.getElementById('score-detail').textContent = wrong > 0 ? wrong+'문제 틀림 — 해설을 다시 읽어봐요.' : '전부 맞았어요!';
+  document.getElementById('score-panel').style.display = 'block';
+  trackComplete('s6');
+  if (score === 100) confetti();
+}
+
+/* 수정 요청 메모 */
+const MEMO_PREFIX = 'stat-memo-';
+const sectionNames = { s1:'개념 1', s2:'개념 2', s3:'개념 3', s4:'개념 4', s5:'개념 5', s6:'종합 퀴즈' };
+function initMemos() {
+  let count = 0;
+  Object.keys(sectionNames).forEach(id => {
+    const val = localStorage.getItem(MEMO_PREFIX+id);
+    if (val) { count++; showMemoBanner(id,val); markBtn(id,true); }
+  });
+  updateFloatBtn(count);
+}
+function openMemo(id) {
+  const area = document.getElementById('mi-'+id);
+  const ta = document.getElementById('mt-'+id);
+  const saved = localStorage.getItem(MEMO_PREFIX+id);
+  ta.value = saved||''; area.classList.add('show'); ta.focus();
+}
+function closeMemo(id) { document.getElementById('mi-'+id).classList.remove('show'); }
+function saveMemo(id) {
+  const val = document.getElementById('mt-'+id).value.trim();
+  if (!val) { deleteMemo(id); return; }
+  localStorage.setItem(MEMO_PREFIX+id, val); showMemoBanner(id,val); markBtn(id,true); closeMemo(id); updateFloatBtn(countMemos());
+}
+function deleteMemo(id) {
+  localStorage.removeItem(MEMO_PREFIX+id);
+  document.getElementById('mb-'+id).classList.remove('show'); markBtn(id,false); closeMemo(id); updateFloatBtn(countMemos());
+}
+function showMemoBanner(id,val) {
+  const b = document.getElementById('mb-'+id); document.getElementById('mbt-'+id).textContent = val; b.classList.add('show');
+}
+function markBtn(id,has) { document.getElementById('eb-'+id).classList.toggle('has-memo',has); }
+function countMemos() { return Object.keys(sectionNames).filter(id => localStorage.getItem(MEMO_PREFIX+id)).length; }
+function updateFloatBtn(count) {
+  const btn = document.getElementById('memo-float-btn');
+  btn.style.display = count > 0 ? 'block' : 'none';
+  document.getElementById('memo-float-count').textContent = count;
+}
+function openMemoList() {
+  const body = document.getElementById('memo-list-body'); body.innerHTML = ''; let has = false;
+  Object.keys(sectionNames).forEach(id => {
+    const val = localStorage.getItem(MEMO_PREFIX+id);
+    if (val) { has = true; body.innerHTML += '<div class="memo-list-item"><div class="memo-list-item-label">'+sectionNames[id]+'</div><div class="memo-list-item-text">'+val+'</div></div>'; }
+  });
+  if (!has) body.innerHTML = '<p style="color:var(--gray-400);font-size:14px;">수정 요청이 없어요.</p>';
+  document.getElementById('memo-list-overlay').classList.add('open');
+}
+function closeMemoList() { document.getElementById('memo-list-overlay').classList.remove('open'); }
+
+/* confetti */
+function confetti() {
+  const colors = ['#4f46e5','#059669','#dc2626','#d97706','#0ea5e9'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div'); el.className = 'cf';
+    el.style.cssText = 'left:'+Math.random()*100+'vw;top:-10px;width:'+(6+Math.random()*6)+'px;height:'+(6+Math.random()*6)+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';animation-duration:'+(1.5+Math.random()*1.5)+'s;animation-delay:'+Math.random()*0.5+'s;';
+    document.body.appendChild(el); setTimeout(() => el.remove(), 3500);
+  }
+}
+
+window.onload = () => { show(1); initMemos(); initStudentNames(); };
+</script>
+</body>
+</html>

@@ -170,38 +170,46 @@ body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacS
   <!-- 중1 2학기 -->
   <div class="term-block">
     <div class="term-label">중학교 1학년 2학기</div>
-    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+    <a class="unit-card" href="기본도형_인터랙티브교재.html" id="card-기본도형">
       <div class="unit-icon green">△</div>
       <div class="unit-main">
         <div class="unit-title">기본도형</div>
         <div class="unit-sub">기본도형, 작도와 합동</div>
       </div>
-      <div class="unit-right"><span class="unit-badge badge-soon">준비 중</span></div>
-    </div>
-    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-right" id="prog-기본도형">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+    <a class="unit-card" href="평면도형_인터랙티브교재.html" id="card-평면도형">
       <div class="unit-icon green">○</div>
       <div class="unit-main">
         <div class="unit-title">평면도형</div>
         <div class="unit-sub">다각형, 원과 부채꼴</div>
       </div>
-      <div class="unit-right"><span class="unit-badge badge-soon">준비 중</span></div>
-    </div>
-    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-right" id="prog-평면도형">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+    <a class="unit-card" href="입체도형_인터랙티브교재.html" id="card-입체도형">
       <div class="unit-icon green">□</div>
       <div class="unit-main">
         <div class="unit-title">입체도형</div>
         <div class="unit-sub">다면체와 회전체, 겉넓이와 부피</div>
       </div>
-      <div class="unit-right"><span class="unit-badge badge-soon">준비 중</span></div>
-    </div>
-    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-right" id="prog-입체도형">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+    <a class="unit-card" href="통계_인터랙티브교재.html" id="card-통계1">
       <div class="unit-icon teal">bar</div>
       <div class="unit-main">
         <div class="unit-title">통계</div>
         <div class="unit-sub">자료의 정리, 자료의 해석</div>
       </div>
-      <div class="unit-right"><span class="unit-badge badge-soon">준비 중</span></div>
-    </div>
+      <div class="unit-right" id="prog-통계1">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
   </div>
 
   <!-- 중2 1학기 -->
@@ -398,6 +406,10 @@ const UNIT_META = {
   '수와연산':    { total:7, domId:'prog-수와연산' },
   '방정식':      { total:7, domId:'prog-방정식' },
   '그래프와비례': { total:6, domId:'prog-그래프와비례' },
+  '기본도형':    { total:7, domId:'prog-기본도형' },
+  '평면도형':    { total:7, domId:'prog-평면도형' },
+  '입체도형':    { total:7, domId:'prog-입체도형' },
+  '통계1':       { total:6, domId:'prog-통계1' },
   '연립방정식':  { total:7, domId:'prog-연립방정식' },
   '일차함수':    { total:7, domId:'prog-일차함수' },
   '일차함수활용': { total:5, domId:'prog-일차함수활용' },
