@@ -215,30 +215,36 @@ body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacS
   <!-- 중2 1학기 -->
   <div class="term-block">
     <div class="term-label">중학교 2학년 1학기</div>
-    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+    <a class="unit-card" href="유리수와소수_인터랙티브교재.html" id="card-유리수와소수">
       <div class="unit-icon orange">0.3</div>
       <div class="unit-main">
         <div class="unit-title">유리수와 소수</div>
         <div class="unit-sub">유한소수, 순환소수, 유리수 판별</div>
       </div>
-      <div class="unit-right"><span class="unit-badge badge-soon">준비 중</span></div>
-    </div>
-    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-right" id="prog-유리수와소수">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+    <a class="unit-card" href="식의계산_인터랙티브교재.html" id="card-식의계산">
       <div class="unit-icon teal">ab</div>
       <div class="unit-main">
         <div class="unit-title">식의 계산</div>
         <div class="unit-sub">단항식의 계산, 다항식의 계산</div>
       </div>
-      <div class="unit-right"><span class="unit-badge badge-soon">준비 중</span></div>
-    </div>
-    <div class="unit-card locked" onclick="alert('아직 준비 중이에요!')">
+      <div class="unit-right" id="prog-식의계산">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
+    <a class="unit-card" href="일차부등식_인터랙티브교재.html" id="card-일차부등식">
       <div class="unit-icon orange">&gt;</div>
       <div class="unit-main">
         <div class="unit-title">일차부등식</div>
         <div class="unit-sub">부등식의 성질, 풀이와 활용</div>
       </div>
-      <div class="unit-right"><span class="unit-badge badge-soon">준비 중</span></div>
-    </div>
+      <div class="unit-right" id="prog-일차부등식">
+        <span class="unit-badge badge-new">학습 가능</span>
+      </div>
+    </a>
     <a class="unit-card" href="연립방정식_인터랙티브교재.html" id="card-연립방정식">
       <div class="unit-icon indigo">=</div>
       <div class="unit-main">
@@ -410,6 +416,9 @@ const UNIT_META = {
   '평면도형':    { total:7, domId:'prog-평면도형' },
   '입체도형':    { total:7, domId:'prog-입체도형' },
   '통계1':       { total:6, domId:'prog-통계1' },
+  '유리수와소수': { total:6, domId:'prog-유리수와소수' },
+  '식의계산':    { total:7, domId:'prog-식의계산' },
+  '일차부등식':  { total:6, domId:'prog-일차부등식' },
   '연립방정식':  { total:7, domId:'prog-연립방정식' },
   '일차함수':    { total:7, domId:'prog-일차함수' },
   '일차함수활용': { total:5, domId:'prog-일차함수활용' },

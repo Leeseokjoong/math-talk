@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>땡중샘 수학톡 | 유리수와 소수</title>
+<style>
+:root {
+  --primary: #4f46e5; --primary-bg: #eef2ff; --primary-border: #c7d2fe;
+  --accent: #0ea5e9; --accent-bg: #e0f2fe;
+  --green: #059669; --green-bg: #d1fae5;
+  --red: #dc2626; --red-bg: #fee2e2;
+  --orange: #d97706; --orange-bg: #fef3c7;
+  --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+  --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280;
+  --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacSystemFont,sans-serif; background:#f5f5f7; color:var(--gray-800); line-height:1.75; -webkit-font-smoothing:antialiased; }
+
+.header { background:var(--gray-900); color:white; padding:40px 24px 36px; text-align:center; }
+.header-eyebrow { font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#a5b4fc; margin-bottom:10px; }
+.header h1 { font-size:clamp(24px,5vw,32px); font-weight:800; letter-spacing:-0.5px; }
+.header p { margin-top:10px; font-size:14px; color:#9ca3af; }
+
+.progress-wrap { background:white; padding:14px 24px; border-bottom:1px solid var(--gray-200); position:sticky; top:0; z-index:100; box-shadow:0 1px 8px rgba(0,0,0,0.06); }
+.progress-meta { display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:var(--gray-500); margin-bottom:8px; }
+.progress-bar { height:4px; background:var(--gray-200); border-radius:99px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--primary); border-radius:99px; transition:width 0.5s ease; width:0%; }
+
+.section { background:white; border-radius:16px; margin:20px 16px; box-shadow:0 1px 6px rgba(0,0,0,0.07); display:none; animation:fadeUp 0.35s ease; }
+.section.active { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)} }
+.sec-top { padding:22px 28px 0; }
+.sec-badge { display:inline-block; font-size:11px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:var(--primary); background:var(--primary-bg); border-radius:6px; padding:3px 10px; }
+.sec-badge.teal { color:var(--accent); background:var(--accent-bg); }
+.sec-badge.green { color:var(--green); background:var(--green-bg); }
+.sec-title { font-size:18px; font-weight:800; color:var(--gray-900); margin-top:8px; padding:0 28px; line-height:1.4; }
+
+/* 대화형 */
+.chat-bg { background:#b2c7d9; border-radius:0 0 16px 16px; padding:18px 16px 24px !important; }
+.chat-step { display:none; animation:fadeUp 0.35s ease; }
+.chat-step.visible { display:block; }
+.t-name { font-size:11px; font-weight:800; color:var(--gray-500); letter-spacing:0.8px; margin-bottom:8px; }
+.t-msg { background:white; color:var(--gray-800); border-radius:4px 16px 16px 16px; padding:14px 16px; margin-bottom:6px; box-shadow:0 1px 4px rgba(0,0,0,0.10); }
+.t-msg p { font-size:14px; line-height:1.85; }
+.s-name { font-size:11px; font-weight:800; color:#b8960a; letter-spacing:0.8px; margin-bottom:6px; }
+.s-msg { background:#FEE500; border-radius:16px 4px 16px 16px; padding:14px 16px; margin-bottom:6px; margin-left:24px; box-shadow:0 1px 4px rgba(0,0,0,0.10); }
+.s-msg p { font-size:14px; line-height:1.85; color:var(--gray-800); }
+.chat-gap { height:8px; }
+.cont-wrap { text-align:center; margin-top:18px; }
+.cont-btn { background:white; color:var(--gray-700); border:1.5px solid var(--gray-300); border-radius:99px; padding:10px 28px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+.cont-btn:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-bg); }
+
+/* 콘텐츠 블록 */
+.math-block { background:var(--gray-900); color:#a5b4fc; border-radius:10px; padding:16px 20px; font-family:'Courier New',monospace; font-size:15px; margin:8px 0 10px; line-height:2; }
+.eq-steps { background:var(--gray-50); border-radius:10px; overflow:hidden; margin:8px 0 10px; }
+.eq-row { display:flex; align-items:baseline; gap:12px; padding:11px 16px; border-bottom:1px solid var(--gray-100); font-size:14px; }
+.eq-row:last-child { border-bottom:none; }
+.eq-row.highlight { background:var(--primary-bg); }
+.eq-row.result { background:var(--gray-900); color:white; }
+.eq-num { font-size:11px; font-weight:700; color:var(--gray-400); min-width:70px; flex-shrink:0; }
+.eq-row.result .eq-num { color:#6b7280; }
+.eq-content { flex:1; }
+.mv { color:var(--primary); font-weight:700; }
+.eq-row.result .mv { color:#a5b4fc; }
+.mr { color:var(--red); font-weight:700; }
+.eq-row.result .mr { color:#fca5a5; }
+.hi { color:var(--orange); font-weight:700; }
+.note { font-size:12px; color:var(--gray-400); }
+.point-box { background:var(--primary-bg); border-left:3px solid var(--primary); border-radius:0 10px 10px 0; padding:16px 18px; margin:8px 0 10px; }
+.point-box p { font-size:14px; line-height:1.8; color:var(--gray-700); }
+.warn-box { background:var(--red-bg); border-left:3px solid var(--red); border-radius:0 10px 10px 0; padding:16px 18px; margin:8px 0 10px; }
+.warn-box p { font-size:14px; line-height:1.8; color:var(--gray-700); }
+.summary-box { border-radius:10px; padding:18px 20px; margin:8px 0 10px; }
+.summary-box.indigo { background:var(--primary-bg); border:1.5px solid var(--primary-border); }
+.sb-head { font-size:13px; font-weight:800; color:var(--primary); margin-bottom:6px; }
+.sb-body { font-size:15px; font-weight:700; color:var(--gray-900); }
+.sb-sub { font-size:13px; color:var(--gray-500); margin-top:4px; }
+
+/* 표 */
+.tbl { width:100%; border-collapse:collapse; font-size:14px; margin:8px 0 10px; }
+.tbl th { background:var(--gray-900); color:white; padding:10px 14px; font-weight:700; font-size:13px; text-align:left; }
+.tbl td { padding:10px 14px; border-bottom:1px solid var(--gray-100); vertical-align:middle; }
+.tbl tbody tr:last-child td { border-bottom:none; }
+.tbl tbody tr:nth-child(even) { background:var(--gray-50); }
+.tbl-var { color:var(--primary); font-weight:700; }
+.tbl-yes { color:var(--green); font-weight:700; }
+.tbl-no { color:var(--red); font-weight:700; }
+
+/* 수 체계 다이어그램 */
+.num-system { margin:10px 0; }
+.ns-box { border-radius:10px; padding:12px 16px; margin:4px 0; border:2px solid; }
+.ns-box.ns-real { border-color:#a5b4fc; background:#f0f0ff; }
+.ns-box.ns-rat { border-color:var(--primary-border); background:var(--primary-bg); margin-left:14px; }
+.ns-box.ns-irr { border-color:#fca5a5; background:var(--red-bg); margin-left:14px; }
+.ns-box.ns-int { border-color:#6ee7b7; background:var(--green-bg); margin-left:28px; }
+.ns-box.ns-frac { border-color:#fcd34d; background:var(--orange-bg); margin-left:28px; }
+.ns-label { font-size:13px; font-weight:800; }
+.ns-ex { font-size:12px; color:var(--gray-500); margin-top:2px; }
+
+/* 순환마디 표기 */
+.cycle-box { display:inline-flex; align-items:flex-start; position:relative; font-weight:700; }
+.dot-above { display:inline-block; position:relative; }
+.dot-above::after { content:'.'; position:absolute; top:-4px; left:50%; transform:translateX(-50%); font-size:14px; line-height:1; color:var(--primary); font-weight:900; }
+
+/* 퀴즈 */
+.quiz { background:var(--gray-50); border-radius:12px; padding:18px; margin:8px 0 10px; }
+.quiz-label { font-size:11px; font-weight:800; color:var(--primary); letter-spacing:0.8px; margin-bottom:8px; }
+.quiz-q { font-size:15px; font-weight:700; color:var(--gray-900); margin-bottom:14px; line-height:1.6; }
+.quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.qopt { background:white; border:1.5px solid var(--gray-200); border-radius:8px; padding:11px 14px; font-size:14px; font-family:inherit; font-weight:600; color:var(--gray-700); cursor:pointer; transition:all 0.15s; text-align:left; }
+.qopt:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-bg); }
+.qopt.correct { background:var(--green-bg); border-color:var(--green); color:var(--green); }
+.qopt.wrong { background:var(--red-bg); border-color:var(--red); color:var(--red); }
+.qopt:disabled { cursor:not-allowed; }
+.quiz-fb { font-size:13px; color:var(--gray-600); margin-top:10px; min-height:18px; line-height:1.6; }
+.quiz-fb.ok { color:var(--green); font-weight:600; }
+.quiz-fb.no { color:var(--red); font-weight:600; }
+
+/* 점수 패널 */
+.score-panel { display:none; background:var(--gray-900); color:white; border-radius:12px; padding:36px; text-align:center; margin-top:20px; animation:fadeUp 0.4s ease; }
+.score-num { font-size:60px; font-weight:900; line-height:1; }
+.score-of { font-size:14px; color:#6b7280; margin-top:4px; }
+.score-msg { font-size:20px; font-weight:800; margin-top:18px; }
+.score-detail { font-size:14px; color:#9ca3af; margin-top:6px; }
+.restart-btn { margin-top:20px; background:white; color:var(--gray-900); border:none; border-radius:8px; padding:11px 28px; font-size:14px; font-weight:700; cursor:pointer; }
+.toc-btn { margin-top:12px; background:var(--primary); color:white; border:none; border-radius:8px; padding:11px 28px; font-size:14px; font-weight:700; cursor:pointer; }
+
+/* 버튼 */
+.next-wrap { text-align:center; margin-top:22px; }
+.next-btn { background:var(--gray-900); color:white; border:none; border-radius:8px; padding:13px 36px; font-size:15px; font-weight:700; cursor:pointer; transition:all 0.18s; }
+.next-btn:hover { background:var(--primary); }
+.score-check-btn { background:var(--gray-300); color:var(--gray-500); border:none; border-radius:8px; padding:13px 36px; font-size:15px; font-weight:700; cursor:not-allowed; transition:all 0.2s; }
+.score-check-btn.ready { background:var(--primary); color:white; cursor:pointer; }
+
+/* 수정 요청 */
+.edit-bar { display:flex; align-items:center; justify-content:flex-end; padding:10px 20px 14px; border-top:1px solid var(--gray-100); margin-top:4px; }
+.edit-request-btn { background:none; border:1.5px dashed var(--gray-300); border-radius:6px; padding:5px 12px; font-size:12px; font-weight:600; color:var(--gray-400); cursor:pointer; transition:all 0.15s; }
+.edit-request-btn:hover { border-color:var(--orange); color:var(--orange); background:var(--orange-bg); }
+.edit-request-btn.has-memo { border-color:var(--orange); color:var(--orange); background:var(--orange-bg); border-style:solid; }
+.memo-banner { margin:0 20px 14px; background:#fffbeb; border:1.5px solid #fcd34d; border-radius:8px; padding:12px 14px; display:none; }
+.memo-banner.show { display:block; }
+.memo-banner-label { font-size:11px; font-weight:700; color:var(--orange); margin-bottom:4px; }
+.memo-banner-text { font-size:14px; color:var(--gray-700); white-space:pre-wrap; }
+.memo-input-area { display:none; margin:0 20px 14px; background:#fffbeb; border:1.5px solid #fcd34d; border-radius:8px; padding:14px; }
+.memo-input-area.show { display:block; }
+.memo-textarea { width:100%; border:1px solid #fcd34d; border-radius:6px; padding:10px 12px; font-size:14px; font-family:inherit; resize:vertical; min-height:80px; outline:none; background:white; }
+.memo-textarea:focus { border-color:var(--orange); }
+.memo-actions { display:flex; gap:8px; margin-top:10px; }
+.memo-save-btn { background:var(--orange); color:white; border:none; border-radius:6px; padding:8px 18px; font-size:13px; font-weight:700; cursor:pointer; }
+.memo-delete-btn { background:white; color:var(--red); border:1.5px solid var(--red); border-radius:6px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; }
+.memo-cancel-btn { background:white; color:var(--gray-500); border:1.5px solid var(--gray-200); border-radius:6px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; }
+.memo-float-btn { position:fixed; bottom:24px; right:20px; background:var(--orange); color:white; border:none; border-radius:99px; padding:12px 20px; font-size:13px; font-weight:700; cursor:pointer; box-shadow:0 4px 16px rgba(217,119,6,0.4); z-index:50; transition:all 0.2s; display:none; }
+.memo-count { background:white; color:var(--orange); border-radius:99px; padding:1px 7px; font-size:12px; font-weight:900; margin-left:6px; }
+.memo-list-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:200; align-items:flex-end; justify-content:center; }
+.memo-list-overlay.open { display:flex; }
+.memo-list-sheet { background:white; border-radius:16px 16px 0 0; padding:24px 22px 36px; width:100%; max-width:740px; max-height:70vh; overflow-y:auto; animation:slideUp 0.25s ease; }
+@keyframes slideUp { from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1} }
+.memo-list-title { font-size:17px; font-weight:900; color:var(--gray-900); margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; }
+.memo-list-close { background:var(--gray-100); border:none; border-radius:6px; padding:6px 14px; font-size:13px; font-weight:700; cursor:pointer; color:var(--gray-700); }
+.memo-list-item { background:#fffbeb; border:1.5px solid #fcd34d; border-radius:8px; padding:12px 14px; margin-bottom:10px; }
+.memo-list-item-label { font-size:11px; font-weight:700; color:var(--orange); margin-bottom:4px; }
+.memo-list-item-text { font-size:14px; color:var(--gray-700); white-space:pre-wrap; }
+
+/* 분수 */
+.frac { display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; font-size:0.88em; line-height:1.15; margin:0 2px; }
+.frac .num { border-bottom:1.5px solid currentColor; padding:0 4px 2px; text-align:center; white-space:nowrap; }
+.frac .den { padding:2px 4px 0; text-align:center; white-space:nowrap; }
+
+/* confetti */
+.cf { position:fixed; border-radius:2px; pointer-events:none; z-index:9999; animation:cfFall linear forwards; }
+@keyframes cfFall { 0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)} }
+
+@media(max-width:520px){
+  .sec-top,.sec-body{padding-left:18px;padding-right:18px;}
+  .sec-title{padding-left:18px;padding-right:18px;}
+  .quiz-opts{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">땡중샘 수학톡 (중학수학)</div>
+  <h1>유리수와 소수</h1>
+  <p>중학교 2학년 · 대화로 배우는 수학</p>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-meta">
+    <span id="prog-label">개념 1 — 유한소수와 무한소수</span>
+    <span id="prog-pct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+</div>
+
+<!-- ════ 1. 유한소수와 무한소수 ════ -->
+<div class="section active" id="s1">
+  <div class="sec-top"><div class="sec-badge">개념 1</div></div>
+  <div class="sec-title">유한소수와 무한소수</div>
+  <div class="sec-body chat-bg" id="chat-s1">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><span class="s-call-slot">태린아</span>, 오늘은 유리수와 소수의 관계를 배울 거야. 먼저 질문 하나 — <strong>1 ÷ 2</strong>를 소수로 나타내면?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>0.5요! 딱 떨어지잖아요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아. 그럼 <strong>1 ÷ 3</strong>은?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>0.333...인데... 끝이 없어요. 계속 3이 나와요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>바로 그거야. 소수점 아래 숫자가 <strong>유한 개</strong>면 <strong>유한소수</strong>, <strong>끝없이 계속</strong>되면 <strong>무한소수</strong>야.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">유한소수</span><span class="eq-content">0.5, 0.25, 1.75 — 소수점 아래 자리가 유한 개</span></div>
+        <div class="eq-row"><span class="eq-num">무한소수</span><span class="eq-content">0.333..., 0.142857... — 소수점 아래가 끝없이 계속</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>무한소수 중에도 종류가 있어. 0.333...처럼 일정 부분이 <strong>반복</strong>되는 건 <strong>순환소수</strong>야. 반면 π(파이) = 3.14159...나 √2 = 1.41421...처럼 규칙 없이 끝없이 계속되는 건 <strong>순환하지 않는 무한소수</strong>야.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row highlight"><span class="eq-num">순환소수</span><span class="eq-content">0.333..., 0.142857142857... — 일정 부분이 반복</span></div>
+        <div class="eq-row"><span class="eq-num">비순환</span><span class="eq-content">π = 3.14159..., √2 = 1.41421... — 규칙 없이 무한</span></div>
+      </div>
+      <div class="point-box" style="margin-top:8px;">
+        <p>순환하지 않는 무한소수는 분수로 나타낼 수 없어. 이를 <strong>무리수</strong>라고 해. 유리수가 아니야!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>그런데 선생님, 0.999...는 1이에요? 무한히 9가 이어지면 1이 되는 거 맞아요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>수학적으로 맞아! x = 0.999...로 놓으면:</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">x =</span><span class="eq-content">0.999...</span></div>
+        <div class="eq-row"><span class="eq-num">10x =</span><span class="eq-content">9.999...</span></div>
+        <div class="eq-row highlight"><span class="eq-num">10x - x =</span><span class="eq-content">9.999... - 0.999... = <span class="mr">9</span></span></div>
+        <div class="eq-row result"><span class="eq-num">따라서</span><span class="eq-content"><span class="mv">9x = 9</span> &nbsp;→&nbsp; <span class="mr">x = 1</span></span></div>
+      </div>
+      <p style="font-size:13px; color:var(--gray-500); margin-top:8px; padding:0 4px;">0.999...와 1 사이에는 다른 수가 존재하지 않아. 수학에서는 같다고 봐.</p>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">다음 중 유한소수인 것은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q1',false)">0.333...</button>
+          <button class="qopt" onclick="q(this,'q1',true)">0.25</button>
+          <button class="qopt" onclick="q(this,'q1',false)">3.14159...</button>
+          <button class="qopt" onclick="q(this,'q1',false)">1.414...</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q1"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(2)">순환소수 표기 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s1" onclick="openMemo('s1')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s1"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s1"></div></div>
+  <div class="memo-input-area" id="mi-s1">
+    <textarea class="memo-textarea" id="mt-s1" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s1')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s1')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s1')">취소</button></div>
+  </div>
+</div>
+
+<!-- ════ 2. 순환소수의 표기 ════ -->
+<div class="section" id="s2">
+  <div class="sec-top"><div class="sec-badge">개념 2</div></div>
+  <div class="sec-title">순환소수의 표기</div>
+  <div class="sec-body chat-bg" id="chat-s2">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>0.333...을 매번 점 세 개로 쓰면 불편하겠지? 그래서 <strong>순환마디</strong>를 찾아 점으로 표기하는 방법이 있어. 순환마디는 반복되는 부분이야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>표기 규칙: 순환마디의 <strong>첫 자리</strong>와 <strong>끝 자리</strong> 숫자 위에 점을 찍어.</p>
+      </div>
+      <div style="background:white; border-radius:10px; padding:16px 18px; margin:10px 0; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+        <table class="tbl" style="margin:0;">
+          <thead><tr><th>원래 소수</th><th>순환마디</th><th>점 표기법</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>0.333...</td>
+              <td class="tbl-var">3</td>
+              <td>0.<span style="display:inline-block;position:relative;">3<span style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;color:var(--primary);">.</span></span></td>
+            </tr>
+            <tr>
+              <td>0.666...</td>
+              <td class="tbl-var">6</td>
+              <td>0.<span style="display:inline-block;position:relative;">6<span style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;color:var(--primary);">.</span></span></td>
+            </tr>
+            <tr>
+              <td>0.142857142857...</td>
+              <td class="tbl-var">142857</td>
+              <td>0.<span style="display:inline-block;position:relative;">1<span style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;color:var(--primary);">.</span></span>4285<span style="display:inline-block;position:relative;">7<span style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;color:var(--primary);">.</span></span></td>
+            </tr>
+            <tr>
+              <td>1.232323...</td>
+              <td class="tbl-var">23</td>
+              <td>1.<span style="display:inline-block;position:relative;">2<span style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;color:var(--primary);">.</span></span><span style="display:inline-block;position:relative;">3<span style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;color:var(--primary);">.</span></span></td>
+            </tr>
+            <tr>
+              <td>0.321321321...</td>
+              <td class="tbl-var">321</td>
+              <td>0.<span style="display:inline-block;position:relative;">3<span style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;color:var(--primary);">.</span></span>2<span style="display:inline-block;position:relative;">1<span style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;color:var(--primary);">.</span></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>점 두 개 찍는 게 헷갈려요. 1.232323...에서 왜 소수점 바로 뒤 1에는 점을 안 찍어요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>좋은 질문이야! 1.232323...에서 반복되는 부분은 <strong>23</strong>이야. 1은 반복 전에 딱 한 번만 나오는 숫자거든. 순환마디는 처음으로 반복이 시작되는 구간을 찾아야 해.</p>
+      </div>
+      <div class="point-box">
+        <p>점은 순환마디 전체의 <strong>첫 번째 자리</strong>와 <strong>마지막 자리</strong>에만 찍어. 순환마디가 한 자리면 그 숫자에만 점 하나 찍으면 돼.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">1.323232...의 순환마디는?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q2',false)">1</button>
+          <button class="qopt" onclick="q(this,'q2',false)">3</button>
+          <button class="qopt" onclick="q(this,'q2',true)">32</button>
+          <button class="qopt" onclick="q(this,'q2',false)">132</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q2"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(3)">유한소수 조건 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s2" onclick="openMemo('s2')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s2"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s2"></div></div>
+  <div class="memo-input-area" id="mi-s2">
+    <textarea class="memo-textarea" id="mt-s2" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s2')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s2')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s2')">취소</button></div>
+  </div>
+</div>
+
+<!-- ════ 3. 유한소수가 되는 조건 ════ -->
+<div class="section" id="s3">
+  <div class="sec-top"><div class="sec-badge teal">개념 3</div></div>
+  <div class="sec-title">유한소수가 되는 조건</div>
+  <div class="sec-body chat-bg" id="chat-s3">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>분수를 소수로 나타낼 때, 어떤 건 유한소수가 되고 어떤 건 무한소수가 될까? 규칙이 있어. 먼저 분수를 기약분수로 만들어봐.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>기약분수로 만든 다음 분모를 소인수분해해봐. 분모의 소인수가 <strong>2와 5만</strong>으로 이루어져 있으면 유한소수야.</p>
+      </div>
+      <div style="background:white; border-radius:10px; padding:16px 18px; margin:10px 0; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+        <table class="tbl" style="margin:0;">
+          <thead><tr><th>분수</th><th>기약분수</th><th>분모 소인수분해</th><th>결과</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="frac"><span class="num">3</span><span class="den">4</span></span></td>
+              <td><span class="frac"><span class="num">3</span><span class="den">4</span></span></td>
+              <td>4 = 2²</td>
+              <td class="tbl-yes">유한소수 (0.75)</td>
+            </tr>
+            <tr>
+              <td><span class="frac"><span class="num">7</span><span class="den">20</span></span></td>
+              <td><span class="frac"><span class="num">7</span><span class="den">20</span></span></td>
+              <td>20 = 2² × 5</td>
+              <td class="tbl-yes">유한소수 (0.35)</td>
+            </tr>
+            <tr>
+              <td><span class="frac"><span class="num">1</span><span class="den">6</span></span></td>
+              <td><span class="frac"><span class="num">1</span><span class="den">6</span></span></td>
+              <td>6 = 2 × 3</td>
+              <td class="tbl-no">순환소수 (0.1666...)</td>
+            </tr>
+            <tr>
+              <td><span class="frac"><span class="num">4</span><span class="den">12</span></span></td>
+              <td><span class="frac"><span class="num">1</span><span class="den">3</span></span></td>
+              <td>3 = 3</td>
+              <td class="tbl-no">순환소수 (0.333...)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>왜 하필 2랑 5만 돼요? 3이 분모에 있으면 왜 안 돼요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>우리가 쓰는 <strong>10진법</strong> 때문이야. 10 = 2 × 5잖아. 소수점 아래 자리는 10의 거듭제곱을 분모로 쓰는 거야. 그래서 분모를 10의 거듭제곱(10, 100, 1000...)으로 만들 수 있으면 유한소수가 돼.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row highlight"><span class="eq-num">예시</span><span class="eq-content"><span class="frac"><span class="num">3</span><span class="den">4</span></span> = <span class="frac"><span class="num">3</span><span class="den">2²</span></span> = <span class="frac"><span class="num">3 × 5²</span><span class="den">2² × 5²</span></span> = <span class="frac"><span class="num">75</span><span class="den">100</span></span> = <span class="mr">0.75</span></span></div>
+        <div class="eq-row"><span class="eq-num">핵심</span><span class="eq-content">분모에 2, 5 이외의 소인수가 있으면 10의 거듭제곱으로 만들 수 없어</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">다음 중 유한소수로 나타낼 수 있는 분수는?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q3',false)"><span class="frac"><span class="num">1</span><span class="den">3</span></span></button>
+          <button class="qopt" onclick="q(this,'q3',false)"><span class="frac"><span class="num">2</span><span class="den">9</span></span></button>
+          <button class="qopt" onclick="q(this,'q3',true)"><span class="frac"><span class="num">3</span><span class="den">8</span></span></button>
+          <button class="qopt" onclick="q(this,'q3',false)"><span class="frac"><span class="num">5</span><span class="den">12</span></span></button>
+        </div>
+        <div class="quiz-fb" id="qfb-q3"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(4)">순환소수를 분수로 변환 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s3" onclick="openMemo('s3')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s3"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s3"></div></div>
+  <div class="memo-input-area" id="mi-s3">
+    <textarea class="memo-textarea" id="mt-s3" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s3')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s3')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s3')">취소</button></div>
+  </div>
+</div>
+
+<!-- ════ 4. 순환소수를 분수로 나타내기 ════ -->
+<div class="section" id="s4">
+  <div class="sec-top"><div class="sec-badge teal">개념 4</div></div>
+  <div class="sec-title">순환소수를 분수로 나타내기</div>
+  <div class="sec-body chat-bg" id="chat-s4">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>순환소수도 분수로 나타낼 수 있어. 방법은 간단해 — <strong>x로 놓고, 10의 배수를 곱한 다음 빼는 거야.</strong></p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><strong>예제 1.</strong> 0.333...을 분수로 나타내기</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">① 설정</span><span class="eq-content"><span class="mv">x</span> = 0.333...</span></div>
+        <div class="eq-row"><span class="eq-num">② ×10</span><span class="eq-content"><span class="mv">10x</span> = 3.333...</span></div>
+        <div class="eq-row highlight"><span class="eq-num">③ 빼기</span><span class="eq-content"><span class="mv">10x</span> − <span class="mv">x</span> = 3.333... − 0.333... = <span class="mr">3</span></span></div>
+        <div class="eq-row result"><span class="eq-num">답</span><span class="eq-content"><span class="mv">9x</span> = 3 &nbsp;→&nbsp; <span class="mv">x</span> = <span class="frac" style="color:white;"><span class="num">3</span><span class="den">9</span></span> = <span class="mr"><span class="frac" style="color:#fca5a5;"><span class="num">1</span><span class="den">3</span></span></span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>왜 10을 곱해요? 100을 곱하면 안 돼요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>순환마디가 1자리면 10을 곱하면 돼. 핵심은 <strong>두 식에서 소수점 아래 반복 부분이 같아야 빼서 없앨 수 있어.</strong> 순환마디가 2자리면 100, 3자리면 1000을 곱해. 즉, 10^(순환마디 자릿수)야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><strong>예제 2.</strong> 0.121212...를 분수로 나타내기 (순환마디 2자리 → ×100)</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">① 설정</span><span class="eq-content"><span class="mv">x</span> = 0.121212...</span></div>
+        <div class="eq-row"><span class="eq-num">② ×100</span><span class="eq-content"><span class="mv">100x</span> = 12.121212...</span></div>
+        <div class="eq-row highlight"><span class="eq-num">③ 빼기</span><span class="eq-content"><span class="mv">99x</span> = <span class="mr">12</span></span></div>
+        <div class="eq-row result"><span class="eq-num">답</span><span class="eq-content"><span class="mv">x</span> = <span class="frac" style="color:white;"><span class="num">12</span><span class="den">99</span></span> = <span class="mr"><span class="frac" style="color:#fca5a5;"><span class="num">4</span><span class="den">33</span></span></span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><strong>예제 3.</strong> 0.1666...처럼 순환 안 하는 부분이 있을 때 (소수점 아래 1자리 뒤부터 순환)</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">① 설정</span><span class="eq-content"><span class="mv">x</span> = 0.1666...</span></div>
+        <div class="eq-row"><span class="eq-num">② ×10</span><span class="eq-content"><span class="mv">10x</span> = 1.666...</span></div>
+        <div class="eq-row"><span class="eq-num">③ ×100</span><span class="eq-content"><span class="mv">100x</span> = 16.666...</span></div>
+        <div class="eq-row highlight"><span class="eq-num">④ 빼기</span><span class="eq-content"><span class="mv">100x</span> − <span class="mv">10x</span> = 16.666... − 1.666... = <span class="mr">15</span></span></div>
+        <div class="eq-row result"><span class="eq-num">답</span><span class="eq-content"><span class="mv">90x</span> = 15 &nbsp;→&nbsp; <span class="mv">x</span> = <span class="frac" style="color:white;"><span class="num">15</span><span class="den">90</span></span> = <span class="mr"><span class="frac" style="color:#fca5a5;"><span class="num">1</span><span class="den">6</span></span></span></span></div>
+      </div>
+      <div class="point-box" style="margin-top:8px;">
+        <p>순환 안 하는 부분이 있을 때는 10을 두 번 곱해서 뺀다. 10^(순환마디 끝 자리) - 10^(순환 시작 전 자리) 로 나누면 돼.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">0.777...을 분수로 나타내면?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q4',false)"><span class="frac"><span class="num">7</span><span class="den">99</span></span></button>
+          <button class="qopt" onclick="q(this,'q4',true)"><span class="frac"><span class="num">7</span><span class="den">9</span></span></button>
+          <button class="qopt" onclick="q(this,'q4',false)"><span class="frac"><span class="num">7</span><span class="den">10</span></span></button>
+          <button class="qopt" onclick="q(this,'q4',false)"><span class="frac"><span class="num">77</span><span class="den">99</span></span></button>
+        </div>
+        <div class="quiz-fb" id="qfb-q4"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(5)">유리수와 소수의 관계 정리 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s4" onclick="openMemo('s4')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s4"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s4"></div></div>
+  <div class="memo-input-area" id="mi-s4">
+    <textarea class="memo-textarea" id="mt-s4" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s4')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s4')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s4')">취소</button></div>
+  </div>
+</div>
+
+<!-- ════ 5. 유리수와 소수의 관계 정리 ════ -->
+<div class="section" id="s5">
+  <div class="sec-top"><div class="sec-badge">개념 5</div></div>
+  <div class="sec-title">유리수와 소수의 관계 정리</div>
+  <div class="sec-body chat-bg" id="chat-s5">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>지금까지 배운 내용을 정리해보자. 유리수는 <strong>정수 p와 자연수 q로 이루어진 분수 p/q</strong> 형태로 나타낼 수 있는 수야. 그리고 유리수는 반드시 소수로 나타낼 수 있어.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>유리수를 소수로 나타내면 반드시 <strong>유한소수 또는 순환소수</strong> 중 하나야. 역도 성립해 — 유한소수나 순환소수는 반드시 분수, 즉 유리수로 나타낼 수 있어.</p>
+      </div>
+      <div class="summary-box indigo" style="margin-top:10px;">
+        <div class="sb-head">핵심 관계</div>
+        <div class="sb-body">유리수 = 유한소수 또는 순환소수</div>
+        <div class="sb-sub">순환하지 않는 무한소수 = 무리수 (유리수 아님)</div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>수의 체계를 다이어그램으로 보자.</p>
+      </div>
+      <div class="num-system" style="margin-top:10px;">
+        <div class="ns-box ns-real">
+          <div class="ns-label" style="color:#4338ca;">실수</div>
+          <div class="ns-box ns-rat" style="margin-top:8px;">
+            <div class="ns-label" style="color:var(--primary);">유리수</div>
+            <div class="ns-ex">분수 p/q 로 나타낼 수 있는 수</div>
+            <div class="ns-box ns-int" style="margin-top:8px;">
+              <div class="ns-label" style="color:var(--green);">정수</div>
+              <div class="ns-ex">..., -2, -1, 0, 1, 2, ...</div>
+            </div>
+            <div class="ns-box ns-frac" style="margin-top:4px;">
+              <div class="ns-label" style="color:var(--orange);">정수가 아닌 유리수</div>
+              <div class="ns-ex">유한소수: 0.5, 0.25 &nbsp;|&nbsp; 순환소수: 0.333..., 0.1666...</div>
+            </div>
+          </div>
+          <div class="ns-box ns-irr" style="margin-top:4px;">
+            <div class="ns-label" style="color:var(--red);">무리수</div>
+            <div class="ns-ex">순환하지 않는 무한소수: π, √2, √3, e, ...</div>
+          </div>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>그럼 무리수는 분수로 못 나타내요? 그게 무리수의 정의예요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아. 무리수는 <strong>유리수가 아닌 실수</strong>야. 즉 정수 p, 자연수 q에 대해 p/q 형태로 나타낼 수 없는 수가 무리수야. π를 3.14로 쓰는 건 근삿값이고, 정확한 값을 분수로는 절대 나타낼 수 없어.</p>
+      </div>
+      <div class="warn-box">
+        <p>유리수와 무리수는 겹치지 않아. 어떤 수는 유리수이거나, 아니면 무리수야. 둘 다이거나 둘 다 아닌 경우는 없어.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">다음 중 유리수인 것을 모두 고른 것은?<br><br>ㄱ. 0.5 &nbsp; ㄴ. √3 &nbsp; ㄷ. 0.121212... &nbsp; ㄹ. π</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q5',false)">ㄱ, ㄴ</button>
+          <button class="qopt" onclick="q(this,'q5',true)">ㄱ, ㄷ</button>
+          <button class="qopt" onclick="q(this,'q5',false)">ㄴ, ㄹ</button>
+          <button class="qopt" onclick="q(this,'q5',false)">ㄱ, ㄴ, ㄷ</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q5"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(6)">종합 퀴즈 풀기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s5" onclick="openMemo('s5')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s5"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s5"></div></div>
+  <div class="memo-input-area" id="mi-s5">
+    <textarea class="memo-textarea" id="mt-s5" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s5')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s5')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s5')">취소</button></div>
+  </div>
+</div>
+
+<!-- ════ 6. 종합 퀴즈 ════ -->
+<div class="section" id="s6">
+  <div class="sec-top"><div class="sec-badge green">종합 퀴즈</div></div>
+  <div class="sec-title">지금까지 이해한 것 점검</div>
+  <div class="sec-body chat-bg" id="chat-s6">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>5문제야. 모두 풀면 점수 확인 버튼이 활성화돼.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">시작 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 1 / 5</div>
+        <div class="quiz-q">다음 중 순환소수인 것은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f1',false)">0.25</button>
+          <button class="qopt" onclick="fin(this,'f1',false)">√2 = 1.41421...</button>
+          <button class="qopt" onclick="fin(this,'f1',true)">0.142857142857...</button>
+          <button class="qopt" onclick="fin(this,'f1',false)">π = 3.14159...</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f1"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 2 / 5</div>
+        <div class="quiz-q">2.353535...를 점 표기법으로 옳게 나타낸 것은?<br><span style="font-size:12px; color:var(--gray-500); font-weight:400;">(위 첨자 점은 해당 숫자 위에 점을 찍는 것을 의미합니다)</span></div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f2',false)" style="font-size:13px;">순환마디: 235</button>
+          <button class="qopt" onclick="fin(this,'f2',true)" style="font-size:13px;">순환마디: 35, 첫 자리(3)와 끝 자리(5)에 점</button>
+          <button class="qopt" onclick="fin(this,'f2',false)" style="font-size:13px;">순환마디: 2, 2에만 점</button>
+          <button class="qopt" onclick="fin(this,'f2',false)" style="font-size:13px;">순환마디: 53, 5와 3에 점</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f2"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 3 / 5</div>
+        <div class="quiz-q"><span class="frac"><span class="num">7</span><span class="den">40</span></span>은 유한소수로 나타낼 수 있는가? 그 이유는?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f3',true)" style="font-size:13px;">가능. 40 = 2³ × 5이므로 분모의 소인수가 2와 5뿐</button>
+          <button class="qopt" onclick="fin(this,'f3',false)" style="font-size:13px;">불가능. 분자 7이 홀수이므로</button>
+          <button class="qopt" onclick="fin(this,'f3',false)" style="font-size:13px;">불가능. 40에 3이 포함되어 있으므로</button>
+          <button class="qopt" onclick="fin(this,'f3',false)" style="font-size:13px;">가능. 분자가 분모보다 작으므로</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f3"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 4 / 5</div>
+        <div class="quiz-q">0.444...를 분수로 나타내면?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f4',false)"><span class="frac"><span class="num">4</span><span class="den">10</span></span></button>
+          <button class="qopt" onclick="fin(this,'f4',false)"><span class="frac"><span class="num">4</span><span class="den">99</span></span></button>
+          <button class="qopt" onclick="fin(this,'f4',true)"><span class="frac"><span class="num">4</span><span class="den">9</span></span></button>
+          <button class="qopt" onclick="fin(this,'f4',false)"><span class="frac"><span class="num">44</span><span class="den">99</span></span></button>
+        </div>
+        <div class="quiz-fb" id="qfb-f4"></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s6')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="quiz">
+        <div class="quiz-label">문제 5 / 5</div>
+        <div class="quiz-q">다음 중 무리수인 것은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f5',false)">0.333...</button>
+          <button class="qopt" onclick="fin(this,'f5',false)"><span class="frac"><span class="num">22</span><span class="den">7</span></span></button>
+          <button class="qopt" onclick="fin(this,'f5',true)">√5</button>
+          <button class="qopt" onclick="fin(this,'f5',false)">0.125</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f5"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;">
+        <button class="score-check-btn" id="score-btn" onclick="showScore()">점수 확인하기</button>
+      </div>
+      <div id="score-panel" class="score-panel">
+        <div class="score-num" id="score-num">0</div>
+        <div class="score-of">/ 100점</div>
+        <div class="score-msg" id="score-msg"></div>
+        <div class="score-detail" id="score-detail"></div>
+        <button class="restart-btn" onclick="location.reload()">처음부터 다시 풀기</button>
+        <br>
+        <button class="toc-btn" onclick="go(1)">개념 1로 돌아가기</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s6" onclick="openMemo('s6')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s6"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s6"></div></div>
+  <div class="memo-input-area" id="mi-s6">
+    <textarea class="memo-textarea" id="mt-s6" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions"><button class="memo-save-btn" onclick="saveMemo('s6')">저장</button><button class="memo-delete-btn" onclick="deleteMemo('s6')">삭제</button><button class="memo-cancel-btn" onclick="closeMemo('s6')">취소</button></div>
+  </div>
+</div>
+
+<button class="memo-float-btn" id="memo-float-btn" onclick="openMemoList()">수정 요청 목록 <span class="memo-count" id="memo-float-count">0</span></button>
+<div class="memo-list-overlay" id="memo-list-overlay" onclick="if(event.target===this)closeMemoList()">
+  <div class="memo-list-sheet">
+    <div class="memo-list-title">수정 요청 목록 <button class="memo-list-close" onclick="closeMemoList()">닫기</button></div>
+    <div id="memo-list-body"></div>
+  </div>
+</div>
+
+<script>
+/* 학생 이름 */
+const STUDENT_NAME = localStorage.getItem('studentName') || '태린';
+function hasJongseong(name) {
+  const code = name.charCodeAt(name.length - 1);
+  return (code - 0xAC00) % 28 > 0;
+}
+const STUDENT_CALL = STUDENT_NAME + (hasJongseong(STUDENT_NAME) ? '아' : '야');
+function initStudentNames() {
+  document.querySelectorAll('.s-name-slot').forEach(el => { el.textContent = STUDENT_NAME; });
+  document.querySelectorAll('.s-call-slot').forEach(el => { el.textContent = STUDENT_CALL; });
+  const p = getProgress(); p.studentName = STUDENT_NAME; saveProgress(p);
+}
+
+/* 학습 추적 */
+const TRACK_KEY = 'mathTalk_progress';
+const UNIT_KEY = '유리수와소수';
+function getProgress() { try { return JSON.parse(localStorage.getItem(TRACK_KEY)) || {}; } catch(e) { return {}; } }
+function saveProgress(d) { localStorage.setItem(TRACK_KEY, JSON.stringify(d)); }
+let _curSec = null, _secStart = null, _stepStart = null;
+function trackEnter(secId) {
+  const now = Date.now(); _curSec = secId; _secStart = now; _stepStart = now;
+  const p = getProgress();
+  if (!p.units) p.units = {};
+  if (!p.units[UNIT_KEY]) p.units[UNIT_KEY] = {};
+  if (!p.units[UNIT_KEY][secId]) p.units[UNIT_KEY][secId] = { firstVisit:now, totalTime:0, stepTimes:[], quizzes:{} };
+  p.units[UNIT_KEY][secId].lastVisit = now; saveProgress(p);
+}
+function trackLeave() {
+  if (!_curSec || !_secStart) return;
+  const elapsed = Math.floor((Date.now()-_secStart)/1000);
+  const p = getProgress();
+  if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][_curSec])
+    p.units[UNIT_KEY][_curSec].totalTime = (p.units[UNIT_KEY][_curSec].totalTime||0)+elapsed;
+  saveProgress(p); _curSec = null; _secStart = null;
+}
+function trackStep(secId) {
+  const now = Date.now();
+  if (_stepStart) {
+    const elapsed = Math.floor((now-_stepStart)/1000);
+    const p = getProgress();
+    if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][secId])
+      p.units[UNIT_KEY][secId].stepTimes.push(elapsed);
+    saveProgress(p);
+  }
+  _stepStart = now;
+}
+function trackQuiz(secId, qId, correct) {
+  const p = getProgress();
+  if (!p.units) p.units = {};
+  if (!p.units[UNIT_KEY]) p.units[UNIT_KEY] = {};
+  if (!p.units[UNIT_KEY][secId]) p.units[UNIT_KEY][secId] = { totalTime:0, stepTimes:[], quizzes:{} };
+  if (!p.units[UNIT_KEY][secId].quizzes) p.units[UNIT_KEY][secId].quizzes = {};
+  p.units[UNIT_KEY][secId].quizzes[qId] = { correct, time:Date.now() }; saveProgress(p);
+}
+function trackComplete(secId) {
+  const p = getProgress();
+  if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][secId]) {
+    p.units[UNIT_KEY][secId].completed = true;
+    p.units[UNIT_KEY][secId].completedAt = Date.now();
+  }
+  saveProgress(p);
+}
+
+/* 대화 진행 */
+function nextStep(secId) {
+  const steps = Array.from(document.querySelectorAll('#chat-'+secId+' .chat-step'));
+  let lastIdx = -1;
+  steps.forEach((s,i) => { if(s.classList.contains('visible')) lastIdx = i; });
+  if (lastIdx < steps.length-1) {
+    trackStep(secId);
+    const next = steps[lastIdx+1];
+    next.classList.add('visible');
+    setTimeout(() => next.scrollIntoView({behavior:'smooth',block:'start'}), 60);
+  }
+}
+
+/* 섹션 이동 */
+const labels = {
+  s1:'개념 1 — 유한소수와 무한소수',
+  s2:'개념 2 — 순환소수의 표기',
+  s3:'개념 3 — 유한소수가 되는 조건',
+  s4:'개념 4 — 순환소수를 분수로 나타내기',
+  s5:'개념 5 — 유리수와 소수의 관계 정리',
+  s6:'종합 퀴즈'
+};
+const TOTAL = 6;
+
+function show(n) {
+  trackLeave();
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('s'+n);
+  el.classList.add('active');
+  document.getElementById('prog-label').textContent = labels['s'+n];
+  const pct = Math.round((n/TOTAL)*100);
+  document.getElementById('prog-pct').textContent = pct+'%';
+  document.getElementById('prog-fill').style.width = pct+'%';
+  setTimeout(() => window.scrollTo(0,0), 30);
+  trackEnter('s'+n);
+}
+function go(n) { show(n); }
+
+/* 확인 문제 */
+const qMsg = {
+  q1:{ ok:'0.25는 소수점 아래 자리가 유한하므로 유한소수예요. 나머지는 모두 끝없이 계속되는 무한소수예요.', no:'유한소수는 소수점 아래 자리가 딱 끝나는 수예요. 0.333...은 끝없이 3이 반복되고, 3.14159...와 1.414...는 끝없이 계속돼요.' },
+  q2:{ ok:'1.323232...에서 소수점 첫째 자리 1은 순환 전 숫자이고, 이후 32가 반복돼요. 순환마디는 32예요.', no:'소수를 자세히 보면 1.32 3232...처럼 32가 반복돼요. 순환마디는 32예요.' },
+  q3:{ ok:'3/8에서 8 = 2³이므로 분모의 소인수가 2만 있어요. 유한소수가 가능해요! (3/8 = 0.375)', no:'기약분수의 분모를 소인수분해해봐요. 3은 분모가 3, 9는 분모가 3², 12는 분모가 2²×3이라 모두 3이 포함돼요. 8 = 2³은 2만 있어요.' },
+  q4:{ ok:'x = 0.777...로 놓으면 10x = 7.777..., 10x - x = 7, 9x = 7, x = 7/9예요.', no:'x = 0.777...로 놓고 10x = 7.777...에서 두 식을 빼봐요. 9x = 7, x = 7/9이에요.' },
+  q5:{ ok:'0.5는 유한소수 (유리수), 0.121212...는 순환소수 (유리수)예요. √3과 π는 순환하지 않는 무한소수라 무리수예요.', no:'유리수는 유한소수나 순환소수로 나타낼 수 있어요. √3과 π는 끝없이 불규칙하게 이어지므로 무리수예요.' },
+};
+function q(el, id, correct) {
+  const opts = el.parentNode.querySelectorAll('.qopt');
+  opts.forEach(o => { o.disabled = true; });
+  el.classList.add(correct ? 'correct' : 'wrong');
+  const fb = document.getElementById('qfb-'+id);
+  fb.textContent = correct ? qMsg[id].ok : qMsg[id].no;
+  fb.className = 'quiz-fb '+(correct?'ok':'no');
+  const secEl = el.closest('.section');
+  trackQuiz(secEl ? secEl.id : (_curSec||'unknown'), id, correct);
+}
+
+/* 종합 퀴즈 */
+const finAnswers = {};
+const fMsg = {
+  f1:{ ok:'0.142857142857...는 142857이 반복되는 순환소수예요. 실제로 1/7 = 0.142857...이에요.', no:'순환소수는 무한소수 중 일정 부분이 반복되는 수예요. 0.25는 유한소수, √2와 π는 순환하지 않는 무한소수(무리수)예요.' },
+  f2:{ ok:'2.353535...에서 정수 부분 2 뒤로 35가 반복돼요. 순환마디는 35, 첫 자리 3과 끝 자리 5에 점을 찍어요.', no:'2.353535...에서 어떤 부분이 반복되는지 확인해봐요. 2 다음에 35가 계속 반복돼요. 순환마디는 35예요.' },
+  f3:{ ok:'40 = 2³ × 5 — 소인수가 2와 5뿐이에요. 유한소수로 나타낼 수 있어요. (7/40 = 0.175)', no:'분모 40을 소인수분해해봐요. 40 = 2³ × 5이므로 소인수에 2와 5만 있어요. 유한소수가 돼요.' },
+  f4:{ ok:'x = 0.444...로 놓으면 10x = 4.444..., 9x = 4, x = 4/9예요.', no:'x = 0.444...로 놓고 10을 곱해봐요. 10x = 4.444... 이므로 9x = 4, x = 4/9예요.' },
+  f5:{ ok:'√5는 소수로 나타내면 2.2360679...로 순환하지 않는 무한소수 — 무리수예요.', no:'0.333...은 순환소수(유리수), 22/7은 분수(유리수), 0.125는 유한소수(유리수)예요. √5는 분수로 나타낼 수 없어요.' },
+};
+function fin(el, id, correct) {
+  const opts = el.parentNode.querySelectorAll('.qopt');
+  opts.forEach(o => { o.disabled = true; });
+  el.classList.add(correct ? 'correct' : 'wrong');
+  finAnswers[id] = correct;
+  const fb = document.getElementById('qfb-'+id);
+  fb.textContent = correct ? fMsg[id].ok : fMsg[id].no;
+  fb.className = 'quiz-fb '+(correct?'ok':'no');
+  trackQuiz('s6', id, correct);
+  const allIds = ['f1','f2','f3','f4','f5'];
+  if (allIds.every(k => k in finAnswers)) {
+    document.getElementById('score-btn').className = 'score-check-btn ready';
+  }
+}
+function showScore() {
+  const allIds = ['f1','f2','f3','f4','f5'];
+  if (!allIds.every(k => k in finAnswers)) return;
+  const score = allIds.filter(k => finAnswers[k]).length * 20;
+  document.getElementById('score-num').textContent = score;
+  const msgs = {
+    100:'완벽해! 유리수와 소수 마스터!',
+    80:'거의 다 왔어! 조금만 더 복습하면 완벽해.',
+    60:'절반 이상이야. 틀린 부분 복습하면 돼.',
+    40:'다시 한 번 개념 정리해보자.',
+    20:'처음부터 차근차근 다시 해보자.',
+    0:'포기하지 마. 다시 시작하면 돼.'
+  };
+  document.getElementById('score-msg').textContent = msgs[score] || '';
+  const wrong = allIds.filter(k => !finAnswers[k]).length;
+  document.getElementById('score-detail').textContent = wrong > 0 ? `${wrong}문제 틀림 — 해설을 다시 읽어봐요.` : '전부 맞았어요!';
+  document.getElementById('score-panel').style.display = 'block';
+  trackComplete('s6');
+  if (score === 100) confetti();
+}
+
+/* 수정 요청 메모 */
+const MEMO_PREFIX = 'yp-memo-';
+const sectionNames = { s1:'개념 1', s2:'개념 2', s3:'개념 3', s4:'개념 4', s5:'개념 5', s6:'종합 퀴즈' };
+function initMemos() {
+  let count = 0;
+  Object.keys(sectionNames).forEach(id => {
+    const val = localStorage.getItem(MEMO_PREFIX+id);
+    if (val) { count++; showMemoBanner(id,val); markBtn(id,true); }
+  });
+  updateFloatBtn(count);
+}
+function openMemo(id) {
+  const area = document.getElementById('mi-'+id);
+  const ta = document.getElementById('mt-'+id);
+  const saved = localStorage.getItem(MEMO_PREFIX+id);
+  ta.value = saved||''; area.classList.add('show'); ta.focus();
+}
+function closeMemo(id) { document.getElementById('mi-'+id).classList.remove('show'); }
+function saveMemo(id) {
+  const val = document.getElementById('mt-'+id).value.trim();
+  if (!val) { deleteMemo(id); return; }
+  localStorage.setItem(MEMO_PREFIX+id, val); showMemoBanner(id,val); markBtn(id,true); closeMemo(id); updateFloatBtn(countMemos());
+}
+function deleteMemo(id) {
+  localStorage.removeItem(MEMO_PREFIX+id);
+  document.getElementById('mb-'+id).classList.remove('show'); markBtn(id,false); closeMemo(id); updateFloatBtn(countMemos());
+}
+function showMemoBanner(id,val) {
+  const b = document.getElementById('mb-'+id); document.getElementById('mbt-'+id).textContent = val; b.classList.add('show');
+}
+function markBtn(id,has) { document.getElementById('eb-'+id).classList.toggle('has-memo',has); }
+function countMemos() { return Object.keys(sectionNames).filter(id => localStorage.getItem(MEMO_PREFIX+id)).length; }
+function updateFloatBtn(count) {
+  const btn = document.getElementById('memo-float-btn');
+  btn.style.display = count > 0 ? 'block' : 'none';
+  document.getElementById('memo-float-count').textContent = count;
+}
+function openMemoList() {
+  const body = document.getElementById('memo-list-body'); body.innerHTML = ''; let has = false;
+  Object.keys(sectionNames).forEach(id => {
+    const val = localStorage.getItem(MEMO_PREFIX+id);
+    if (val) { has = true; body.innerHTML += `<div class="memo-list-item"><div class="memo-list-item-label">${sectionNames[id]}</div><div class="memo-list-item-text">${val}</div></div>`; }
+  });
+  if (!has) body.innerHTML = '<p style="color:var(--gray-400);font-size:14px;">수정 요청이 없어요.</p>';
+  document.getElementById('memo-list-overlay').classList.add('open');
+}
+function closeMemoList() { document.getElementById('memo-list-overlay').classList.remove('open'); }
+
+/* confetti */
+function confetti() {
+  const colors = ['#4f46e5','#059669','#dc2626','#d97706','#0ea5e9'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div'); el.className = 'cf';
+    el.style.cssText = `left:${Math.random()*100}vw;top:-10px;width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*1.5}s;animation-delay:${Math.random()*0.5}s;`;
+    document.body.appendChild(el); setTimeout(() => el.remove(), 3500);
+  }
+}
+
+window.onload = () => { show(1); initMemos(); initStudentNames(); };
+</script>
+</body>
+</html>

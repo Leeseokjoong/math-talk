@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>땡중샘 수학톡 | 일차부등식</title>
+<style>
+:root {
+  --primary: #4f46e5; --primary-bg: #eef2ff; --primary-border: #c7d2fe;
+  --accent: #0ea5e9; --accent-bg: #e0f2fe;
+  --green: #059669; --green-bg: #d1fae5;
+  --red: #dc2626; --red-bg: #fee2e2;
+  --orange: #d97706; --orange-bg: #fef3c7;
+  --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+  --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280;
+  --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacSystemFont,sans-serif; background:#f5f5f7; color:var(--gray-800); line-height:1.75; -webkit-font-smoothing:antialiased; }
+
+.header { background:var(--gray-900); color:white; padding:40px 24px 36px; text-align:center; }
+.header-eyebrow { font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#a5b4fc; margin-bottom:10px; }
+.header h1 { font-size:clamp(24px,5vw,32px); font-weight:800; letter-spacing:-0.5px; }
+.header p { margin-top:10px; font-size:14px; color:#9ca3af; }
+
+.progress-wrap { background:white; padding:14px 24px; border-bottom:1px solid var(--gray-200); position:sticky; top:0; z-index:100; box-shadow:0 1px 8px rgba(0,0,0,0.06); }
+.progress-meta { display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:var(--gray-500); margin-bottom:8px; }
+.progress-bar { height:4px; background:var(--gray-200); border-radius:99px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--primary); border-radius:99px; transition:width 0.5s ease; width:0%; }
+
+.section { background:white; border-radius:16px; margin:20px 16px; box-shadow:0 1px 6px rgba(0,0,0,0.07); display:none; animation:fadeUp 0.35s ease; }
+.section.active { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)} }
+.sec-top { padding:22px 28px 0; }
+.sec-badge { display:inline-block; font-size:11px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:var(--primary); background:var(--primary-bg); border-radius:6px; padding:3px 10px; }
+.sec-badge.teal { color:var(--accent); background:var(--accent-bg); }
+.sec-badge.green { color:var(--green); background:var(--green-bg); }
+.sec-title { font-size:18px; font-weight:800; color:var(--gray-900); margin-top:8px; padding:0 28px; line-height:1.4; }
+
+.chat-bg { background:#b2c7d9; border-radius:0 0 16px 16px; padding:18px 16px 24px !important; }
+.chat-step { display:none; animation:fadeUp 0.35s ease; }
+.chat-step.visible { display:block; }
+.t-name { font-size:11px; font-weight:800; color:var(--gray-500); letter-spacing:0.8px; margin-bottom:8px; }
+.t-msg { background:white; color:var(--gray-800); border-radius:4px 16px 16px 16px; padding:14px 16px; margin-bottom:6px; box-shadow:0 1px 4px rgba(0,0,0,0.10); }
+.t-msg p { font-size:14px; line-height:1.85; }
+.s-name { font-size:11px; font-weight:800; color:#b8960a; letter-spacing:0.8px; margin-bottom:6px; }
+.s-msg { background:#FEE500; border-radius:16px 4px 16px 16px; padding:14px 16px; margin-bottom:6px; margin-left:24px; box-shadow:0 1px 4px rgba(0,0,0,0.10); }
+.s-msg p { font-size:14px; line-height:1.85; color:var(--gray-800); }
+.chat-gap { height:8px; }
+.cont-wrap { text-align:center; margin-top:18px; }
+.cont-btn { background:white; color:var(--gray-700); border:1.5px solid var(--gray-300); border-radius:99px; padding:10px 28px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+.cont-btn:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-bg); }
+
+.math-block { background:var(--gray-900); color:#a5b4fc; border-radius:10px; padding:16px 20px; font-family:'Courier New',monospace; font-size:15px; margin:8px 0 10px; line-height:2; }
+.eq-steps { background:var(--gray-50); border-radius:10px; overflow:hidden; margin:8px 0 10px; }
+.eq-row { display:flex; align-items:baseline; gap:12px; padding:11px 16px; border-bottom:1px solid var(--gray-100); font-size:14px; }
+.eq-row:last-child { border-bottom:none; }
+.eq-row.highlight { background:var(--primary-bg); }
+.eq-row.warn { background:var(--red-bg); }
+.eq-row.result { background:var(--gray-900); color:white; }
+.eq-num { font-size:11px; font-weight:700; color:var(--gray-400); min-width:80px; flex-shrink:0; }
+.eq-row.result .eq-num { color:#6b7280; }
+.eq-content { flex:1; }
+.mv { color:var(--primary); font-weight:700; }
+.eq-row.result .mv { color:#a5b4fc; }
+.mr { color:var(--red); font-weight:700; }
+.eq-row.result .mr { color:#fca5a5; }
+.hi { color:var(--orange); font-weight:700; }
+.note { font-size:12px; color:var(--gray-400); }
+.point-box { background:var(--primary-bg); border-left:3px solid var(--primary); border-radius:0 10px 10px 0; padding:16px 18px; margin:8px 0 10px; }
+.point-box p { font-size:14px; line-height:1.8; color:var(--gray-700); }
+.warn-box { background:var(--red-bg); border-left:3px solid var(--red); border-radius:0 10px 10px 0; padding:16px 18px; margin:8px 0 10px; }
+.warn-box p { font-size:14px; line-height:1.8; color:var(--gray-700); }
+.summary-box { border-radius:10px; padding:18px 20px; margin:8px 0 10px; }
+.summary-box.indigo { background:var(--primary-bg); border:1.5px solid var(--primary-border); }
+.sb-head { font-size:13px; font-weight:800; color:var(--primary); margin-bottom:6px; }
+.sb-body { font-size:15px; font-weight:700; color:var(--gray-900); }
+.sb-sub { font-size:13px; color:var(--gray-500); margin-top:4px; }
+
+.tbl { width:100%; border-collapse:collapse; font-size:14px; margin:8px 0 10px; }
+.tbl th { background:var(--gray-900); color:white; padding:10px 14px; font-weight:700; font-size:13px; text-align:left; }
+.tbl td { padding:10px 14px; border-bottom:1px solid var(--gray-100); vertical-align:middle; }
+.tbl tbody tr:last-child td { border-bottom:none; }
+.tbl tbody tr:nth-child(even) { background:var(--gray-50); }
+.tbl-var { color:var(--primary); font-weight:700; }
+.tbl-yes { color:var(--green); font-weight:700; }
+.tbl-no { color:var(--red); font-weight:700; }
+
+/* 수직선 */
+.numline-wrap { margin:10px 0; padding:16px 20px; background:var(--gray-50); border-radius:10px; }
+.numline-label { font-size:12px; font-weight:700; color:var(--gray-500); margin-bottom:8px; }
+.numline { position:relative; height:32px; }
+.nl-axis { position:absolute; top:50%; left:0; right:0; height:2px; background:var(--gray-400); transform:translateY(-50%); }
+.nl-arrow { position:absolute; top:50%; right:-2px; transform:translateY(-50%); width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:8px solid var(--gray-400); }
+.nl-tick { position:absolute; top:50%; width:1px; height:12px; background:var(--gray-400); transform:translate(-50%,-50%); }
+.nl-label { position:absolute; top:100%; transform:translateX(-50%); font-size:11px; font-weight:700; color:var(--gray-600); margin-top:2px; }
+.nl-range { position:absolute; top:50%; height:4px; background:var(--primary); transform:translateY(-50%); opacity:0.7; }
+.nl-dot { position:absolute; top:50%; width:12px; height:12px; border-radius:50%; transform:translate(-50%,-50%); z-index:2; }
+.nl-dot.filled { background:var(--primary); }
+.nl-dot.empty { background:white; border:2.5px solid var(--primary); }
+
+.quiz { background:var(--gray-50); border-radius:12px; padding:18px; margin:8px 0 10px; }
+.quiz-label { font-size:11px; font-weight:800; color:var(--primary); letter-spacing:0.8px; margin-bottom:8px; }
+.quiz-q { font-size:15px; font-weight:700; color:var(--gray-900); margin-bottom:14px; line-height:1.6; }
+.quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.qopt { background:white; border:1.5px solid var(--gray-200); border-radius:8px; padding:11px 14px; font-size:14px; font-family:inherit; font-weight:600; color:var(--gray-700); cursor:pointer; transition:all 0.15s; text-align:left; }
+.qopt:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-bg); }
+.qopt.correct { background:var(--green-bg); border-color:var(--green); color:var(--green); }
+.qopt.wrong { background:var(--red-bg); border-color:var(--red); color:var(--red); }
+.qopt:disabled { cursor:not-allowed; }
+.quiz-fb { font-size:13px; color:var(--gray-600); margin-top:10px; min-height:18px; line-height:1.6; }
+.quiz-fb.ok { color:var(--green); font-weight:600; }
+.quiz-fb.no { color:var(--red); font-weight:600; }
+
+.score-panel { display:none; background:var(--gray-900); color:white; border-radius:12px; padding:36px; text-align:center; margin-top:20px; animation:fadeUp 0.4s ease; }
+.score-num { font-size:60px; font-weight:900; line-height:1; }
+.score-of { font-size:14px; color:#6b7280; margin-top:4px; }
+.score-msg { font-size:20px; font-weight:800; margin-top:18px; }
+.score-detail { font-size:14px; color:#9ca3af; margin-top:6px; }
+.restart-btn { margin-top:20px; background:white; color:var(--gray-900); border:none; border-radius:8px; padding:11px 28px; font-size:14px; font-weight:700; cursor:pointer; }
+.toc-btn { margin-top:12px; background:var(--primary); color:white; border:none; border-radius:8px; padding:11px 28px; font-size:14px; font-weight:700; cursor:pointer; }
+
+.next-wrap { text-align:center; margin-top:22px; }
+.next-btn { background:var(--gray-900); color:white; border:none; border-radius:8px; padding:13px 36px; font-size:15px; font-weight:700; cursor:pointer; transition:all 0.18s; }
+.next-btn:hover { background:var(--primary); }
+.score-check-btn { background:var(--gray-300); color:var(--gray-500); border:none; border-radius:8px; padding:13px 36px; font-size:15px; font-weight:700; cursor:not-allowed; transition:all 0.2s; }
+.score-check-btn.ready { background:var(--primary); color:white; cursor:pointer; }
+
+.edit-bar { display:flex; align-items:center; justify-content:flex-end; padding:10px 20px 14px; border-top:1px solid var(--gray-100); margin-top:4px; }
+.edit-request-btn { background:none; border:1.5px dashed var(--gray-300); border-radius:6px; padding:5px 12px; font-size:12px; font-weight:600; color:var(--gray-400); cursor:pointer; transition:all 0.15s; }
+.edit-request-btn:hover { border-color:var(--orange); color:var(--orange); background:var(--orange-bg); }
+.edit-request-btn.has-memo { border-color:var(--orange); color:var(--orange); background:var(--orange-bg); border-style:solid; }
+.memo-banner { margin:0 20px 14px; background:#fffbeb; border:1.5px solid #fcd34d; border-radius:8px; padding:12px 14px; display:none; }
+.memo-banner.show { display:block; }
+.memo-banner-label { font-size:11px; font-weight:700; color:var(--orange); margin-bottom:4px; }
+.memo-banner-text { font-size:14px; color:var(--gray-700); white-space:pre-wrap; }
+.memo-input-area { display:none; margin:0 20px 14px; background:#fffbeb; border:1.5px solid #fcd34d; border-radius:8px; padding:14px; }
+.memo-input-area.show { display:block; }
+.memo-textarea { width:100%; border:1px solid #fcd34d; border-radius:6px; padding:10px 12px; font-size:14px; font-family:inherit; resize:vertical; min-height:80px; outline:none; background:white; }
+.memo-textarea:focus { border-color:var(--orange); }
+.memo-actions { display:flex; gap:8px; margin-top:10px; }
+.memo-save-btn { background:var(--orange); color:white; border:none; border-radius:6px; padding:8px 18px; font-size:13px; font-weight:700; cursor:pointer; }
+.memo-delete-btn { background:white; color:var(--red); border:1.5px solid var(--red); border-radius:6px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; }
+.memo-cancel-btn { background:white; color:var(--gray-500); border:1.5px solid var(--gray-200); border-radius:6px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; }
+.memo-float-btn { position:fixed; bottom:24px; right:20px; background:var(--orange); color:white; border:none; border-radius:99px; padding:12px 20px; font-size:13px; font-weight:700; cursor:pointer; box-shadow:0 4px 16px rgba(217,119,6,0.4); z-index:50; transition:all 0.2s; display:none; }
+.memo-count { background:white; color:var(--orange); border-radius:99px; padding:1px 7px; font-size:12px; font-weight:900; margin-left:6px; }
+.memo-list-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:200; align-items:flex-end; justify-content:center; }
+.memo-list-overlay.open { display:flex; }
+.memo-list-sheet { background:white; border-radius:16px 16px 0 0; padding:24px 22px 36px; width:100%; max-width:740px; max-height:70vh; overflow-y:auto; animation:slideUp 0.25s ease; }
+@keyframes slideUp { from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1} }
+.memo-list-title { font-size:17px; font-weight:900; color:var(--gray-900); margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; }
+.memo-list-close { background:var(--gray-100); border:none; border-radius:6px; padding:6px 14px; font-size:13px; font-weight:700; cursor:pointer; color:var(--gray-700); }
+.memo-list-item { background:#fffbeb; border:1.5px solid #fcd34d; border-radius:8px; padding:12px 14px; margin-bottom:10px; }
+.memo-list-item-label { font-size:11px; font-weight:700; color:var(--orange); margin-bottom:4px; }
+.memo-list-item-text { font-size:14px; color:var(--gray-700); white-space:pre-wrap; }
+
+.frac { display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; font-size:0.88em; line-height:1.15; margin:0 2px; }
+.frac .num { border-bottom:1.5px solid currentColor; padding:0 4px 2px; text-align:center; white-space:nowrap; }
+.frac .den { padding:2px 4px 0; text-align:center; white-space:nowrap; }
+
+.cf { position:fixed; border-radius:2px; pointer-events:none; z-index:9999; animation:cfFall linear forwards; }
+@keyframes cfFall { 0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)} }
+
+@media(max-width:520px){
+  .sec-top,.sec-body{padding-left:18px;padding-right:18px;}
+  .sec-title{padding-left:18px;padding-right:18px;}
+  .quiz-opts{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">땡중샘 수학톡 (중학수학)</div>
+  <h1>일차부등식</h1>
+  <p>중학교 2학년 · 대화로 배우는 수학</p>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-meta">
+    <span id="prog-label">개념 1 — 부등식의 뜻과 부등호</span>
+    <span id="prog-pct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+</div>
+
+<!-- ════ 1. 부등식의 뜻과 부등호 ════ -->
+<div class="section active" id="s1">
+  <div class="sec-top"><div class="sec-badge">개념 1</div></div>
+  <div class="sec-title">부등식의 뜻과 부등호</div>
+  <div class="sec-body chat-bg" id="chat-s1">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><span class="s-call-slot">태린아</span>, 방정식은 알지? 등호(=)를 쓰는 식이잖아. 오늘 배울 <strong>부등식</strong>은 '같다' 대신 <strong>크다, 작다</strong>는 관계를 나타내는 식이야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>그럼 x &gt; 3 이런 것도 부등식이에요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아! 부등호(&gt;, &lt;, &ge;, &le;)를 사용한 식이 바로 부등식이야. 네 가지 부등호의 의미를 정리해 볼게.</p>
+      </div>
+      <table class="tbl" style="margin-top:10px;">
+        <thead><tr><th>부등호</th><th>읽는 법</th><th>의미</th></tr></thead>
+        <tbody>
+          <tr><td class="tbl-var">a &gt; b</td><td>a는 b보다 크다</td><td>a가 b 초과</td></tr>
+          <tr><td class="tbl-var">a &lt; b</td><td>a는 b보다 작다</td><td>a가 b 미만</td></tr>
+          <tr><td class="tbl-var">a &ge; b</td><td>a는 b 이상이다</td><td>a &gt; b 또는 a = b</td></tr>
+          <tr><td class="tbl-var">a &le; b</td><td>a는 b 이하이다</td><td>a &lt; b 또는 a = b</td></tr>
+        </tbody>
+      </table>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>'이상'이랑 '초과'가 헷갈려요.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>쉽게 기억하는 방법이 있어. <strong>이상·이하</strong>는 그 수를 <strong>포함</strong>해(&ge;, &le;), <strong>초과·미만</strong>은 그 수를 <strong>포함 안 해</strong>(&gt;, &lt;).</p>
+      </div>
+      <div class="point-box" style="margin-top:8px;">
+        <p>예) "키가 160cm <strong>이상</strong>" — 160cm도 포함 (x &ge; 160)<br>
+        "키가 160cm <strong>초과</strong>" — 160cm 미포함 (x &gt; 160)</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>부등식이 참인지도 확인할 수 있어. x = 5일 때 부등식 2x &gt; 8을 확인해볼게.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">x = 5 대입</span><span class="eq-content">2 × 5 &gt; 8</span></div>
+        <div class="eq-row highlight"><span class="eq-num">계산</span><span class="eq-content">10 &gt; 8 — <span class="mv">참</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">"x는 3 미만이다"를 부등식으로 나타내면?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q1',false)">x &ge; 3</button>
+          <button class="qopt" onclick="q(this,'q1',false)">x &gt; 3</button>
+          <button class="qopt" onclick="q(this,'q1',true)">x &lt; 3</button>
+          <button class="qopt" onclick="q(this,'q1',false)">x &le; 3</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q1"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(2)">부등식의 성질 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s1" onclick="openMemo('s1')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s1"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s1"></div></div>
+  <div class="memo-input-area" id="mi-s1">
+    <textarea class="memo-textarea" id="mt-s1" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s1')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s1')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s1')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 2. 부등식의 성질 ════ -->
+<div class="section" id="s2">
+  <div class="sec-top"><div class="sec-badge">개념 2</div></div>
+  <div class="sec-title">부등식의 성질</div>
+  <div class="sec-body chat-bg" id="chat-s2">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><span class="s-call-slot">태린아</span>, 방정식을 풀 때는 양변에 같은 수를 더하거나 빼고, 곱하거나 나눠도 등호가 유지됐잖아. 부등식에서도 비슷한 성질이 있는데, 딱 하나 중요한 차이가 있어.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>먼저 더하기와 빼기. 3 &gt; 1이야. 양변에 2를 더하면?</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">원래</span><span class="eq-content">3 &gt; 1</span></div>
+        <div class="eq-row highlight"><span class="eq-num">+2</span><span class="eq-content">3 + 2 &gt; 1 + 2 &nbsp; &rarr; &nbsp; <span class="mv">5 &gt; 3</span> (참)</span></div>
+      </div>
+      <div class="point-box" style="margin-top:6px;">
+        <p>양변에 같은 수를 <strong>더하거나 빼도</strong> 부등호 방향은 바뀌지 않아.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>이번엔 곱하기. 3 &gt; 1에서 양변에 <strong>양수 2</strong>를 곱하면?</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">원래</span><span class="eq-content">3 &gt; 1</span></div>
+        <div class="eq-row highlight"><span class="eq-num">× 2 (+)</span><span class="eq-content">6 &gt; 2 (참) — 부등호 방향 유지</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>그런데! 같은 3 &gt; 1에서 양변에 <strong>음수 -2</strong>를 곱하면?</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">원래</span><span class="eq-content">3 &gt; 1</span></div>
+        <div class="eq-row warn"><span class="eq-num">× (-2)</span><span class="eq-content">-6 &gt; -2? &nbsp; <span class="mr">거짓!</span> &nbsp; -6 &lt; -2이 맞아</span></div>
+        <div class="eq-row result"><span class="eq-num">올바른 결과</span><span class="eq-content"><span class="mv">-6 &lt; -2</span> — 부등호 방향이 뒤집혀!</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>아, 음수를 곱하거나 나누면 부등호가 뒤집히는 거네요!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>정확해! 부등식의 성질을 정리하면:</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">+ / -</span><span class="eq-content">양변에 같은 수를 더하거나 빼도 부등호 방향 유지</span></div>
+        <div class="eq-row highlight"><span class="eq-num">× / ÷ (양수)</span><span class="eq-content">양수를 곱하거나 나눠도 부등호 방향 유지</span></div>
+        <div class="eq-row warn"><span class="eq-num">× / ÷ (음수)</span><span class="eq-content"><span class="mr">음수를 곱하거나 나누면 부등호 방향이 바뀜</span></span></div>
+      </div>
+      <div class="warn-box" style="margin-top:8px;">
+        <p><strong>핵심 주의!</strong> 음수를 곱하거나 나눌 때는 반드시 부등호 방향을 바꿔야 해. 이걸 빠뜨리면 틀려.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s2')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">a &gt; b일 때, 다음 중 항상 옳지 않은 것은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q2',false)">a + 3 &gt; b + 3</button>
+          <button class="qopt" onclick="q(this,'q2',false)">a - 5 &gt; b - 5</button>
+          <button class="qopt" onclick="q(this,'q2',true)">-2a &gt; -2b</button>
+          <button class="qopt" onclick="q(this,'q2',false)">3a &gt; 3b</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q2"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(3)">일차부등식 풀이 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s2" onclick="openMemo('s2')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s2"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s2"></div></div>
+  <div class="memo-input-area" id="mi-s2">
+    <textarea class="memo-textarea" id="mt-s2" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s2')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s2')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s2')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 3. 일차부등식의 뜻과 풀이 ════ -->
+<div class="section" id="s3">
+  <div class="sec-top"><div class="sec-badge">개념 3</div></div>
+  <div class="sec-title">일차부등식의 뜻과 풀이</div>
+  <div class="sec-body chat-bg" id="chat-s3">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><span class="s-call-slot">태린아</span>, 일차방정식처럼 미지수가 <strong>1차</strong>인 부등식을 <strong>일차부등식</strong>이라고 해. 2x - 1 &gt; 5 같은 것들이야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>일차부등식의 해는 부등식을 참으로 만드는 x의 값 전체야. 방정식처럼 딱 하나가 아니라 <strong>범위</strong>로 나와. 2x - 1 &gt; 5를 풀어볼게.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">원래 식</span><span class="eq-content">2x - 1 &gt; 5</span></div>
+        <div class="eq-row"><span class="eq-num">양변 + 1</span><span class="eq-content">2x &gt; 6</span></div>
+        <div class="eq-row highlight"><span class="eq-num">양변 ÷ 2</span><span class="eq-content"><span class="mv">x &gt; 3</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>해 x &gt; 3을 수직선으로 나타내면, 3은 포함하지 않으니까 열린 점으로 표시하고 오른쪽 방향으로 화살표를 그려.</p>
+      </div>
+      <div class="numline-wrap" style="margin-top:10px;">
+        <div class="numline-label">x &gt; 3의 수직선 표현</div>
+        <div class="numline" style="margin:18px 16px 28px;">
+          <div class="nl-axis"></div>
+          <div class="nl-arrow"></div>
+          <div class="nl-tick" style="left:20%"></div><div class="nl-label" style="left:20%">0</div>
+          <div class="nl-tick" style="left:45%"></div><div class="nl-label" style="left:45%">3</div>
+          <div class="nl-range" style="left:45%; right:0;"></div>
+          <div class="nl-dot empty" style="left:45%"></div>
+        </div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>이번엔 음수 계수가 있으면 부등호가 바뀌겠네요?</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>맞아! -3x + 2 &le; 11을 풀어볼게. 음수로 나눌 때 부등호 방향을 뒤집는 것 잘 봐.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">원래 식</span><span class="eq-content">-3x + 2 &le; 11</span></div>
+        <div class="eq-row"><span class="eq-num">양변 - 2</span><span class="eq-content">-3x &le; 9</span></div>
+        <div class="eq-row warn"><span class="eq-num">양변 ÷ (-3)</span><span class="eq-content"><span class="mr">부등호 방향 뒤집기!</span> &nbsp; x &ge; -3</span></div>
+        <div class="eq-row result"><span class="eq-num">해</span><span class="eq-content"><span class="mv">x &ge; -3</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>풀이 순서를 정리하면:</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">1단계</span><span class="eq-content">괄호 풀기, 분수·소수 정리</span></div>
+        <div class="eq-row"><span class="eq-num">2단계</span><span class="eq-content">x가 있는 항은 왼쪽, 상수항은 오른쪽으로 이항</span></div>
+        <div class="eq-row"><span class="eq-num">3단계</span><span class="eq-content">동류항 정리 ax &gt; b 꼴 만들기</span></div>
+        <div class="eq-row highlight"><span class="eq-num">4단계</span><span class="eq-content">양변을 a로 나누기 (음수면 부등호 뒤집기)</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s3')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">부등식 3x - 4 &lt; 2를 풀면?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q3',false)">x &lt; 2</button>
+          <button class="qopt" onclick="q(this,'q3',true)">x &lt; 2</button>
+          <button class="qopt" onclick="q(this,'q3',false)">x &gt; 2</button>
+          <button class="qopt" onclick="q(this,'q3',false)">x &gt; -2</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q3"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(4)">복잡한 일차부등식 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s3" onclick="openMemo('s3')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s3"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s3"></div></div>
+  <div class="memo-input-area" id="mi-s3">
+    <textarea class="memo-textarea" id="mt-s3" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s3')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s3')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s3')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 4. 복잡한 일차부등식 ════ -->
+<div class="section" id="s4">
+  <div class="sec-top"><div class="sec-badge">개념 4</div></div>
+  <div class="sec-title">복잡한 일차부등식</div>
+  <div class="sec-body chat-bg" id="chat-s4">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><span class="s-call-slot">태린아</span>, 이번엔 괄호나 분수, 소수가 있는 조금 더 복잡한 일차부등식을 다뤄볼게.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>먼저 <strong>괄호가 있는 경우</strong>. 2(x - 3) &gt; x + 1을 풀어볼게.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">원래 식</span><span class="eq-content">2(x - 3) &gt; x + 1</span></div>
+        <div class="eq-row"><span class="eq-num">괄호 전개</span><span class="eq-content">2x - 6 &gt; x + 1</span></div>
+        <div class="eq-row"><span class="eq-num">이항</span><span class="eq-content">2x - x &gt; 1 + 6</span></div>
+        <div class="eq-row result"><span class="eq-num">해</span><span class="eq-content"><span class="mv">x &gt; 7</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>다음은 <strong>분수가 있는 경우</strong>. <span class="frac"><span class="num">x</span><span class="den">3</span></span> - 1 &gt; <span class="frac"><span class="num">x + 2</span><span class="den">2</span></span>를 풀어볼게. 분모의 최소공배수 6을 양변에 곱해서 분수를 없애.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">원래 식</span><span class="eq-content"><span class="frac"><span class="num">x</span><span class="den">3</span></span> - 1 &gt; <span class="frac"><span class="num">x + 2</span><span class="den">2</span></span></span></div>
+        <div class="eq-row highlight"><span class="eq-num">×6 (통분)</span><span class="eq-content">2x - 6 &gt; 3(x + 2)</span></div>
+        <div class="eq-row"><span class="eq-num">괄호 전개</span><span class="eq-content">2x - 6 &gt; 3x + 6</span></div>
+        <div class="eq-row"><span class="eq-num">이항</span><span class="eq-content">2x - 3x &gt; 6 + 6</span></div>
+        <div class="eq-row"><span class="eq-num">정리</span><span class="eq-content">-x &gt; 12</span></div>
+        <div class="eq-row warn"><span class="eq-num">÷(-1)</span><span class="eq-content"><span class="mr">부등호 뒤집기!</span> &nbsp; x &lt; -12</span></div>
+        <div class="eq-row result"><span class="eq-num">해</span><span class="eq-content"><span class="mv">x &lt; -12</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>이번엔 <strong>소수가 있는 경우</strong>. 0.3x - 0.5 &le; 0.1x + 0.7을 풀어볼게. 양변에 10을 곱해서 소수를 없애.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">원래 식</span><span class="eq-content">0.3x - 0.5 &le; 0.1x + 0.7</span></div>
+        <div class="eq-row highlight"><span class="eq-num">×10</span><span class="eq-content">3x - 5 &le; x + 7</span></div>
+        <div class="eq-row"><span class="eq-num">이항</span><span class="eq-content">2x &le; 12</span></div>
+        <div class="eq-row result"><span class="eq-num">해</span><span class="eq-content"><span class="mv">x &le; 6</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="s-msg"><div class="s-name s-name-slot">태린</div>
+        <p>분수나 소수는 먼저 없애고 시작하면 훨씬 쉽겠네요!</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s4')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>정확해! 확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">3(x - 2) &le; 2x + 1을 풀면?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q4',false)">x &le; 5</button>
+          <button class="qopt" onclick="q(this,'q4',true)">x &le; 7</button>
+          <button class="qopt" onclick="q(this,'q4',false)">x &ge; 7</button>
+          <button class="qopt" onclick="q(this,'q4',false)">x &le; -7</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q4"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(5)">일차부등식 활용 배우기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s4" onclick="openMemo('s4')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s4"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s4"></div></div>
+  <div class="memo-input-area" id="mi-s4">
+    <textarea class="memo-textarea" id="mt-s4" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s4')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s4')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s4')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 5. 일차부등식의 활용 ════ -->
+<div class="section" id="s5">
+  <div class="sec-top"><div class="sec-badge">개념 5</div></div>
+  <div class="sec-title">일차부등식의 활용</div>
+  <div class="sec-body chat-bg" id="chat-s5">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><span class="s-call-slot">태린아</span>, 일차방정식을 활용 문제에 적용했듯이, 일차부등식도 실생활 문제에 쓸 수 있어. 풀이 방법은 거의 같아.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>활용 문제 풀이 단계야.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">1단계</span><span class="eq-content">구하려는 것을 x로 놓기</span></div>
+        <div class="eq-row"><span class="eq-num">2단계</span><span class="eq-content">문제의 조건을 부등식으로 세우기</span></div>
+        <div class="eq-row"><span class="eq-num">3단계</span><span class="eq-content">부등식 풀기</span></div>
+        <div class="eq-row highlight"><span class="eq-num">4단계</span><span class="eq-content">해가 문제 조건에 맞는지 확인하고 답 쓰기</span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>예제 1. 어떤 수의 3배에서 7을 뺀 값이 어떤 수보다 크다고 할 때, 어떤 수의 범위를 구해봐.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">x로 놓기</span><span class="eq-content">어떤 수를 x라 하자</span></div>
+        <div class="eq-row"><span class="eq-num">부등식 세우기</span><span class="eq-content">3x - 7 &gt; x</span></div>
+        <div class="eq-row"><span class="eq-num">풀기</span><span class="eq-content">2x &gt; 7</span></div>
+        <div class="eq-row result"><span class="eq-num">해</span><span class="eq-content"><span class="mv">x &gt; 3.5</span></span></div>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>예제 2. 한 개에 300원인 사탕을 몇 개까지 살 수 있는지 구해봐. 가지고 있는 돈은 2000원이야.</p>
+      </div>
+      <div class="eq-steps" style="margin-top:10px;">
+        <div class="eq-row"><span class="eq-num">x로 놓기</span><span class="eq-content">사탕의 수를 x개라 하자</span></div>
+        <div class="eq-row"><span class="eq-num">부등식 세우기</span><span class="eq-content">300x &le; 2000</span></div>
+        <div class="eq-row highlight"><span class="eq-num">풀기</span><span class="eq-content">x &le; <span class="frac"><span class="num">20</span><span class="den">3</span></span> &asymp; 6.67</span></div>
+        <div class="eq-row result"><span class="eq-num">자연수 조건</span><span class="eq-content"><span class="mv">최대 6개</span></span></div>
+      </div>
+      <div class="point-box" style="margin-top:8px;">
+        <p>개수처럼 자연수여야 하는 경우 소수점을 내려서 판단해야 해. 6.67이면 자연수는 최대 6까지야.</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s5')">다음 →</button></div>
+    </div>
+
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>확인 문제!</p>
+      </div>
+      <div class="quiz" style="margin-top:10px;">
+        <div class="quiz-label">확인 문제</div>
+        <div class="quiz-q">한 개에 500원인 음료수를 사는데 3000원 이하로 사려면 최대 몇 개까지 살 수 있을까?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="q(this,'q5',false)">5개</button>
+          <button class="qopt" onclick="q(this,'q5',true)">6개</button>
+          <button class="qopt" onclick="q(this,'q5',false)">7개</button>
+          <button class="qopt" onclick="q(this,'q5',false)">4개</button>
+        </div>
+        <div class="quiz-fb" id="qfb-q5"></div>
+      </div>
+      <div class="next-wrap" style="margin-top:16px;"><button class="next-btn" onclick="go(6)">종합 퀴즈 풀기 →</button></div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s5" onclick="openMemo('s5')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s5"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s5"></div></div>
+  <div class="memo-input-area" id="mi-s5">
+    <textarea class="memo-textarea" id="mt-s5" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s5')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s5')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s5')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 6. 종합 퀴즈 ════ -->
+<div class="section" id="s6">
+  <div class="sec-top"><div class="sec-badge green">종합 퀴즈</div></div>
+  <div class="sec-title">지금까지 이해한 것 점검</div>
+  <div class="sec-body chat-bg" id="chat-s6">
+
+    <div class="chat-step visible">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p><span class="s-call-slot">태린아</span>, 일차부등식 전체 내용을 종합해서 확인해볼게. 5문제야. 모두 풀고 점수를 확인해봐.</p>
+      </div>
+
+      <div class="quiz" style="margin-top:16px;">
+        <div class="quiz-label">문제 1</div>
+        <div class="quiz-q">a &lt; b일 때, 다음 중 항상 옳은 것은?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f1',false)">-a &lt; -b</button>
+          <button class="qopt" onclick="fin(this,'f1',true)">a - 3 &lt; b - 3</button>
+          <button class="qopt" onclick="fin(this,'f1',false)">2a &gt; 2b</button>
+          <button class="qopt" onclick="fin(this,'f1',false)"><span class="frac" style="font-size:1em"><span class="num">a</span><span class="den">-2</span></span> &lt; <span class="frac" style="font-size:1em"><span class="num">b</span><span class="den">-2</span></span></button>
+        </div>
+        <div class="quiz-fb" id="qfb-f1"></div>
+      </div>
+
+      <div class="quiz" style="margin-top:12px;">
+        <div class="quiz-label">문제 2</div>
+        <div class="quiz-q">부등식 -2x + 5 &gt; 11을 풀면?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f2',false)">x &gt; -3</button>
+          <button class="qopt" onclick="fin(this,'f2',false)">x &gt; 3</button>
+          <button class="qopt" onclick="fin(this,'f2',true)">x &lt; -3</button>
+          <button class="qopt" onclick="fin(this,'f2',false)">x &lt; 3</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f2"></div>
+      </div>
+
+      <div class="quiz" style="margin-top:12px;">
+        <div class="quiz-label">문제 3</div>
+        <div class="quiz-q">부등식 4(x + 1) &ge; 3x - 2를 풀면?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f3',false)">x &ge; -4</button>
+          <button class="qopt" onclick="fin(this,'f3',true)">x &ge; -6</button>
+          <button class="qopt" onclick="fin(this,'f3',false)">x &le; -6</button>
+          <button class="qopt" onclick="fin(this,'f3',false)">x &ge; 6</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f3"></div>
+      </div>
+
+      <div class="quiz" style="margin-top:12px;">
+        <div class="quiz-label">문제 4</div>
+        <div class="quiz-q">0.2x - 0.6 &lt; 0.4x + 0.2를 풀면?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f4',false)">x &lt; -4</button>
+          <button class="qopt" onclick="fin(this,'f4',true)">x &gt; -4</button>
+          <button class="qopt" onclick="fin(this,'f4',false)">x &lt; 4</button>
+          <button class="qopt" onclick="fin(this,'f4',false)">x &gt; 4</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f4"></div>
+      </div>
+
+      <div class="quiz" style="margin-top:12px;">
+        <div class="quiz-label">문제 5</div>
+        <div class="quiz-q">한 권에 800원인 공책을 사는데 5000원으로 최대 몇 권 살 수 있을까?</div>
+        <div class="quiz-opts">
+          <button class="qopt" onclick="fin(this,'f5',false)">5권</button>
+          <button class="qopt" onclick="fin(this,'f5',true)">6권</button>
+          <button class="qopt" onclick="fin(this,'f5',false)">7권</button>
+          <button class="qopt" onclick="fin(this,'f5',false)">4권</button>
+        </div>
+        <div class="quiz-fb" id="qfb-f5"></div>
+      </div>
+
+      <div class="next-wrap" style="margin-top:24px;">
+        <button class="score-check-btn" id="score-btn" onclick="showScore()">점수 확인하기</button>
+      </div>
+
+      <div class="score-panel" id="score-panel">
+        <div class="score-num" id="score-num">0</div>
+        <div class="score-of">/ 100점</div>
+        <div class="score-msg" id="score-msg"></div>
+        <div class="score-detail" id="score-detail"></div>
+        <button class="restart-btn" onclick="go(1)">처음부터 다시</button>
+        <br>
+        <button class="toc-btn" onclick="location.href='index.html'">목차로 돌아가기</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="edit-bar"><button class="edit-request-btn" id="eb-s6" onclick="openMemo('s6')">수정 요청</button></div>
+  <div class="memo-banner" id="mb-s6"><div class="memo-banner-label">수정 요청</div><div class="memo-banner-text" id="mbt-s6"></div></div>
+  <div class="memo-input-area" id="mi-s6">
+    <textarea class="memo-textarea" id="mt-s6" placeholder="수정할 내용을 적어주세요..."></textarea>
+    <div class="memo-actions">
+      <button class="memo-save-btn" onclick="saveMemo('s6')">저장</button>
+      <button class="memo-delete-btn" onclick="deleteMemo('s6')">삭제</button>
+      <button class="memo-cancel-btn" onclick="closeMemo('s6')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 수정 요청 플로팅 버튼 -->
+<button class="memo-float-btn" id="memo-float-btn" onclick="openMemoList()">
+  수정 요청 <span class="memo-count" id="memo-float-count">0</span>
+</button>
+
+<!-- 수정 요청 목록 -->
+<div class="memo-list-overlay" id="memo-list-overlay" onclick="if(event.target===this)closeMemoList()">
+  <div class="memo-list-sheet">
+    <div class="memo-list-title">수정 요청 목록 <button class="memo-list-close" onclick="closeMemoList()">닫기</button></div>
+    <div id="memo-list-body"></div>
+  </div>
+</div>
+
+<script>
+/* 학생 이름 */
+const STUDENT_NAME = localStorage.getItem('studentName') || '태린';
+function hasJongseong(name) {
+  const code = name.charCodeAt(name.length - 1);
+  return (code - 0xAC00) % 28 > 0;
+}
+const STUDENT_CALL = STUDENT_NAME + (hasJongseong(STUDENT_NAME) ? '아' : '야');
+function initStudentNames() {
+  document.querySelectorAll('.s-name-slot').forEach(el => { el.textContent = STUDENT_NAME; });
+  document.querySelectorAll('.s-call-slot').forEach(el => { el.textContent = STUDENT_CALL; });
+  const p = getProgress(); p.studentName = STUDENT_NAME; saveProgress(p);
+}
+
+/* 학습 추적 */
+const TRACK_KEY = 'mathTalk_progress';
+const UNIT_KEY = '일차부등식';
+function getProgress() { try { return JSON.parse(localStorage.getItem(TRACK_KEY)) || {}; } catch(e) { return {}; } }
+function saveProgress(d) { localStorage.setItem(TRACK_KEY, JSON.stringify(d)); }
+let _curSec = null, _secStart = null, _stepStart = null;
+function trackEnter(secId) {
+  const now = Date.now(); _curSec = secId; _secStart = now; _stepStart = now;
+  const p = getProgress();
+  if (!p.units) p.units = {};
+  if (!p.units[UNIT_KEY]) p.units[UNIT_KEY] = {};
+  if (!p.units[UNIT_KEY][secId]) p.units[UNIT_KEY][secId] = { firstVisit:now, totalTime:0, stepTimes:[], quizzes:{} };
+  p.units[UNIT_KEY][secId].lastVisit = now; saveProgress(p);
+}
+function trackLeave() {
+  if (!_curSec || !_secStart) return;
+  const elapsed = Math.floor((Date.now()-_secStart)/1000);
+  const p = getProgress();
+  if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][_curSec])
+    p.units[UNIT_KEY][_curSec].totalTime = (p.units[UNIT_KEY][_curSec].totalTime||0)+elapsed;
+  saveProgress(p); _curSec = null; _secStart = null;
+}
+function trackStep(secId) {
+  const now = Date.now();
+  if (_stepStart) {
+    const elapsed = Math.floor((now-_stepStart)/1000);
+    const p = getProgress();
+    if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][secId])
+      p.units[UNIT_KEY][secId].stepTimes.push(elapsed);
+    saveProgress(p);
+  }
+  _stepStart = now;
+}
+function trackQuiz(secId, qId, correct) {
+  const p = getProgress();
+  if (!p.units) p.units = {};
+  if (!p.units[UNIT_KEY]) p.units[UNIT_KEY] = {};
+  if (!p.units[UNIT_KEY][secId]) p.units[UNIT_KEY][secId] = { totalTime:0, stepTimes:[], quizzes:{} };
+  if (!p.units[UNIT_KEY][secId].quizzes) p.units[UNIT_KEY][secId].quizzes = {};
+  p.units[UNIT_KEY][secId].quizzes[qId] = { correct, time:Date.now() }; saveProgress(p);
+}
+function trackComplete(secId) {
+  const p = getProgress();
+  if (p.units && p.units[UNIT_KEY] && p.units[UNIT_KEY][secId]) {
+    p.units[UNIT_KEY][secId].completed = true;
+    p.units[UNIT_KEY][secId].completedAt = Date.now();
+  }
+  saveProgress(p);
+}
+
+/* 대화 진행 */
+function nextStep(secId) {
+  const steps = Array.from(document.querySelectorAll('#chat-'+secId+' .chat-step'));
+  let lastIdx = -1;
+  steps.forEach((s,i) => { if(s.classList.contains('visible')) lastIdx = i; });
+  if (lastIdx < steps.length-1) {
+    trackStep(secId);
+    const next = steps[lastIdx+1];
+    next.classList.add('visible');
+    setTimeout(() => next.scrollIntoView({behavior:'smooth',block:'start'}), 60);
+  }
+}
+
+/* 섹션 이동 */
+const labels = {
+  s1:'개념 1 — 부등식의 뜻과 부등호',
+  s2:'개념 2 — 부등식의 성질',
+  s3:'개념 3 — 일차부등식의 뜻과 풀이',
+  s4:'개념 4 — 복잡한 일차부등식',
+  s5:'개념 5 — 일차부등식의 활용',
+  s6:'종합 퀴즈'
+};
+const TOTAL = 6;
+
+function show(n) {
+  trackLeave();
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('s'+n);
+  el.classList.add('active');
+  document.getElementById('prog-label').textContent = labels['s'+n];
+  const pct = Math.round((n/TOTAL)*100);
+  document.getElementById('prog-pct').textContent = pct+'%';
+  document.getElementById('prog-fill').style.width = pct+'%';
+  setTimeout(() => window.scrollTo(0,0), 30);
+  trackEnter('s'+n);
+}
+function go(n) { show(n); }
+
+/* 확인 문제 */
+const qMsg = {
+  q1:{ ok:'"미만"은 그 수를 포함하지 않으므로 부등호는 &lt;를 써요. x &lt; 3이 맞아요.', no:'"미만"은 그 수를 포함하지 않아요. 포함하지 않을 때는 &lt; 또는 &gt;를 써요. x &lt; 3이에요.' },
+  q2:{ ok:'a &gt; b일 때 -2를 곱하면 음수이므로 부등호가 뒤집혀 -2a &lt; -2b가 되어야 해요. 즉 -2a &gt; -2b는 틀려요.', no:'음수를 곱할 때 부등호 방향이 바뀌어요. a &gt; b에서 -2를 곱하면 -2a &lt; -2b가 되어야 해요.' },
+  q3:{ ok:'3x - 4 &lt; 2 → 3x &lt; 6 → x &lt; 2예요. 양수 3으로 나누므로 부등호 방향은 그대로예요.', no:'3x - 4 &lt; 2에서 4를 이항하면 3x &lt; 6, 양변을 3으로 나누면 x &lt; 2예요.' },
+  q4:{ ok:'3(x-2) &le; 2x+1 → 3x-6 &le; 2x+1 → x &le; 7이에요.', no:'괄호를 먼저 전개해요. 3x-6 &le; 2x+1 → 3x-2x &le; 1+6 → x &le; 7이에요.' },
+  q5:{ ok:'500x &le; 3000 → x &le; 6이므로 최대 6개예요.', no:'500 × 개수 &le; 3000으로 부등식을 세워요. 500x &le; 3000, x &le; 6, 최대 6개예요.' },
+};
+function q(el, id, correct) {
+  const opts = el.parentNode.querySelectorAll('.qopt');
+  opts.forEach(o => { o.disabled = true; });
+  el.classList.add(correct ? 'correct' : 'wrong');
+  const fb = document.getElementById('qfb-'+id);
+  fb.textContent = correct ? qMsg[id].ok : qMsg[id].no;
+  fb.className = 'quiz-fb '+(correct?'ok':'no');
+  const secEl = el.closest('.section');
+  trackQuiz(secEl ? secEl.id : (_curSec||'unknown'), id, correct);
+}
+
+/* 종합 퀴즈 */
+const finAnswers = {};
+const fMsg = {
+  f1:{ ok:'부등호 방향이 같을 때는 양변에 같은 수를 더하거나 빼도 방향이 유지돼요. a-3 &lt; b-3은 항상 맞아요.', no:'-a와 -b 비교는 부호가 뒤집혀서 -a &gt; -b가 되고, 2를 곱하면 방향 유지, -2로 나누면 뒤집혀요. a-3 &lt; b-3만 항상 옳아요.' },
+  f2:{ ok:'-2x+5 &gt; 11 → -2x &gt; 6 → 양변을 -2로 나누면 부등호 뒤집혀서 x &lt; -3이에요.', no:'-2x &gt; 6에서 양변을 -2로 나눌 때 음수이므로 부등호 방향이 바뀌어요. x &lt; -3이에요.' },
+  f3:{ ok:'4(x+1) &ge; 3x-2 → 4x+4 &ge; 3x-2 → x &ge; -6이에요.', no:'괄호를 전개하면 4x+4 &ge; 3x-2, 이항하면 x &ge; -2-4 = -6이에요.' },
+  f4:{ ok:'양변에 10을 곱하면 2x-6 &lt; 4x+2 → -2x &lt; 8 → x &gt; -4이에요.', no:'소수를 없애려면 양변에 10을 곱해요. 2x-6 &lt; 4x+2 → -2x &lt; 8, -2로 나누면 부등호 뒤집혀 x &gt; -4예요.' },
+  f5:{ ok:'800x &le; 5000 → x &le; 6.25이므로 자연수 최대는 6권이에요.', no:'800 × 권수 &le; 5000으로 세워요. x &le; 6.25이고 자연수는 최대 6이에요.' },
+};
+function fin(el, id, correct) {
+  const opts = el.parentNode.querySelectorAll('.qopt');
+  opts.forEach(o => { o.disabled = true; });
+  el.classList.add(correct ? 'correct' : 'wrong');
+  finAnswers[id] = correct;
+  const fb = document.getElementById('qfb-'+id);
+  fb.textContent = correct ? fMsg[id].ok : fMsg[id].no;
+  fb.className = 'quiz-fb '+(correct?'ok':'no');
+  trackQuiz('s6', id, correct);
+  const allIds = ['f1','f2','f3','f4','f5'];
+  if (allIds.every(k => k in finAnswers)) {
+    document.getElementById('score-btn').className = 'score-check-btn ready';
+  }
+}
+function showScore() {
+  const allIds = ['f1','f2','f3','f4','f5'];
+  if (!allIds.every(k => k in finAnswers)) return;
+  const score = allIds.filter(k => finAnswers[k]).length * 20;
+  document.getElementById('score-num').textContent = score;
+  const msgs = {
+    100:'완벽해! 일차부등식 마스터!',
+    80:'거의 다 왔어! 조금만 더 복습하면 완벽해.',
+    60:'절반 이상이야. 틀린 부분 복습하면 돼.',
+    40:'다시 한 번 개념 정리해보자.',
+    20:'처음부터 차근차근 다시 해보자.',
+    0:'포기하지 마. 다시 시작하면 돼.'
+  };
+  document.getElementById('score-msg').textContent = msgs[score] || '';
+  const wrong = allIds.filter(k => !finAnswers[k]).length;
+  document.getElementById('score-detail').textContent = wrong > 0 ? `${wrong}문제 틀림 — 해설을 다시 읽어봐요.` : '전부 맞았어요!';
+  document.getElementById('score-panel').style.display = 'block';
+  trackComplete('s6');
+  if (score === 100) confetti();
+}
+
+/* 수정 요청 메모 */
+const MEMO_PREFIX = 'ineq-memo-';
+const sectionNames = { s1:'개념 1', s2:'개념 2', s3:'개념 3', s4:'개념 4', s5:'개념 5', s6:'종합 퀴즈' };
+function initMemos() {
+  let count = 0;
+  Object.keys(sectionNames).forEach(id => {
+    const val = localStorage.getItem(MEMO_PREFIX+id);
+    if (val) { count++; showMemoBanner(id,val); markBtn(id,true); }
+  });
+  updateFloatBtn(count);
+}
+function openMemo(id) {
+  const area = document.getElementById('mi-'+id);
+  const ta = document.getElementById('mt-'+id);
+  const saved = localStorage.getItem(MEMO_PREFIX+id);
+  ta.value = saved||''; area.classList.add('show'); ta.focus();
+}
+function closeMemo(id) { document.getElementById('mi-'+id).classList.remove('show'); }
+function saveMemo(id) {
+  const val = document.getElementById('mt-'+id).value.trim();
+  if (!val) { deleteMemo(id); return; }
+  localStorage.setItem(MEMO_PREFIX+id, val); showMemoBanner(id,val); markBtn(id,true); closeMemo(id); updateFloatBtn(countMemos());
+}
+function deleteMemo(id) {
+  localStorage.removeItem(MEMO_PREFIX+id);
+  document.getElementById('mb-'+id).classList.remove('show'); markBtn(id,false); closeMemo(id); updateFloatBtn(countMemos());
+}
+function showMemoBanner(id,val) {
+  const b = document.getElementById('mb-'+id); document.getElementById('mbt-'+id).textContent = val; b.classList.add('show');
+}
+function markBtn(id,has) { document.getElementById('eb-'+id).classList.toggle('has-memo',has); }
+function countMemos() { return Object.keys(sectionNames).filter(id => localStorage.getItem(MEMO_PREFIX+id)).length; }
+function updateFloatBtn(count) {
+  const btn = document.getElementById('memo-float-btn');
+  btn.style.display = count > 0 ? 'block' : 'none';
+  document.getElementById('memo-float-count').textContent = count;
+}
+function openMemoList() {
+  const body = document.getElementById('memo-list-body'); body.innerHTML = ''; let has = false;
+  Object.keys(sectionNames).forEach(id => {
+    const val = localStorage.getItem(MEMO_PREFIX+id);
+    if (val) { has = true; body.innerHTML += `<div class="memo-list-item"><div class="memo-list-item-label">${sectionNames[id]}</div><div class="memo-list-item-text">${val}</div></div>`; }
+  });
+  if (!has) body.innerHTML = '<p style="color:var(--gray-400);font-size:14px;">수정 요청이 없어요.</p>';
+  document.getElementById('memo-list-overlay').classList.add('open');
+}
+function closeMemoList() { document.getElementById('memo-list-overlay').classList.remove('open'); }
+
+/* confetti */
+function confetti() {
+  const colors = ['#4f46e5','#059669','#dc2626','#d97706','#0ea5e9'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div'); el.className = 'cf';
+    el.style.cssText = `left:${Math.random()*100}vw;top:-10px;width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*1.5}s;animation-delay:${Math.random()*0.5}s;`;
+    document.body.appendChild(el); setTimeout(() => el.remove(), 3500);
+  }
+}
+
+window.onload = () => { show(1); initMemos(); initStudentNames(); };
+</script>
+</body>
+</html>
