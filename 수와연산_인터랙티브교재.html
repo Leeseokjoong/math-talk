@@ -253,27 +253,77 @@ body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',BlinkMacS
   <div class="sec-title">소수와 합성수</div>
   <div class="sec-body chat-bg" id="chat-s1">
 
+    <!-- step 1 -->
     <div class="chat-step visible">
       <div class="t-msg"><div class="t-name">땡중샘</div>
-        <p><span class="s-call-slot">태린아</span>, 소수 기억나지?</p>
+        <p><span class="s-call-slot">태린아</span>, 소수가 뭔지 알아?</p>
       </div>
       <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
     </div>
 
+    <!-- step 2: 소수 혼동 -->
     <div class="chat-step">
       <div class="s-msg"><div class="s-name s-name-slot">태린</div>
-        <p>2, 3, 5 같은 거요!</p>
+        <p>0.2, 0.03 같은 거요?</p>
+      </div>
+      <div class="t-msg" style="margin-top:10px;"><div class="t-name">땡중샘</div>
+        <p>맞아, 그것도 소수야! 근데 그건 <strong>작을 소(小)</strong>자를 쓰는 소수(小數) — 1보다 작은 수라는 뜻이야.<br>오늘 배울 소수는 글자는 같지만 한자가 달라.</p>
       </div>
       <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
     </div>
 
+    <!-- step 3: 한자 풀이 -->
     <div class="chat-step">
       <div class="t-msg"><div class="t-name">땡중샘</div>
-        <p>맞아. 정확한 정의는 — <strong>1과 자기 자신으로만 나누어지는 수</strong>야.</p>
+        <p>두 소수를 한자로 나란히 놓아보면 이래.</p>
+      </div>
+      <div style="background:white; border-radius:10px; padding:16px 18px; margin:10px 0; font-size:14px; line-height:2.3;">
+        <div style="display:flex; align-items:center; gap:10px; padding-bottom:12px; border-bottom:1px solid var(--gray-200); margin-bottom:12px;">
+          <span style="font-size:22px; font-weight:900; color:var(--gray-400); min-width:44px; text-align:center;">小數</span>
+          <div>
+            <strong style="color:var(--gray-500);">작을 소(小) + 수 수(數)</strong><br>
+            <span style="color:var(--gray-400); font-size:13px;">0.2, 0.03처럼 1보다 작은 수</span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:22px; font-weight:900; color:var(--primary); min-width:44px; text-align:center;">素數</span>
+          <div>
+            <strong style="color:var(--primary);">바탕 소(素) + 수 수(數)</strong><br>
+            <span style="color:var(--gray-400); font-size:13px;">더 이상 나눌 수 없는, 수의 바탕이 되는 수</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--gray-900); color:white; border-radius:12px; padding:18px 22px; margin:10px 0;">
+        <div style="display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:14px; flex-wrap:wrap;">
+          <div style="text-align:center;">
+            <div style="font-size:38px; font-weight:900; color:#a5b4fc; line-height:1.1;">素</div>
+            <div style="font-size:11px; color:#9ca3af; margin-top:6px; letter-spacing:0.5px;">바탕, 근본</div>
+          </div>
+          <div style="font-size:24px; color:#6b7280; padding-bottom:10px;">+</div>
+          <div style="text-align:center;">
+            <div style="font-size:38px; font-weight:900; color:#a5b4fc; line-height:1.1;">數</div>
+            <div style="font-size:11px; color:#9ca3af; margin-top:6px; letter-spacing:0.5px;">수</div>
+          </div>
+          <div style="font-size:24px; color:#6b7280; padding-bottom:10px;">=</div>
+          <div style="text-align:center;">
+            <div style="font-size:38px; font-weight:900; color:white; line-height:1.1;">素數</div>
+            <div style="font-size:11px; color:#a5b4fc; margin-top:6px; letter-spacing:0.5px;">소수 (prime number)</div>
+          </div>
+        </div>
+        <p style="color:#9ca3af; font-size:13px; text-align:center; line-height:1.8;">수의 바탕 — 더 이상 쪼갤 수 없는 수</p>
+      </div>
+      <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
+    </div>
+
+    <!-- step 4: 정의 -->
+    <div class="chat-step">
+      <div class="t-msg"><div class="t-name">땡중샘</div>
+        <p>그럼 정확히 어떤 수가 소수(素數)야? 정의는 이거야.</p>
       </div>
       <div style="background:var(--gray-900); color:white; border-radius:10px; padding:16px 20px; margin:10px 0; text-align:center;">
-        <p style="color:#a5b4fc; font-size:15px; font-weight:900;">소수 (prime number)</p>
+        <p style="color:#a5b4fc; font-size:15px; font-weight:900;">소수 素數 (prime number)</p>
         <p style="color:#9ca3af; font-size:13px; margin-top:8px; line-height:1.8;">1보다 큰 자연수 중<br><strong style="color:white;">약수가 1과 자기 자신뿐</strong>인 수</p>
+        <p style="color:#6b7280; font-size:13px; margin-top:10px;">예: 2, 3, 5, 7, 11, 13 ...</p>
       </div>
       <div class="cont-wrap"><button class="cont-btn" onclick="nextStep('s1')">다음 →</button></div>
     </div>
